@@ -164,6 +164,31 @@ $(cfg_list domain.addons)
 EOF
 fi
 
+# --- agent team: curated minus exclude plus include ------------------------
+AGENTS_DIR="$TARGET/.claude/agents"
+if [ "$(cfg agents.team)" = "none" ] && [ -d "$AGENTS_DIR" ]; then
+  find "$AGENTS_DIR" -name '*.md' ! -name 'README.md' -delete
+  echo "→ agents: team=none (specialist agents removed)"
+fi
+while IFS= read -r ex; do
+  [ -z "$ex" ] && continue
+  rm -f "$AGENTS_DIR/$ex.md" && echo "  · agent excluded: $ex"
+done <<EOF
+$(cfg_list agents.exclude)
+EOF
+while IFS= read -r inc; do
+  [ -z "$inc" ] && continue
+  # inc form: <domain>/<sub-domain>/<agent>  -> templates/.../files/.claude/agents/<agent>.md
+  src="$HERE/${inc%/*}/files/.claude/agents/${inc##*/}.md"
+  if [ -f "$src" ]; then
+    mkdir -p "$AGENTS_DIR"; cp "$src" "$AGENTS_DIR/"; echo "  · agent included: $inc"
+  else
+    echo "  ! agent not found: $inc (skipped)" >&2
+  fi
+done <<EOF
+$(cfg_list agents.include)
+EOF
+
 # --- substitute the project name --------------------------------------------
 NAME="$(cfg project.name)"
 if [ -n "$NAME" ]; then
