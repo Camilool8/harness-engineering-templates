@@ -120,22 +120,29 @@ TOPO="$(cfg orchestration.topology)"
 [ "$(cfg safety.kill_switch)" = "true" ] && install_module "safety/kill-switch"
 [ "$(cfg safety.sandbox)"     = "true" ] && install_module "safety/sandbox"
 
-# --- domain recipe extras ----------------------------------------------------
-# If the config lives in a recipe folder (templates/<domain>/), apply that
-# folder's files/ tree and claude-md.md snippet too.
+# --- domain pack / sub-domain / thin-recipe layering ------------------------
+apply_layer() {           # apply_layer <dir> <claude-md-filename> <label>
+  local dir="$1" cmd="$2" label="$3"
+  [ -d "$dir/files" ] && { echo "→ $label"; cp -R "$dir/files/." "$TARGET/"; merge_fragments; }
+  if [ -f "$dir/$cmd" ]; then
+    printf '\n' >> "$TARGET/CLAUDE.md"; cat "$dir/$cmd" >> "$TARGET/CLAUDE.md"
+  fi
+}
+
 CONFIG_DIR="$(cd "$(dirname "$CONFIG")" && pwd)"
+DOMAIN_DIR=""
 if [ "$CONFIG_DIR" != "$HERE" ]; then
-  RECIPE="$(basename "$CONFIG_DIR")"
-  if [ -d "$CONFIG_DIR/files" ]; then
-    echo "→ recipe: $RECIPE"
-    cp -R "$CONFIG_DIR/files/." "$TARGET/"
-    merge_fragments
+  if [ -f "$CONFIG_DIR/../DOMAIN.md" ]; then
+    # domain pack: config lives in a sub-domain folder
+    DOMAIN_DIR="$(cd "$CONFIG_DIR/.." && pwd)"
+    apply_layer "$DOMAIN_DIR" "domain.claude-md.md" "domain: $(basename "$DOMAIN_DIR")"
+    apply_layer "$CONFIG_DIR" "claude-md.md" "sub-domain: $(basename "$CONFIG_DIR")"
+    PICKED+=("domain/$(basename "$DOMAIN_DIR")/$(basename "$CONFIG_DIR")")
+  else
+    # v1 thin recipe
+    apply_layer "$CONFIG_DIR" "claude-md.md" "recipe: $(basename "$CONFIG_DIR")"
+    PICKED+=("recipe/$(basename "$CONFIG_DIR")")
   fi
-  if [ -f "$CONFIG_DIR/claude-md.md" ]; then
-    printf '\n' >> "$TARGET/CLAUDE.md"
-    cat "$CONFIG_DIR/claude-md.md" >> "$TARGET/CLAUDE.md"
-  fi
-  PICKED+=("recipe/$RECIPE")
 fi
 
 # --- substitute the project name --------------------------------------------
