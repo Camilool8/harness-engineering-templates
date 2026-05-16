@@ -1,0 +1,3 @@
+# transient probe configs written by tests/checks/assemble-coverage.sh
+.probe-*.harness.config.yml
+templates/web/*/.probe-*.harness.config.yml
