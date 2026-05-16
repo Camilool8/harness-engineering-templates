@@ -47,7 +47,7 @@ cfg_list() {
   local raw; raw="$(cfg "$1")"
   raw="${raw#[}"; raw="${raw%]}"
   [ -z "$raw" ] && return 0
-  printf '%s\n' "$raw" | tr ',' '\n' | sed 's/^[ \t]*//; s/[ \t]*$//' | grep -v '^$'
+  printf '%s\n' "$raw" | tr ',' '\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | grep -v '^$'
 }
 
 # --- copy _base --------------------------------------------------------------
