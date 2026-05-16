@@ -189,6 +189,15 @@ done <<EOF
 $(cfg_list agents.include)
 EOF
 
+# --- docs: Context7 live-docs MCP (opt-in) ----------------------------------
+if [ "$(cfg docs.context7_mcp)" = "true" ] && [ -n "$DOMAIN_DIR" ] \
+   && [ -f "$DOMAIN_DIR/files/.claude/context7.mcp.json.fragment" ]; then
+  cp "$DOMAIN_DIR/files/.claude/context7.mcp.json.fragment" "$TARGET/.mcp.json.fragment"
+  merge_fragments
+  echo "→ docs: Context7 MCP wired"
+fi
+rm -f "$TARGET/.claude/context7.mcp.json.fragment"   # never ship the raw fragment
+
 # --- substitute the project name --------------------------------------------
 NAME="$(cfg project.name)"
 if [ -n "$NAME" ]; then
