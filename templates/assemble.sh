@@ -52,9 +52,10 @@ PICKED=()
 # deep-merge it into .claude/settings.json (objects recurse, arrays concatenate)
 # so module hooks add to the base hooks instead of overwriting them.
 JQ_OK=0; command -v jq >/dev/null 2>&1 && JQ_OK=1
-merge_settings() {
-  local frag="$TARGET/.claude/settings.fragment.json"
-  local base="$TARGET/.claude/settings.json"
+
+# Deep-merge $1 (fragment) into $2 (base): objects recurse, arrays concatenate.
+merge_json() {
+  local frag="$1" base="$2"
   [ -f "$frag" ] || return 0
   if [ "$JQ_OK" -eq 1 ] && [ -f "$base" ]; then
     jq -s '
@@ -67,11 +68,16 @@ merge_settings() {
           else .[$k] = $b[$k] end);
       deepmerge(.[0]; .[1])' "$base" "$frag" > "$base.tmp" \
       && mv "$base.tmp" "$base" && rm -f "$frag" \
-      && echo "  · merged settings.fragment.json"
+      && echo "  · merged $(basename "$frag")"
   else
-    echo "  ! jq not found — settings.fragment.json left in place; merge it" >&2
-    echo "    into .claude/settings.json by hand (jq is also needed by hooks)." >&2
+    echo "  ! jq not found — $(basename "$frag") left for manual merge" >&2
   fi
+}
+
+# Merge any settings + mcp fragments the last copy step dropped into the target.
+merge_fragments() {
+  merge_json "$TARGET/.claude/settings.fragment.json" "$TARGET/.claude/settings.json"
+  merge_json "$TARGET/.mcp.json.fragment"             "$TARGET/.mcp.json"
 }
 
 # --- helper: install a module dir into the target ---------------------------
@@ -79,7 +85,7 @@ install_module() {
   local mod="$1" dir="$HERE/_modules/$1"
   [ -d "$dir" ] || { echo "  ! module missing: $1 (skipped)" >&2; return; }
   echo "→ module: $1"
-  [ -d "$dir/files" ] && { cp -R "$dir/files/." "$TARGET/"; merge_settings; }
+  [ -d "$dir/files" ] && { cp -R "$dir/files/." "$TARGET/"; merge_fragments; }
   if [ -f "$dir/claude-md.md" ]; then
     printf '\n' >> "$TARGET/CLAUDE.md"
     cat "$dir/claude-md.md" >> "$TARGET/CLAUDE.md"
@@ -115,7 +121,7 @@ if [ "$CONFIG_DIR" != "$HERE" ]; then
   if [ -d "$CONFIG_DIR/files" ]; then
     echo "→ recipe: $RECIPE"
     cp -R "$CONFIG_DIR/files/." "$TARGET/"
-    merge_settings
+    merge_fragments
   fi
   if [ -f "$CONFIG_DIR/claude-md.md" ]; then
     printf '\n' >> "$TARGET/CLAUDE.md"

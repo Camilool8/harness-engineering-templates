@@ -40,6 +40,17 @@ for d in generic web data devops finance mobile game embedded \
 done
 assert_assembles "harness.config.yml" "root-manifest"
 
+echo "== .mcp.json fragments deep-merge =="
+assemble "generic/harness.config.yml"
+cp tests/fixtures/mcp-merge/.mcp.json.fragment "$OUT/.mcp.json.fragment"
+merged="$(jq -s 'def dm($a;$b): reduce ($b|keys_unsorted[]) as $k ($a;
+  if (($a[$k]|type)=="object") and (($b[$k]|type)=="object") then .[$k]=dm($a[$k];$b[$k])
+  elif (($a[$k]|type)=="array") and (($b[$k]|type)=="array") then .[$k]=($a[$k]+$b[$k])
+  else .[$k]=$b[$k] end); dm(.[0];.[1])' "$OUT/.mcp.json" "$OUT/.mcp.json.fragment")"
+echo "$merged" | jq -e '.mcpServers.context7' >/dev/null 2>&1 \
+  && ok "mcp deep-merge keeps server" || fail "mcp deep-merge lost server"
+rm -rf "$OUT"
+
 echo ""
 echo "Passed: $PASS  Failed: $FAIL"
 [ "$FAIL" -eq 0 ]
