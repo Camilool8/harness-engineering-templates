@@ -1,0 +1,36 @@
+name: Propose new content
+description: Propose a new module, addon, sub-domain, or domain.
+labels: ["proposal"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of content
+      options:
+        - Module (cross-cutting — memory, progress, methodology, orchestration, safety)
+        - Addon (domain-scoped extra)
+        - Sub-domain (a deliverable shape within a domain)
+        - Domain (a whole new domain pack)
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What it does
+      description: One or two sentences — the capability this adds.
+    validations:
+      required: true
+  - type: textarea
+    id: adopt-skip
+    attributes:
+      label: Adopt if / Skip if
+      description: When should a harness pick this up, and when should it not?
+    validations:
+      required: true
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Prior art / references
+      description: Links to the tools, docs, or practice this is grounded in.
+    validations:
+      required: false
