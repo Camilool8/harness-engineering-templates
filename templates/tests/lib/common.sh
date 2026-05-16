@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # tests/lib/common.sh — shared helpers. Source this from a checks/*.sh script.
 # Provides: ok / fail / note / summary, and $REPO (repo root) + $TPL (templates dir).
 _PASS=0; _FAIL=0
