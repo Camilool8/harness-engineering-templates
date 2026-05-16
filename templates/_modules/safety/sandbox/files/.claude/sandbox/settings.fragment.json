@@ -1,0 +1,30 @@
+{
+  "_comment": "safety/sandbox — MERGE the permissions block below into .claude/settings.json. This is a POLICY declaration: it bounds a well-behaved agent. It does NOT contain an escaped or prompt-injected agent. For real enforcement, run Claude Code under Anthropic sandbox-runtime (https://github.com/anthropic-experimental/sandbox-runtime) or inside a container/VM with unscoped network egress disabled at the OS layer.",
+  "_filesystem": "The deny list confines writes to the working directory and blocks credential/config/system paths. Writes inside the project root remain allowed by default. Tighten to match your repo.",
+  "_network": "WebFetch is default-deny: only the hosts listed under permissions.allow are reachable. Replace the example hosts with the exact destinations your task needs. In a container, mirror this with an egress firewall allow-list — defense in depth.",
+  "permissions": {
+    "deny": [
+      "Write(~/**)",
+      "Edit(~/**)",
+      "Write(/etc/**)",
+      "Write(/usr/**)",
+      "Write(/var/**)",
+      "Write(/**/.ssh/**)",
+      "Write(/**/.aws/**)",
+      "Write(/**/.config/**)",
+      "Write(/**/.netrc)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(/**/.env*)",
+      "WebFetch",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(nc:*)",
+      "Bash(ssh:*)"
+    ],
+    "allow": [
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:api.github.com)"
+    ]
+  }
+}

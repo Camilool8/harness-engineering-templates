@@ -1,0 +1,52 @@
+# ============================================================================
+# harness.config.yml — customer support & ops automation recipe.
+#
+#   ./assemble.sh ops/harness.config.yml /path/to/your/project
+#
+# For support and ops agents that triage, draft replies, and touch CRM/billing.
+# The non-default choices gate irreversible customer-facing actions behind a
+# human.
+# ============================================================================
+
+project:
+  name: my-project
+  domain: ops
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # default — playbooks, macros, and escalation
+                             # rules stay git-diffable and reviewed.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: linear            # the 2026 ops work-item spine; native Linear
+                             # agent integrations cover Intercom/Zendesk/Gong.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: false                 # OFF — support/ops work is workflow automation,
+                             # not red-green unit-tested code.
+  spec_driven: true          # default — the support procedure / runbook is
+                             # the spec the agent executes against.
+  eval_driven: true          # ON — ticket classification and routing are
+                             # judgment calls; grade them against a labelled
+                             # golden set so misroutes are caught, not shipped.
+  bdd: false                 # default.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default — one agent triages and drafts.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: true              # ON — refunds, credits, and irreversible CRM
+                             # mutations (account merges, subscription changes)
+                             # touch money/customer state; require a typed-token
+                             # human confirmation before they execute.
+  kill_switch: false         # default — no long autonomous loop.
+  sandbox: false             # default — trusted internal CRM/helpdesk tools.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true    # default.
+  diff_review_required: true # default.

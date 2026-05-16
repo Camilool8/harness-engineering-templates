@@ -1,0 +1,15 @@
+# Worker findings live here.
+#
+# One file per contribution, named <timestamp>-<agent>.md, e.g.
+#   2026-01-01T1430-researcher.md
+# Append-only: never overwrite another agent's entry.
+#
+# Each entry starts with frontmatter:
+#   ---
+#   agent: researcher
+#   task: tasks/T3.md
+#   status: done
+#   summary: "<one line>"
+#   ---
+#
+# This .gitkeep keeps the directory under version control while empty.

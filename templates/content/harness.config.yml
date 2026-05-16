@@ -1,0 +1,46 @@
+# ============================================================================
+# harness.config.yml — content / marketing / SEO recipe.
+#
+#   ./assemble.sh content/harness.config.yml /path/to/your/project
+#
+# For brand-voice-consistent content production. The non-default choices make
+# brand voice and structured data mechanically checkable.
+# ============================================================================
+
+project:
+  name: my-project
+  domain: content
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # default — brand guide, voice notes, and content
+                             # conventions stay git-diffable and reviewed.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem        # default — content calendar as plan/task files.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: false                 # OFF — prose has no red-green test surface.
+  spec_driven: true          # default — the content brief (audience, angle,
+                             # keywords, structure) is the spec.
+  eval_driven: true          # ON — content quality is a judgment call; grade
+                             # drafts against a brand-voice golden set so
+                             # "on brand" is measured, not vibes.
+  bdd: false                 # default.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default — one agent drafts, revises, validates.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false             # default — no prod/money/deletion surface.
+  kill_switch: false         # default.
+  sandbox: false             # default — local content authoring.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true    # default.
+  diff_review_required: true # default.

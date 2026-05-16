@@ -1,0 +1,22 @@
+{
+  "_comment": "Lighthouse / Core Web Vitals budget. The verifying-web-ui skill checks measured numbers against these. Tighten for marketing pages, loosen for data-heavy dashboards. Thresholds reflect the 2026 'good' Core Web Vitals bands.",
+  "timings": [
+    { "metric": "largest-contentful-paint", "budget": 2500, "_unit": "ms" },
+    { "metric": "interaction-to-next-paint", "budget": 200, "_unit": "ms" },
+    { "metric": "cumulative-layout-shift", "budget": 0.1, "_unit": "score" },
+    { "metric": "first-contentful-paint", "budget": 1800, "_unit": "ms" },
+    { "metric": "total-blocking-time", "budget": 200, "_unit": "ms" }
+  ],
+  "resourceSizes": [
+    { "resourceType": "script", "budget": 300, "_unit": "KiB" },
+    { "resourceType": "stylesheet", "budget": 100, "_unit": "KiB" },
+    { "resourceType": "image", "budget": 500, "_unit": "KiB" },
+    { "resourceType": "total", "budget": 1000, "_unit": "KiB" }
+  ],
+  "categories": {
+    "performance": 90,
+    "accessibility": 100,
+    "best-practices": 95,
+    "seo": 95
+  }
+}

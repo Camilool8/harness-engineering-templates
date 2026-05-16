@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# verify.sh — the objective pass/fail gate for "is this work done?"
+#
+#   1. Copy this file to verify.sh:   cp verify.sh.example verify.sh
+#   2. Replace the commands below with your project's real ones (mirror the
+#      Commands section of CLAUDE.md).
+#   3. chmod +x verify.sh
+#
+# The Stop hook runs this. Non-zero exit blocks the agent from claiming "done"
+# and feeds the output back so it can fix the failure.
+set -euo pipefail
+
+# --- replace with your stack -------------------------------------------------
+# npm run lint && npm run typecheck && npm test
+# uv run ruff check . && uv run pytest -q
+# go vet ./... && go test ./...
+# cargo clippy -- -D warnings && cargo test
+echo "verify.sh: no checks configured — edit .claude/verify.sh" >&2
+exit 0

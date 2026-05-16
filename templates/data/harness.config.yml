@@ -1,0 +1,43 @@
+# ============================================================================
+# harness.config.yml — data recipe (Data Analysis / Data Science / ML / AI).
+#
+#   ./assemble.sh data/harness.config.yml /path/to/your/project
+# ============================================================================
+
+project:
+  name: my-data-project
+  domain: data
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # decisions, dataset notes, model cards as md.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem        # experiment plans and task files as md.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true                  # functions lifted out of notebooks get real tests.
+  spec_driven: true          # the analysis question / contract before code.
+  eval_driven: true          # ON, non-negotiable for data/ML: a model or LLM
+                             # output is only as trustworthy as its eval set,
+                             # and evals must live apart from model code so the
+                             # agent cannot "improve numbers" by editing both.
+  bdd: false                 # no non-technical behavior sign-off here.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default; a chart-critic or eval reviewer can be
+                             # a separate subagent later.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false             # warehouse writes are blocked by hook, not money.
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true

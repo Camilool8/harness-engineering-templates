@@ -1,0 +1,44 @@
+# ============================================================================
+# harness.config.yml — web recipe (Web / SaaS / frontend + API).
+#
+#   ./assemble.sh web/harness.config.yml /path/to/your/project
+# ============================================================================
+
+project:
+  name: my-web-app
+  domain: web
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # code-shaped knowledge; CLAUDE.md per package.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem        # switch to github-issues/linear if the team
+                             # already lives there.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true
+  spec_driven: true
+  eval_driven: true          # ON: any AI-generated copy/feature output needs
+                             # a golden set; also covers OpenAPI contract evals.
+  bdd: true                  # ON: web features are user-facing; Gherkin lets
+                             # PMs/designers sign off on behavior.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default. For a monorepo, switch to
+                             # supervisor-worker — one subagent per affected
+                             # package, each in its own git worktree.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false             # no money/prod-deletion tools in a typical app.
+  kill_switch: false         # no long autonomous loops.
+  sandbox: false             # turn ON if the agent ingests untrusted issues/PRs.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true

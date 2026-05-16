@@ -1,0 +1,47 @@
+# ============================================================================
+# harness.config.yml — game development recipe.
+#
+#   ./assemble.sh game/harness.config.yml /path/to/your/project
+#
+# Tuned for Unity / Godot / Unreal / Bevy work. The non-default choices below
+# exist because game code is judged by what it looks like on screen, and the
+# asset pipeline is a minefield of GUID-bearing sidecar files.
+# ============================================================================
+
+project:
+  name: my-project
+  domain: game
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # default — engine quirks & asset conventions are
+                             # small, git-diffable, and reviewed by humans.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem        # default — solo/small studio cadence.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true                  # ON for deterministic logic (sim, math, ECS
+                             # systems, save/load). Visual/spatial work is
+                             # verified in-engine, not by unit tests.
+  spec_driven: true          # default — design doc / mechanic spec before code.
+  eval_driven: false         # no LLM output surface in a typical game build.
+  bdd: false                 # default.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default — one agent that owns code + the
+                             # in-engine verification loop.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false             # default — no prod/money/deletion surface.
+  kill_switch: false         # default — no autonomous long-running loop.
+  sandbox: false             # default — local engine, no untrusted ingest.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true    # default.
+  diff_review_required: true # default — and asset/scene diffs especially.

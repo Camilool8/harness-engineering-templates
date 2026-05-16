@@ -1,0 +1,50 @@
+# ============================================================================
+# harness.config.yml — embedded / IoT / firmware recipe.
+#
+#   ./assemble.sh embedded/harness.config.yml /path/to/your/project
+#
+# Firmware is the highest "irreversible action" surface in software: a bad
+# flash bricks hardware. Every non-default below raises the gate around the
+# flash step and ties verification to real silicon.
+# ============================================================================
+
+project:
+  name: my-project
+  domain: embedded
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # default — board pinouts, peripheral quirks and
+                             # toolchain notes stay git-diffable and reviewed.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: github-issues     # firmware repos run on Issues + self-hosted HIL
+                             # runners; keep work items where CI already lives.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true                  # ON for deterministic logic — protocol parsing,
+                             # state machines, drivers behind a HAL mock.
+                             # Hardware timing is verified on-target (HIL).
+  spec_driven: true          # default — datasheet/register contract first.
+  eval_driven: false         # no LLM output surface in a firmware build.
+  bdd: false                 # default.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent     # default — one agent owns build + flash + HIL.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: true              # ON — flashing is irreversible; a typed-token
+                             # confirmation gates every write-to-silicon.
+  kill_switch: true          # ON — out-of-band stop for long HIL/soak loops
+                             # so a runaway run can't keep cycling hardware.
+  sandbox: false             # OFF — the toolchain needs USB/JTAG device access
+                             # and serial ports; a network/fs jail breaks it.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true    # default.
+  diff_review_required: true # default.

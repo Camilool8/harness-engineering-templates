@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "zep": {
+      "command": "npx",
+      "args": ["-y", "@getzep/zep-mcp-server"],
+      "env": {
+        "ZEP_API_KEY": "${ZEP_API_KEY}",
+        "ZEP_API_URL": "${ZEP_API_URL}"
+      }
+    }
+  }
+}

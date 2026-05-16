@@ -1,0 +1,71 @@
+# ============================================================================
+# harness.config.yml — the SINGLE source of truth for your Claude Code harness.
+#
+# Edit this file, then run:   ./assemble.sh harness.config.yml <target-dir>
+# Or assemble by hand — see templates/README.md and each module's MODULE.md.
+#
+# Every option below is PICK or DISCARD. Defaults are the 2026 practitioner
+# consensus; change a value only when the comment's "switch when" applies.
+# ============================================================================
+
+project:
+  name: my-project
+  # domain selects a recipe's defaults if you assemble from a <domain>/ folder.
+  # generic = base only. web | data | devops | finance | mobile | game |
+  # embedded | scientific | security | content | ops | generic
+  domain: generic
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+# Where the agent's durable, cross-session knowledge lives.
+memory:
+  # md-files       → CLAUDE.md + .claude/memory/*.md. Cheap, git-diffable,
+  #                  human-auditable, survives every model upgrade. START HERE.
+  # vector-store   → Mem0 / Chroma. Switch when the corpus is too large for
+  #                  context and is naturally semantic-retrieval-shaped.
+  # knowledge-graph→ Zep / Letta. Switch for regulated work where facts have
+  #                  provenance and decay, or multi-hop reasoning is needed.
+  # none           → no durable memory (one-shot / CI agents).
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+# Where work items, plans and status live.
+progress:
+  # filesystem    → .claude/progress/ plan + task files. Solo / small teams.
+  # github-issues → GitHub Issues via gh CLI / GitHub MCP. Switch when the repo
+  #                 already runs on Issues.
+  # linear        → Linear MCP. Switch for product teams already in Linear.
+  # jira          → Jira/Atlassian MCP. Switch for enterprise/regulated teams.
+  # none          → ephemeral, in-conversation tasks only.
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+# Which engineering discipline is mechanically enforced (not just documented).
+methodology:
+  tdd: true            # red-green-refactor, hook-enforced. Keep on by default.
+  spec_driven: true    # specs/ contract + Plan Mode before code. Keep on.
+  eval_driven: false   # evals/ golden set. Turn ON for any LLM/ML output.
+  bdd: false           # Gherkin .feature files. ON when non-tech stakeholders
+                       # sign off on behavior.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+# Agent topology. Start single. Escalate only when work truly parallelizes.
+orchestration:
+  # single-agent     → one well-equipped agent. The correct default.
+  # supervisor-worker→ orchestrator fans out to isolated subagents.
+  # pipeline         → fixed sequential stages with gates.
+  # blackboard       → heterogeneous agents coordinate via the file system.
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+# secret-scan + command-guard + audit-log + verify-gate ALWAYS ship in _base.
+# These add stronger gates for higher blast radius.
+safety:
+  two_key: false       # typed-token confirmation for prod / money / deletion.
+  kill_switch: false   # out-of-band stop for autonomous / long-running loops.
+  sandbox: false       # filesystem + network egress restriction. ON when the
+                       # agent ingests untrusted input (issues, PRs, web).
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # non-trivial work pauses for plan approval.
+  diff_review_required: true  # read every diff before "done" is allowed.

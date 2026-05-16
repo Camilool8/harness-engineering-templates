@@ -1,0 +1,56 @@
+# ============================================================================
+# harness.config.yml — security research (red & blue team) recipe.
+#
+#   ./assemble.sh security/harness.config.yml /path/to/your/project
+#
+# For AUTHORIZED security testing, CTF, and defensive research only. The
+# non-default choices isolate offensive tooling and gate every action against
+# a written engagement scope.
+# ============================================================================
+
+project:
+  name: my-project
+  domain: security
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files          # default — findings and engagement notes stay
+                             # git-diffable and auditable.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: github-issues     # findings/advisories tracked as issues, where
+                             # remediation and CI already live.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: false                 # OFF — security research is exploratory; the
+                             # work is recon and PoC, not red-green TDD.
+  spec_driven: true          # default — the engagement scope + rules of
+                             # engagement are the spec.
+  eval_driven: false         # default — no graded LLM output surface.
+  bdd: false                 # default.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  # supervisor-worker — a supervisor fans out to CLEANLY SEPARATED subagents.
+  # Red-team (offensive) and blue-team (defensive) work MUST run in different
+  # isolated subagents, never the same context: it stops offensive tooling and
+  # findings from leaking into defensive analysis (and vice versa), and keeps
+  # each subagent's tool surface scoped to its role.
+  topology: supervisor-worker
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false             # default — gating is by engagement scope, not a
+                             # typed token.
+  kill_switch: true          # ON — scans and offensive runs are long and
+                             # noisy; an out-of-band stop is mandatory.
+  sandbox: true              # ON — security tooling ingests untrusted targets
+                             # and payloads; restrict filesystem + network
+                             # egress so the harness can't reach beyond scope.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true    # default.
+  diff_review_required: true # default.

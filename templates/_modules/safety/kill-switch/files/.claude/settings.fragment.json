@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/kill-switch.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/kill-switch.sh" }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Edit(.claude/KILL)",
+      "Write(.claude/KILL)",
+      "Edit(.claude/hooks/kill-switch.sh)",
+      "Write(.claude/hooks/kill-switch.sh)",
+      "Edit(.claude/kill-switch.log.jsonl)",
+      "Write(.claude/kill-switch.log.jsonl)"
+    ]
+  }
+}

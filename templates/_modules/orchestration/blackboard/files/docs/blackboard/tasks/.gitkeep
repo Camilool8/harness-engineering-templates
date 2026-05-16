@@ -1,0 +1,16 @@
+# Task files live here.
+#
+# One file per task, named <id>.md, e.g. T3.md. The orchestrator posts tasks;
+# workers claim and complete them.
+#
+# Each task file is frontmatter plus a body:
+#   ---
+#   id: T3
+#   status: open        # open -> claimed -> done | blocked
+#   claimed_by: ""
+#   depends_on: []
+#   ---
+#   ## Task
+#   <what to do, acceptance criteria, file scope>
+#
+# This .gitkeep keeps the directory under version control while empty.

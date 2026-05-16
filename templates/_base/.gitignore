@@ -1,0 +1,20 @@
+# Claude Code — local & generated
+.claude/settings.local.json
+.claude/audit/
+.claude/progress/state.local.*
+CLAUDE.local.md
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Build / deps
+build/
+dist/
+node_modules/
+__pycache__/
+.venv/

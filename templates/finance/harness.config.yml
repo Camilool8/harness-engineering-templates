@@ -1,0 +1,53 @@
+# ============================================================================
+# harness.config.yml — finance recipe (Finance / Quant / Trading / Accounting).
+#
+#   ./assemble.sh finance/harness.config.yml /path/to/your/project
+# ============================================================================
+
+project:
+  name: my-finance-system
+  domain: finance
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: knowledge-graph   # regulated work: facts have provenance and decay;
+                             # a graph tracks how a figure/assumption changed
+                             # and supports the multi-hop audit questions
+                             # examiners ask.
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: jira              # enterprise/regulated teams already run on Jira;
+                             # work items become part of the audit record.
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true                  # P&L, journal and risk math get deterministic tests.
+  spec_driven: true          # the strategy / control contract before code.
+  eval_driven: true          # ON: strategies and models are evaluated like LLM
+                             # output — OOS validation is the unit test, and
+                             # eval artifacts are part of model-risk evidence.
+  bdd: false
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: supervisor-worker  # split the agent: a single global agent with all
+                               # permissions is a financial anti-pattern.
+                               # Separate research (backtest/validate),
+                               # execution (order proposal), and reconciliation
+                               # (settlement/audit) into isolated workers with
+                               # distinct, least-privilege credentials.
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: true              # ON: every trade, journal entry or client
+                             # notification requires a human-issued typed token
+                             # the model cannot generate.
+  kill_switch: true          # ON: out-of-band three-level stop (throttle →
+                             # pause → flatten) for any autonomous loop.
+  sandbox: false             # the agent drafts; humans sign off and execute.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
