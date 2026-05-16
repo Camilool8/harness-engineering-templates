@@ -50,9 +50,9 @@ domain:
 # ── AGENTS ──────────────────────────────────────────────────────────────────
 agents:
   team: curated       # Installs api-architect + api-implementer +
-                      # contract-reviewer + api-security-auditor +
-                      # 2 shared web agents (perf-auditor excluded — no UI).
-  exclude: [web-perf-auditor]  # No app shell — Lighthouse budget not applicable.
+                      # contract-reviewer + api-security-auditor.
+                      # All 3 shared web agents excluded — no UI surface.
+  exclude: [web-perf-auditor, design-critic, accessibility-auditor]
   include: []
 
 # ── DOCS ────────────────────────────────────────────────────────────────────
