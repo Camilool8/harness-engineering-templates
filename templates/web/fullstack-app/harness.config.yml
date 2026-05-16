@@ -1,0 +1,68 @@
+# ============================================================================
+# harness.config.yml — web / fullstack-app sub-domain
+#
+# Single deployable that owns both frontend and backend.
+# Typical stack: Next.js App Router + Tailwind + shadcn/ui + Drizzle + Auth.js.
+#
+# Assemble:  ./assemble.sh web/fullstack-app/harness.config.yml ./my-app
+# ============================================================================
+
+project:
+  name: my-fullstack-app
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+# md-files: git-diffable memory covering both client and server decisions.
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # Server Action + component tests first; enforced by hook.
+  spec_driven: true    # Agree on route shape and data schema before coding.
+  eval_driven: false   # No LLM pipeline output; leave off.
+  bdd: true            # ON: user-facing features span client+server; Gherkin
+                       # sign-off ensures both layers meet the requirement.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+# single-agent: the fullstack loop is tightly coupled; supervisor-worker adds
+# overhead without benefit when client and server share one deployment.
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+# Data mutations are possible; keep sandbox off (dev DB) but consider
+# enabling two-key for production migration PRs.
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # Schema changes and auth flows pause for approval.
+  diff_review_required: true  # Read every diff before "done" is allowed.
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: web
+  subdomain: fullstack-app
+  addons: [nextjs, tailwind-shadcn, drizzle, authjs]
+                               # Default: Next.js App Router + Tailwind/shadcn +
+                               # Drizzle ORM + Auth.js. Add playwright-e2e for
+                               # E2E coverage; sentry-observability for monitoring.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # Installs fullstack-architect + fullstack-implementer +
+                      # data-layer-implementer + security-auditor +
+                      # 3 shared web agents.
+  exclude: []
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # Wire Context7 for live Next.js/Drizzle/Auth.js docs.

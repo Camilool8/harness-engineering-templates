@@ -1,0 +1,60 @@
+# ============================================================================
+# harness.config.yml — web / api-service sub-domain
+#
+# Schema-first HTTP API service with no UI.
+# The OpenAPI schema is committed before any handler code is written.
+#
+# Assemble:  ./assemble.sh web/api-service/harness.config.yml ./my-api
+# ============================================================================
+
+project:
+  name: my-api-service
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # Contract + unit tests first; enforced by hook.
+  spec_driven: true    # Schema is agreed before handler code is written.
+  eval_driven: false   # No LLM pipeline output.
+  bdd: false           # OFF: API services have no user-facing Gherkin scenarios;
+                       # contract tests cover the behaviour boundary instead.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # Breaking schema changes pause for approval.
+  diff_review_required: true  # Every diff reviewed before "done".
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: web
+  subdomain: api-service
+  addons: []            # openapi-rest addon built in Phase 6 — add it once available.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # Installs api-architect + api-implementer +
+                      # contract-reviewer + api-security-auditor +
+                      # 2 shared web agents (perf-auditor excluded — no UI).
+  exclude: [web-perf-auditor]  # No app shell — Lighthouse budget not applicable.
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # Wire Context7 for live OpenAPI/Zod/Hono/Fastify docs.

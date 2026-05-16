@@ -1,0 +1,67 @@
+# ============================================================================
+# harness.config.yml — web / design-system sub-domain
+#
+# Shared component library consumed by ≥2 applications.
+# Typical stack: Storybook + Tailwind tokens + shadcn/ui primitives.
+#
+# Assemble:  ./assemble.sh web/design-system/harness.config.yml ./my-design-system
+# ============================================================================
+
+project:
+  name: my-design-system
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+# md-files: cheap, git-diffable, human-auditable. Correct for a component
+# library where the corpus is component specs and token documentation.
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+# filesystem: solo / small team. Switch to github-issues if the repo tracks
+# component work there.
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # Story + unit tests first; enforced by hook.
+  spec_driven: true    # Agree on component API before writing a line of code.
+  eval_driven: false   # No LLM pipeline output; leave off.
+  bdd: true            # ON: component behavior is user-observable; Gherkin
+                       # sign-off before implementation keeps design intent.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+# single-agent: sufficient for a focused component library.
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+# No production-destructive operations in a component library.
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # Component API changes pause for approval.
+  diff_review_required: true  # Read every diff before "done" is allowed.
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: web
+  subdomain: design-system
+  addons: [tailwind-shadcn]   # Default: Tailwind tokens + shadcn/ui primitives.
+                               # Add playwright-e2e for cross-browser component tests.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # Installs component-architect + component-implementer +
+                      # visual-regression-tester + 2 shared web agents.
+  exclude: [web-perf-auditor]  # Lighthouse perf budget not applicable to a
+                               # component library (no app shell to audit).
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # Wire Context7 for live Storybook/Tailwind/shadcn docs.

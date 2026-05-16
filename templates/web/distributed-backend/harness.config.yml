@@ -1,0 +1,63 @@
+# ============================================================================
+# harness.config.yml — web / distributed-backend sub-domain
+#
+# Independently deployable microservices communicating over messaging
+# infrastructure and/or synchronous HTTP/gRPC with explicit contracts.
+#
+# Assemble:  ./assemble.sh web/distributed-backend/harness.config.yml ./my-services
+# ============================================================================
+
+project:
+  name: my-distributed-backend
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # Contract + unit tests first per service.
+  spec_driven: true    # Service contract agreed before implementation.
+  eval_driven: false   # No LLM pipeline output.
+  bdd: false           # OFF: distributed services use consumer-driven contracts
+                       # (Pact) as the behaviour boundary, not Gherkin.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+# pipeline: each service change flows through its own architect → implement →
+# contract-review → test pipeline; tasks are bounded per service.
+orchestration:
+  topology: pipeline
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # Cross-service boundary changes pause for approval.
+  diff_review_required: true  # Every diff reviewed before "done".
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: web
+  subdomain: distributed-backend
+  addons: []            # Add openapi-rest when services expose REST APIs (Phase 6).
+                        # Add sentry-observability for distributed tracing.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # Installs service-architect + service-implementer +
+                      # contract-reviewer + integration-tester + security-auditor +
+                      # 2 shared web agents (perf-auditor excluded — no UI).
+  exclude: [web-perf-auditor]  # No app shell — Lighthouse budget not applicable.
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # Wire Context7 for live Pact/Kafka/OpenTelemetry docs.
