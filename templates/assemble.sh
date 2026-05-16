@@ -145,6 +145,25 @@ if [ "$CONFIG_DIR" != "$HERE" ]; then
   fi
 fi
 
+# --- addons (domain-scoped, _modules-shaped) --------------------------------
+if [ -n "$DOMAIN_DIR" ]; then
+  while IFS= read -r addon; do
+    [ -z "$addon" ] && continue
+    adir="$DOMAIN_DIR/_addons/$addon"
+    if [ -d "$adir" ]; then
+      echo "→ addon: $addon"
+      [ -d "$adir/files" ] && { cp -R "$adir/files/." "$TARGET/"; merge_fragments; }
+      [ -f "$adir/claude-md.md" ] && {
+        printf '\n' >> "$TARGET/CLAUDE.md"; cat "$adir/claude-md.md" >> "$TARGET/CLAUDE.md"; }
+      PICKED+=("addon/$addon")
+    else
+      echo "  ! addon not found: $addon (skipped)" >&2
+    fi
+  done <<EOF
+$(cfg_list domain.addons)
+EOF
+fi
+
 # --- substitute the project name --------------------------------------------
 NAME="$(cfg project.name)"
 if [ -n "$NAME" ]; then
