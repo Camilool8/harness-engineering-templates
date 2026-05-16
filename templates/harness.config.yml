@@ -10,10 +10,6 @@
 
 project:
   name: my-project
-  # domain selects a recipe's defaults if you assemble from a <domain>/ folder.
-  # generic = base only. web | data | devops | finance | mobile | game |
-  # embedded | scientific | security | content | ops | generic
-  domain: generic
 
 # ── MEMORY ──────────────────────────────────────────────────────────────────
 # Where the agent's durable, cross-session knowledge lives.
@@ -69,3 +65,20 @@ safety:
 hitl:
   plan_mode_default: true     # non-trivial work pauses for plan approval.
   diff_review_required: true  # read every diff before "done" is allowed.
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+# Curated, three-layer domain content. Leave pack empty for a base-only harness.
+domain:
+  pack: ""            # web | data | devops | ... | "" (base only)
+  subdomain: ""       # the assemble unit, e.g. frontend-app — see <pack>/DOMAIN.md
+  addons: []          # domain-scoped extras, e.g. [nextjs, tailwind-shadcn]
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # curated = install the sub-domain's team | none
+  exclude: []         # drop named agents from the curated team
+  include: []         # add agents à-la-carte, by path: <pack>/<subdomain>/<agent>
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # wire the Context7 live-docs MCP (false = dossier only)
