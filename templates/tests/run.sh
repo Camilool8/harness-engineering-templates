@@ -18,8 +18,12 @@ assert_assembles() {
   jq -e . "$OUT/.claude/settings.json" >/dev/null 2>&1 \
     || { fail "$2: settings.json invalid"; return; }
   [ -f "$OUT/CLAUDE.md" ] || { fail "$2: no CLAUDE.md"; return; }
-  if find "$OUT" -name 'settings.fragment.json' | grep -q .; then
-    fail "$2: leftover settings.fragment.json"; return
+  # assemble.sh auto-merges fragments at exactly these two paths; assert they
+  # were consumed. Fragments at other paths (e.g. the safety/sandbox module's
+  # .claude/sandbox/settings.fragment.json) are intentional manual-apply
+  # artifacts — not flagged here.
+  if [ -f "$OUT/.claude/settings.fragment.json" ] || [ -f "$OUT/.mcp.json.fragment" ]; then
+    fail "$2: leftover fragment at an auto-merge path"; return
   fi
   for h in "$OUT"/.claude/hooks/*.sh; do
     [ -x "$h" ] || { fail "$2: hook not executable: $h"; return; }
