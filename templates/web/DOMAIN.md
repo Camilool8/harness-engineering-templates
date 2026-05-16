@@ -16,7 +16,7 @@ platforms, API services, design systems, and distributed backends.
 ## Addons
 
 Addons are composable extras declared in `domain.addons` of your config.
-Available: `nextjs`, `vite-spa`, `tailwind-shadcn`, `drizzle`, `authjs`, `playwright-e2e`, `sentry-observability`.
+Available: `nextjs`, `astro`, `vite-spa`, `tailwind-shadcn`, `drizzle`, `sanity-cms`, `authjs`, `playwright-e2e`, `sentry-observability`.
 See each addon's `MODULE.md` for adopt-if / skip-if guidance.
 
 ## Assemble
