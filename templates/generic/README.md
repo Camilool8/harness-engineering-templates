@@ -1,6 +1,9 @@
 # Generic harness recipe
 > For anyone who is not sure which domain fits yet — start here, graduate later.
 
+> **Note:** `generic` is intentionally base-only and is not a domain pack — it has
+> no sub-domains, addons, or curated agent teams by design.
+
 This recipe is **base only**. It picks nothing exotic: every value in
 `harness.config.yml` is the 2026 practitioner default. You get a correct,
 disciplined harness with zero domain-specific assumptions, and you can layer a

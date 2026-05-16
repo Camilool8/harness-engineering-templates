@@ -1,6 +1,11 @@
 # Finance harness recipe
 > For quant, trading, accounting, and FinTech teams in regulated environments.
 
+> **Status: v1 thin recipe** — pending deep curation into a three-layer domain
+> pack (see `web/` for the curated reference and
+> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
+> It assembles and works today; sub-domains and curated agent teams are coming.
+
 The financial domain demands auditability, determinism, and regulatory
 traceability. The consensus pattern is uncompromising: **AI drafts; humans sign
 off.** No trade, journal entry, or client notification is ever fully automated.

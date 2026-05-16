@@ -1,6 +1,11 @@
 # Security harness recipe
 > For authorized security researchers doing red-team, blue-team, and CTF work.
 
+> **Status: v1 thin recipe** — pending deep curation into a three-layer domain
+> pack (see `web/` for the curated reference and
+> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
+> It assembles and works today; sub-domains and curated agent teams are coming.
+
 > **Authorized use only.** This recipe is for authorized penetration testing,
 > CTF challenges, and defensive security research. Every target must be covered
 > by a signed engagement scope.

@@ -1,6 +1,11 @@
 # DevOps harness recipe
 > For DevOps, SRE, and platform engineers managing infrastructure and clusters.
 
+> **Status: v1 thin recipe** — pending deep curation into a three-layer domain
+> pack (see `web/` for the curated reference and
+> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
+> It assembles and works today; sub-domains and curated agent teams are coming.
+
 ## What this recipe picks
 
 | Axis | Choice | Why |

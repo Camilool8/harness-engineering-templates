@@ -34,7 +34,7 @@ assert_assembles() {
 }
 
 echo "== backward-compat: every thin recipe assembles =="
-for d in generic web data devops finance mobile game embedded \
+for d in generic data devops finance mobile game embedded \
          scientific security content ops; do
   assert_assembles "$d/harness.config.yml" "recipe:$d"
 done
