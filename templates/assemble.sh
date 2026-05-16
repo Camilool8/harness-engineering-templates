@@ -42,6 +42,14 @@ flatten() {
 CFG="$(flatten)"
 cfg() { printf '%s\n' "$CFG" | grep "^$1=" | head -1 | cut -d= -f2- || true; }
 
+# cfg_list <dotted.key> -> prints one list item per line (handles [a, b] or empty)
+cfg_list() {
+  local raw; raw="$(cfg "$1")"
+  raw="${raw#[}"; raw="${raw%]}"
+  [ -z "$raw" ] && return 0
+  printf '%s\n' "$raw" | tr ',' '\n' | sed 's/^[ \t]*//; s/[ \t]*$//' | grep -v '^$'
+}
+
 # --- copy _base --------------------------------------------------------------
 echo "→ base"
 cp -R "$HERE/_base/." "$TARGET/"
