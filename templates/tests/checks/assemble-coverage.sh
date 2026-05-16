@@ -3,7 +3,7 @@
 # A new module/addon/sub-domain is covered the moment its folder exists.
 set -uo pipefail
 . "$(dirname "$0")/../lib/common.sh"
-cd "$TPL"
+cd "$TPL" || exit 1
 
 # assert_assembled <output-dir> <label>
 assert_assembled() {
@@ -48,9 +48,11 @@ probe_for_module() {            # probe_for_module <category> <option> <tmpfile>
   local cat="$1" opt="$2" f="$3"
   cp harness.config.yml "$f"
   case "$cat" in
-    memory)          sed -i.x "s/^  backend: .*/  backend: $opt/" "$f" ;;  # first 'backend:' is memory
+    memory)
+      # first 'backend:' is memory — rewrite only that occurrence
+      awk -v o="$opt" 'BEGIN{n=0} /^  backend:/{n++; if(n==1){print "  backend: " o; next}} {print}' "$f" > "$f.a" && mv "$f.a" "$f" ;;
     progress-tracking)
-      # second 'backend:' is progress — rewrite via awk
+      # second 'backend:' is progress — rewrite only that occurrence
       awk -v o="$opt" 'BEGIN{n=0} /^  backend:/{n++; if(n==2){print "  backend: " o; next}} {print}' "$f" > "$f.a" && mv "$f.a" "$f" ;;
     methodology)
       key="$opt"; [ "$opt" = "spec-driven" ] && key="spec_driven"
@@ -83,8 +85,8 @@ while IFS= read -r addondir; do
   f="$PROBE_HOST/.probe-${addon}.harness.config.yml"
   sed "s/^\(  addons:\).*/\1 [$addon]/" "$PROBE_HOST/harness.config.yml" > "$f"
   out="$(mktemp -d)"
-  if ./assemble.sh "$f" "$out" >/dev/null 2>&1 \
-     && ! ./assemble.sh "$f" "$out" 2>&1 >/dev/null | grep -q "addon not found"; then
+  log="$(./assemble.sh "$f" "$out" 2>&1)"; rc=$?
+  if [ "$rc" -eq 0 ] && ! printf '%s' "$log" | grep -q "addon not found"; then
     assert_assembled "$out" "addon:$addon"
   else
     fail "addon:$addon — assemble failed or addon not found"

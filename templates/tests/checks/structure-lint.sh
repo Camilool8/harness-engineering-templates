@@ -2,7 +2,7 @@
 # checks/structure-lint.sh — convention checks across the harness templates.
 set -uo pipefail
 . "$(dirname "$0")/../lib/common.sh"
-cd "$TPL"
+cd "$TPL" || exit 1
 
 echo "== structure-lint: MODULE.md standard sections =="
 MODULE_SECTIONS=("## Adopt if" "## Skip if" "## Dependencies"

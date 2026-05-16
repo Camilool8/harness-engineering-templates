@@ -3,7 +3,7 @@
 # at error severity when shellcheck is installed. Both are hard gates.
 set -uo pipefail
 . "$(dirname "$0")/../lib/common.sh"
-cd "$REPO"
+cd "$REPO" || exit 1
 
 echo "== hook-lint: bash -n on every *.sh =="
 while IFS= read -r sh; do
