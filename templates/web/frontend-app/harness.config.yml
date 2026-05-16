@@ -1,0 +1,68 @@
+# ============================================================================
+# harness.config.yml — web / frontend-app sub-domain
+#
+# Client-side application that consumes APIs it does not own.
+# Typical stack: Vite SPA or SSG + Tailwind + shadcn/ui.
+#
+# Assemble:  ./assemble.sh web/frontend-app/harness.config.yml ./my-app
+# ============================================================================
+
+project:
+  name: my-frontend-app
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+# md-files: cheap, git-diffable, human-auditable. The correct default for a
+# client app where the corpus rarely grows past CLAUDE.md + a few memory files.
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+# filesystem: solo / small team. Switch to github-issues if the repo already
+# tracks work there.
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # Component + unit tests first; enforced by hook.
+  spec_driven: true    # Agree on component API + route shape before coding.
+  eval_driven: false   # No LLM-generated output pipeline; leave off.
+  bdd: true            # ON: user-facing features benefit from Gherkin sign-off
+                       # by product/design before implementation starts.
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+# single-agent: sufficient for a pure frontend app. Switch to supervisor-worker
+# only for monorepos where components and pages are independently authored.
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+# No production-destructive operations in a pure frontend; all three stay off.
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true     # Non-trivial component work pauses for approval.
+  diff_review_required: true  # Read every diff before "done" is allowed.
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: web
+  subdomain: frontend-app
+  addons: [vite-spa, tailwind-shadcn]   # Default: Vite SPA + Tailwind/shadcn.
+                                         # Swap vite-spa → nextjs for SSG/SSR.
+                                         # Add playwright-e2e for E2E coverage.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated       # Installs frontend-architect + frontend-implementer
+                      # plus the 3 shared web agents.
+  exclude: []
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true  # Wire Context7 for live Vite/React/shadcn/Tailwind docs.
