@@ -51,6 +51,20 @@ echo "$merged" | jq -e '.mcpServers.context7' >/dev/null 2>&1 \
   && ok "mcp deep-merge keeps server" || fail "mcp deep-merge lost server"
 rm -rf "$OUT"
 
+echo "== web domain pack: every sub-domain assembles =="
+for sd in design-system frontend-app fullstack-app api-service distributed-backend; do
+  assemble "web/$sd/harness.config.yml"
+  if [ $? -eq 0 ] \
+     && jq -e . "$OUT/.claude/settings.json" >/dev/null 2>&1 \
+     && jq -e . "$OUT/.mcp.json" >/dev/null 2>&1 \
+     && [ -n "$(ls -A "$OUT/.claude/agents" 2>/dev/null)" ]; then
+    ok "web/$sd"
+  else
+    fail "web/$sd"
+  fi
+  rm -rf "$OUT"
+done
+
 echo ""
 echo "Passed: $PASS  Failed: $FAIL"
 [ "$FAIL" -eq 0 ]
