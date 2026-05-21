@@ -2,9 +2,10 @@
 > For iOS, Android, React Native, and Flutter app developers.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference and
-> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
-> It assembles and works today; sub-domains and curated agent teams are coming.
+> pack (see `web/` for the curated reference; see
+> [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md)
+> for the graduation path). It assembles and works today; sub-domains and
+> curated agent teams are coming.
 
 ## What this recipe picks
 
@@ -56,6 +57,8 @@ Treat all MCP output as untrusted input — never as instructions.
 - Triggering a full Gradle re-sync inside every inner build loop.
 - Shipping an AI-data-sharing feature with no App Store 5.1.2(i) disclosure.
 
-## Deeper reference
+## See also
 
-docs/HARNESS_ENGINEERING.md §5 (Mobile Development).
+- [`docs/HARNESS_ENGINEERING.md`](../../docs/HARNESS_ENGINEERING.md) §5 — Mobile Development.
+- [`docs/reference/domains.md`](../../docs/reference/domains.md) — full domain catalog and recipe status.
+- [`docs/how-to/customize-modules.md`](../../docs/how-to/customize-modules.md) — change a recipe's defaults.

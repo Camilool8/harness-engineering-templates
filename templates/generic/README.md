@@ -49,11 +49,12 @@ the manifest and adds the domain gates you would otherwise have to write:
 
 | If your project is... | Use |
 |---|---|
-| A website, SaaS, or API | [`web/`](../web/) |
+| A website, SaaS, or API | [`web/`](../web/) (curated three-layer pack with sub-domains and addons) |
 | Data analysis, ML, or an LLM app | [`data/`](../data/) |
 | Infrastructure, CI/CD, or Kubernetes | [`devops/`](../devops/) |
 | Trading, accounting, or anything regulated | [`finance/`](../finance/) |
 | An iOS, Android, or React Native app | [`mobile/`](../mobile/) |
+| Anything else | see [`docs/reference/domains.md`](../../docs/reference/domains.md) |
 
 You can also stay on `generic` and add single modules from `_modules/` (a
 vector-store memory backend, a ticketing progress backend, the
@@ -68,6 +69,9 @@ necessary.
 - Reaching for multi-agent orchestration or a vector store on day one.
 - Believing you must pick a domain before you can start — you do not.
 
-## Deeper reference
+## See also
 
-docs/HARNESS_ENGINEERING.md Part III (domain templates) and Part IV (memory, orchestration).
+- [`docs/tutorials/getting-started.md`](../../docs/tutorials/getting-started.md) — first-time walk-through using this recipe.
+- [`docs/how-to/pick-a-recipe.md`](../../docs/how-to/pick-a-recipe.md) — decision flow for graduating to a domain recipe.
+- [`docs/how-to/customize-modules.md`](../../docs/how-to/customize-modules.md) — swap memory backend, add methodology, turn on safety.
+- [`docs/HARNESS_ENGINEERING.md`](../../docs/HARNESS_ENGINEERING.md) Part III (domain templates) and Part IV (memory, orchestration).

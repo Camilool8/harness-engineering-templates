@@ -1408,3 +1408,13 @@ The highest-leverage primary sources to internalize, in approximate order.
 ---
 
 *This document is a synthesis intended as the foundation for a template library. Each domain section should evolve into an actual ready-to-clone template directory under this repository — `templates/web/`, `templates/data/`, `templates/devops/`, `templates/finance/`, etc. — each instantiating the prescriptive defaults of its section with concrete `CLAUDE.md`, `.claude/skills/`, `.claude/hooks/`, and `.mcp.json` files. The harness, not the agent, is the contract.*
+
+---
+
+## See also (within this repo)
+
+- [`docs/README.md`](README.md) — full documentation index organised by Diátaxis quadrant.
+- [`docs/tutorials/getting-started.md`](tutorials/getting-started.md) — first-time walk-through.
+- [`docs/reference/domains.md`](reference/domains.md) — catalog of every domain recipe with status.
+- [`docs/explanation/why-harness.md`](explanation/why-harness.md) — the *agent = model + harness* premise condensed.
+- [`docs/METHODOLOGIES.md`](METHODOLOGIES.md) and [`docs/AGENT_ROLES.md`](AGENT_ROLES.md) — companion deep references.

@@ -512,3 +512,12 @@ Plus hooks for TDD enforcement, Plan Mode for planning, subagents for dispatch.
 - [awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)
 - [TELUS Digital — Building AI Agents Using Plan-and-Execute Loops](https://www.telusdigital.com/insights/data-and-ai/article/building-ai-agents-with-plan-and-execute)
 - [Microsoft Azure — AI Agent Orchestration Patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns)
+
+---
+
+## See also (within this repo)
+
+- [`docs/README.md`](README.md) — full documentation index organised by Diátaxis quadrant.
+- [`docs/reference/modules.md`](reference/modules.md) — methodology modules (`tdd`, `spec-driven`, `eval-driven`, `bdd`) and how to enable them.
+- [`docs/how-to/customize-modules.md`](how-to/customize-modules.md) — turn methodologies on / off in your harness.
+- [`docs/HARNESS_ENGINEERING.md`](HARNESS_ENGINEERING.md) and [`docs/AGENT_ROLES.md`](AGENT_ROLES.md) — companion deep references.

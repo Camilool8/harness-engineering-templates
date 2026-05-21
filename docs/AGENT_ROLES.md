@@ -316,3 +316,12 @@ That, more than anything else, is the agentic frontier the harness has to keep u
 - [wshobson/agents](https://github.com/wshobson/agents)
 - [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)
 - [Augment — Best AI Model for Coding Agents in 2026: A Routing Guide](https://www.augmentcode.com/guides/ai-model-routing-guide)
+
+---
+
+## See also (within this repo)
+
+- [`docs/README.md`](README.md) — full documentation index organised by Diátaxis quadrant.
+- [`docs/reference/modules.md`](reference/modules.md) — orchestration modules (`supervisor-worker`, `pipeline`, `blackboard`) and when to switch.
+- [`docs/how-to/customize-modules.md`](how-to/customize-modules.md) — escalating from `single-agent` deliberately.
+- [`docs/HARNESS_ENGINEERING.md`](HARNESS_ENGINEERING.md) and [`docs/METHODOLOGIES.md`](METHODOLOGIES.md) — companion deep references.

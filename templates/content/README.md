@@ -2,9 +2,10 @@
 > For content, marketing, and SEO teams producing brand-consistent copy at scale.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference and
-> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
-> It assembles and works today; sub-domains and curated agent teams are coming.
+> pack (see `web/` for the curated reference; see
+> [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md)
+> for the graduation path). It assembles and works today; sub-domains and
+> curated agent teams are coming.
 
 ## What this recipe picks
 
@@ -51,6 +52,8 @@
 - Shipping pages with malformed or unvalidated schema.org JSON-LD.
 - "On brand" treated as a vibe instead of a measured eval result.
 
-## Deeper reference
+## See also
 
-docs/HARNESS_ENGINEERING.md §10
+- [`docs/HARNESS_ENGINEERING.md`](../../docs/HARNESS_ENGINEERING.md) §10 — Content & Marketing.
+- [`docs/reference/domains.md`](../../docs/reference/domains.md) — full domain catalog and recipe status.
+- [`docs/how-to/customize-modules.md`](../../docs/how-to/customize-modules.md) — change a recipe's defaults.

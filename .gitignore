@@ -1,3 +1,6 @@
 # transient probe configs written by tests/checks/assemble-coverage.sh
 .probe-*.harness.config.yml
 templates/web/*/.probe-*.harness.config.yml
+
+# repo-root Claude Code workspace — root-anchored so templates/**/.claude/ is NOT ignored
+/.claude/
