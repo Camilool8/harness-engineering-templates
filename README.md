@@ -1,5 +1,7 @@
 # harness-engineering-templates
 
+![CI](https://github.com/Camilool8/harness-engineering-templates/actions/workflows/ci.yml/badge.svg)
+
 A library of opinionated **Claude Code harness templates** for software engineering across domains — web, data, DevOps, finance, mobile, game, embedded, scientific, security, content, ops.
 
 The premise (per Birgitta Böckeler, Anthropic engineering, METR, and the practitioner consensus of 2025–2026):
@@ -206,3 +208,13 @@ which orchestration topology, which safety gates — and run `assemble.sh`.
 Every module ships a `MODULE.md` with **adopt-if / skip-if / install / remove**,
 so picking and discarding is genuinely plug-and-play. Full guide:
 [`templates/README.md`](templates/README.md).
+
+## Contributing
+
+Contributions — new modules, addons, sub-domains, or whole domains — are welcome.
+Start with the [Propose new content](https://github.com/Camilool8/harness-engineering-templates/issues/new/choose)
+issue template, then read **[CONTRIBUTING.md](CONTRIBUTING.md)** for the step-by-step
+guide and **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)**.
+
+Every PR is automatically verified: `./templates/tests/run.sh` runs in CI and
+must pass before merge.
