@@ -1,6 +1,8 @@
 # Curated Domain Packs — Design
 
-> Status: approved design, ready for implementation planning.
+> Status: ✓ Completed 2026-05-15 — implemented and merged. This document is a
+> historical design record; the `- [ ]` checkboxes below were the design's
+> task list and are all done.
 > Date: 2026-05-15.
 > Supersedes the flat "domain recipe" structure in `templates/` with curated,
 > three-layer **domain packs**. Companion to `docs/HARNESS_ENGINEERING.md`,

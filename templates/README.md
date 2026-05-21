@@ -64,6 +64,10 @@ A **domain pack** layers three levels of curated content on top of the base:
     addons/                  ← optional extras (e.g. nextjs/, tailwind-shadcn/)
 ```
 
+> **Scope:** only the `web/` domain currently uses this three-layer structure
+> (`DOMAIN.md`, sub-domains, `_addons/`). The other 11 domains are v1 thin
+> recipes — a single `harness.config.yml` + `files/` — pending curation.
+
 The **sub-domain config is the assemble unit.** Pass it to `assemble.sh` instead
 of the generic manifest to get a fully configured, opinionated harness in one
 step:
@@ -79,12 +83,6 @@ Three new config blocks control how the pack is applied:
 | `domain` | `pack` / `subdomain` / `addons` | Which pack + sub-domain to assemble; optional addon layers. Leave `pack: ""` for a base-only harness. |
 | `agents` | `team` / `exclude` / `include` | `curated` installs the sub-domain's recommended agent roster; override with exclude/include lists. |
 | `docs` | `context7_mcp` | When `true`, wires the Context7 live-docs MCP so agents fetch current library docs at runtime. |
-
-**Status:** the `web` domain is the first fully curated v2 pack (DOMAIN.md,
-sub-domains, addon matrix, agent rosters). The other 11 domains (`data`,
-`devops`, `finance`, `mobile`, `game`, `embedded`, `scientific`, `security`,
-`content`, `ops`, `generic`) remain v1 thin recipes — they assemble correctly
-but do not yet have the three-layer structure.
 
 ---
 

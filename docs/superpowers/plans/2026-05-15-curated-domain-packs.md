@@ -1,5 +1,9 @@
 # Curated Domain Packs Implementation Plan
 
+> **✓ Completed 2026-05-15.** All 18 tasks were implemented, reviewed, and
+> merged. This file is kept as a historical record — the `- [ ]` checkboxes are
+> not open work.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Restructure `templates/` from flat domain recipes into curated three-layer domain packs (domain → sub-domain → addons), and fully build the web domain pack as the worked reference.
