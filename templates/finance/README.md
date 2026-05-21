@@ -2,10 +2,8 @@
 > For quant, trading, accounting, and FinTech teams in regulated environments.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference; see
-> [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md)
-> for the graduation path). It assembles and works today; sub-domains and
-> curated agent teams are coming.
+> pack (see `web/` for the curated reference). It assembles and works today;
+> sub-domains and curated agent teams are part of the maintainer roadmap.
 
 The financial domain demands auditability, determinism, and regulatory
 traceability. The consensus pattern is uncompromising: **AI drafts; humans sign

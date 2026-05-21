@@ -2,10 +2,8 @@
 > For solo developers and small studios building in Unity, Godot, Unreal, or Bevy.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference; see
-> [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md)
-> for the graduation path). It assembles and works today; sub-domains and
-> curated agent teams are coming.
+> pack (see `web/` for the curated reference). It assembles and works today;
+> sub-domains and curated agent teams are part of the maintainer roadmap.
 
 ## What this recipe picks
 

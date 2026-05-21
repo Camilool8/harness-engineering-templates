@@ -2,7 +2,7 @@
 
 Curated harness content for teams building web products: frontend apps, full-stack platforms, API services, design systems, and distributed backends.
 
-> **Status: curated three-layer pack.** This is the reference shape for the eleven thin recipes that have not yet graduated. See [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md).
+> **Status: curated three-layer pack.** The other eleven domains ship as v1 thin recipes today; curating them into three-layer packs is part of the maintainer roadmap.
 
 ## Sub-domain decision guide
 

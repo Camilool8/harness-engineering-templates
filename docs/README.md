@@ -47,7 +47,6 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 - [`how-to/add-an-addon.md`](how-to/add-an-addon.md) — contribute a new addon under `templates/web/_addons/`.
 - [`how-to/add-a-subdomain.md`](how-to/add-a-subdomain.md) — contribute a new sub-domain under `templates/web/`.
 - [`how-to/run-tests-locally.md`](how-to/run-tests-locally.md) — run `./templates/tests/run.sh` and individual checks; install prerequisites.
-- [`how-to/upgrade-from-thin-recipe.md`](how-to/upgrade-from-thin-recipe.md) — layer modules onto a v1 thin recipe, or graduate it into a three-layer pack.
 
 ### Reference
 

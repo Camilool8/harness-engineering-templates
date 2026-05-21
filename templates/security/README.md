@@ -2,10 +2,8 @@
 > For authorized security researchers doing red-team, blue-team, and CTF work.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference; see
-> [`docs/how-to/upgrade-from-thin-recipe.md`](../../docs/how-to/upgrade-from-thin-recipe.md)
-> for the graduation path). It assembles and works today; sub-domains and
-> curated agent teams are coming.
+> pack (see `web/` for the curated reference). It assembles and works today;
+> sub-domains and curated agent teams are part of the maintainer roadmap.
 
 > **Authorized use only.** This recipe is for authorized penetration testing,
 > CTF challenges, and defensive security research. Every target must be covered

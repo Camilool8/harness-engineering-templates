@@ -2,7 +2,7 @@
 
 A sub-domain is a distinct deliverable shape within a three-layer [domain pack](../reference/glossary.md#domain-pack). For `web/`, the existing sub-domains are `design-system`, `frontend-app`, `fullstack-app`, `api-service`, `distributed-backend`. Each represents a project shape with its own agent team, addon pairings, and conventions.
 
-Today only the `web/` pack ships sub-domains. To add a sub-domain to a domain that does not have any yet, you are graduating a [v1 thin recipe](../reference/glossary.md#thin-recipe) — see [`upgrade-from-thin-recipe.md`](upgrade-from-thin-recipe.md).
+Today only the `web/` pack ships sub-domains. Adding a sub-domain to a domain that does not yet have any (i.e. curating a v1 thin recipe into a three-layer pack) is part of the maintainer roadmap — this guide covers sub-domains *within an already-curated pack*.
 
 ---
 
@@ -245,6 +245,5 @@ The reviewer will check:
 ## See also
 
 - [`reference/domains.md`](../reference/domains.md) — current sub-domains.
-- [`upgrade-from-thin-recipe.md`](upgrade-from-thin-recipe.md) — graduating a non-web domain to three-layer.
 - [`add-an-addon.md`](add-an-addon.md) — for sub-domain-scoped extras.
 - Canonical reference: [`templates/web/frontend-app/`](../../templates/web/frontend-app/).

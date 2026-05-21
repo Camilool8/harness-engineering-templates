@@ -2,7 +2,7 @@
 
 You are starting a new project and need to choose which recipe to assemble. This guide walks you through the decision in three questions.
 
-If you do not know yet what you are building, use `generic` and graduate later — see [`upgrade-from-thin-recipe.md`](upgrade-from-thin-recipe.md). The friction cost of switching recipes is one re-run of `assemble.sh`.
+If you do not know yet what you are building, use `generic` and switch recipes later — the friction cost is one re-run of `assemble.sh` against the new config.
 
 ---
 
@@ -109,5 +109,4 @@ Open [`getting-started.md`](../tutorials/getting-started.md) from step 4 onward 
 
 - [`reference/harness-config.md`](../reference/harness-config.md) — every config key.
 - [`reference/domains.md`](../reference/domains.md) — full domain catalog.
-- [`customize-modules.md`](customize-modules.md) — change a recipe's defaults.
-- [`upgrade-from-thin-recipe.md`](upgrade-from-thin-recipe.md) — what to do when a domain you want is still a v1 thin recipe.
+- [`customize-modules.md`](customize-modules.md) — change a recipe's defaults, including for v1 thin recipes.

@@ -84,7 +84,7 @@ The human-readable decision guide every [sub-domain](#sub-domain) ships. Require
 
 ### Thin recipe
 
-A domain that ships as a single `harness.config.yml` + `files/` tree, with no `DOMAIN.md`, no [sub-domains](#sub-domain), and no [addons](#addon). Eleven domains are thin recipes today (everything except `web/`). They assemble and work; they have not yet been curated into the three-layer shape. See [`how-to/upgrade-from-thin-recipe.md`](../how-to/upgrade-from-thin-recipe.md).
+A domain that ships as a single `harness.config.yml` + `files/` tree, with no `DOMAIN.md`, no [sub-domains](#sub-domain), and no [addons](#addon). Eleven domains are thin recipes today (everything except `web/`). They assemble and work; curating them into the three-layer shape is part of the maintainer roadmap.
 
 ### Two-key
 

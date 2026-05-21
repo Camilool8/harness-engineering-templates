@@ -23,7 +23,6 @@ If this is your very first contribution, walk through [`docs/tutorials/your-firs
 | A new **module** under `templates/_modules/<category>/<option>/` (memory, progress, methodology, orchestration, safety) | [`docs/how-to/add-a-module.md`](docs/how-to/add-a-module.md) |
 | A new **addon** under `templates/web/_addons/<addon>/` (project-type-specific scaffolding) | [`docs/how-to/add-an-addon.md`](docs/how-to/add-an-addon.md) |
 | A new **sub-domain** under `templates/web/<sub-domain>/` (deliverable shape within the web pack) | [`docs/how-to/add-a-subdomain.md`](docs/how-to/add-a-subdomain.md) |
-| **Graduating** a v1 thin recipe into a three-layer domain pack | [`docs/how-to/upgrade-from-thin-recipe.md`](docs/how-to/upgrade-from-thin-recipe.md) |
 | **Core enhancements** to `_base/`, `assemble.sh`, the config schema, or the test engine | This file, [Core enhancements](#core-enhancements) below |
 | **Documentation** improvements anywhere | Straight to PR (small) or issue first (large) |
 

@@ -85,7 +85,7 @@ Each recipe's `README.md` documents what it picks, what gates it adds, and what 
 - [`templates/ops/README.md`](../../templates/ops/README.md) — customer support & ops
 - [`templates/generic/README.md`](../../templates/generic/README.md) — base-only starter
 
-To graduate a thin recipe to a three-layer pack, follow [`how-to/upgrade-from-thin-recipe.md`](../how-to/upgrade-from-thin-recipe.md).
+Curating a thin recipe into a three-layer pack is part of the maintainer roadmap; external contributions add modules, addons, and sub-domains inside an already-curated pack rather than driving pack-shape evolution.
 
 ---
 
