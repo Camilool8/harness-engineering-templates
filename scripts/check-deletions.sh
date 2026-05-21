@@ -9,8 +9,16 @@ set -uo pipefail
 BASE_REF="${BASE_REF:-origin/main}"
 PR_BODY="${PR_BODY:-}"
 PR_LABELS="${PR_LABELS:-}"
+# Some GitHub Actions payloads emit the literal string "null" when a PR has no
+# labels; normalize to empty so the override check below cannot match it.
+[ "$PR_LABELS" = "null" ] && PR_LABELS=""
 
-deleted="$(git diff --diff-filter=D --name-only "${BASE_REF}...HEAD")"
+if ! deleted="$(git diff --diff-filter=D --name-only "${BASE_REF}...HEAD" 2>&1)"; then
+  echo "✗ Could not compute deletions against '${BASE_REF}':" >&2
+  echo "$deleted" >&2
+  echo "  Make sure the base ref is fetched (CI does this; locally: 'git fetch origin')." >&2
+  exit 2
+fi
 if [ -z "$deleted" ]; then
   echo "✓ No files deleted in this PR."
   exit 0

@@ -38,6 +38,17 @@ while IFS= read -r a; do
   if [ -z "$miss" ]; then ok "agent  $a"; else fail "agent  $a —$miss"; fi
 done < <(find _modules web -path '*/agents/*.md' 2>/dev/null | sort)
 
+echo "== structure-lint: SUBDOMAIN.md standard sections =="
+SUBDOMAIN_SECTIONS=("## Adopt if" "## Skip if" "## Addons that pair well" "## Agent team")
+while IFS= read -r sd; do
+  miss=""
+  grep -q '^# ' "$sd" || miss="$miss [# title]"
+  for s in "${SUBDOMAIN_SECTIONS[@]}"; do
+    grep -qF "$s" "$sd" || miss="$miss [$s]"
+  done
+  if [ -z "$miss" ]; then ok "SUBDOMAIN.md  $sd"; else fail "SUBDOMAIN.md  $sd —$miss"; fi
+done < <(find web -name 'SUBDOMAIN.md' 2>/dev/null | sort)
+
 echo "== structure-lint: SKILL.md frontmatter =="
 while IFS= read -r s; do
   miss=""
