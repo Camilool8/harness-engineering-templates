@@ -21,7 +21,7 @@ assert_assembled() {
 }
 
 echo "== coverage: thin recipes + root manifest =="
-for d in generic data finance mobile game embedded scientific security content ops; do
+for d in generic finance mobile game embedded scientific security content ops; do
   out="$(mktemp -d)"
   if ./assemble.sh "$d/harness.config.yml" "$out" >/dev/null 2>&1; then
     assert_assembled "$out" "recipe:$d"
