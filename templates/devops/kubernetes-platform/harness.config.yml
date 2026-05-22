@@ -1,0 +1,47 @@
+# ============================================================================
+# harness.config.yml — devops / kubernetes-platform sub-domain
+#
+# A K8s cluster + GitOps engine + addons + paved path for app teams.
+#
+# Assemble:  ./assemble.sh devops/kubernetes-platform/harness.config.yml ./my-cluster
+# ============================================================================
+
+project:
+  name: my-kubernetes-platform
+
+memory:
+  backend: md-files
+
+progress:
+  backend: github-issues
+
+methodology:
+  tdd: true            # manifest pipeline + policy unit tests.
+  spec_driven: true
+  eval_driven: false
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: true
+  kill_switch: true
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: devops
+  subdomain: kubernetes-platform
+  addons: []           # typical: [aws, argo-cd, kyverno]
+
+agents:
+  team: curated        # installs k8s-architect + manifest-implementer + incident + cost.
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true
