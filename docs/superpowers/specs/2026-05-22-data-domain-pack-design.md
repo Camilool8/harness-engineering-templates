@@ -139,6 +139,20 @@ categories.
 
 ## 4. Sub-domains — partitioned by deliverable shape
 
+**Preview-tagged addons in default sets.** Where a sub-domain's natural
+warehouse surface includes a vendor whose MCP is still in preview
+(`bigquery-mcp`, `databricks-mcp`), this design **includes the preview-tagged
+addon in `domain.addons`** rather than forcing it out. The `preview: true`
+flag in the addon's `MODULE.md` carries the install-time warning regardless
+of whether the addon lands via default set or explicit opt-in; pushing
+preview MCPs out of defaults to chase a "GA-only defaults" purity would
+misrepresent how `ml-pipeline` and `analytics-engineering` actually target
+warehouses in 2026. `data-analyst-notebook`'s default set is the one
+exception: notebook work has a primary-warehouse choice rather than a
+multi-warehouse-by-default posture, so its defaults pick the GA pair
+(`snowflake-mcp` + `duckdb-mcp`) and surface preview warehouses as per-project
+opt-ins.
+
 ### 4.1 `data-analyst-notebook`
 
 **Purpose:** ad-hoc and exploratory analysis where the deliverable is a
@@ -178,8 +192,12 @@ reactive, reproducible notebook that explains a data question end-to-end.
   agent before any "complete" claim.
 
 **Default `domain.addons`:** `uv`, `polars`, `marimo`, `duckdb-mcp`,
-`snowflake-mcp` (preview-tagged ones — `bigquery-mcp`, `databricks-mcp` —
-opted in per project).
+`snowflake-mcp`. Preview-tagged warehouses (`bigquery-mcp`,
+`databricks-mcp`) are opted in per project for this sub-domain — notebook
+analysis typically pins to one primary warehouse and `data-analyst-notebook`
+keeps its default set to the GA pair. (Sub-domains with multi-warehouse-by-
+default posture — `ml-pipeline`, `analytics-engineering` — include preview
+MCPs in defaults per the §4 resolution above.)
 
 ### 4.2 `ml-pipeline`
 
@@ -220,7 +238,9 @@ model artifact plus the eval suite that gates it.
   that imports the model but the model never imports it.
 
 **Default `domain.addons`:** `uv`, `polars`, `mlflow`, `wandb-mcp`,
-`inspect-ai`, `databricks-mcp` (preview-tagged).
+`inspect-ai`, `databricks-mcp` (preview-tagged; included in defaults per the
+§4 resolution — Databricks is a primary ML-platform target and the
+`preview: true` flag in `MODULE.md` carries the install-time warning).
 
 ### 4.3 `llm-app`
 
@@ -303,7 +323,10 @@ from "data work" per brief A (HE §2 will be updated when this ships).
 
 **Default `domain.addons`:** `uv`, `dbt-core`, `snowflake-mcp`,
 `bigquery-mcp` (preview), `databricks-mcp` (preview), `duckdb-mcp` (local
-dev).
+dev). Both preview-tagged warehouse MCPs are included in defaults per the
+§4 resolution — analytics-engineering is the most multi-warehouse-by-default
+sub-domain in the pack and the `preview: true` flag in each addon's
+`MODULE.md` carries the install-time warning.
 
 ## 5. Addons — 12 in the initial set
 
@@ -546,7 +569,65 @@ shared rule as web and devops: *`references.md` is the curated baseline;
 for exact current library/framework API syntax, query Context7
 (`resolve-library-id` then `query-docs`).*
 
-## 7. Migration & retirement
+### 6.4 Addon-shipped hooks
+
+Two of the twelve addons currently ship their own hook; the rest contribute
+agents, MCP fragments, skills, or claude-md snippets only. The shared
+warehouse-credential and warehouse-query hooks in §6.1 cover the
+cross-warehouse posture, so warehouse-MCP addons need no additional hook of
+their own. Mirrors the devops §7.2 consolidation.
+
+| Addon | Hook | Cadence | Behaviour |
+|---|---|---|---|
+| `uv` | `lockfile-frozen.sh` | PostToolUse on `Bash` matching `pip install\|uv add\|uv pip` | Refuses unfrozen installs outside an explicit deps-update mode; enforces `uv lock --frozen` + `uv sync --frozen` discipline. |
+| `mlflow` | `require-tracking.sh` | PreToolUse on `Bash` matching `python\s+train` | Refuses `python train…` invocations whose target script lacks `import mlflow`. Pairs with `ml-pipeline`'s tracking-required posture. |
+
+All addon hooks share the same `bash -n`-clean exit-2 contract as the
+shared hooks so they survive `--dangerously-skip-permissions` (HE §3.9
+invariant).
+
+## 7. Dossier model
+
+`references.md` files follow the same fixed shape as web and devops:
+`Verified: 2026-05 · Refresh: re-verify version-sensitive notes each
+quarter.` header, then `Current best practices / Common gotchas /
+Version-sensitive notes / Cited links` (≥5 cited links, each annotated with
+what it is good for). The research dossier produced during brainstorming
+(briefs A/B/C, ~3500 words, 30+ cited links) distributes across the
+domain-level dossier plus one per sub-domain.
+
+- `templates/data/references.md` — cross-cutting threads: post-ShinyHunters
+  warehouse-credential posture (Managed-MCP / OAuth-only), EU AI Act
+  Annex IV audit-log obligations and NIST AI RMF / ISO 42001 rebuttable
+  presumption, the vendor-MCP / agent-skill GA wave (Snowflake Cortex,
+  dbt remote, BigQuery, Databricks, MotherDuck, MLflow, W&B, Langfuse,
+  Inspect AI), data-leakage taxonomy (LeakageDetector 2.0, arXiv 2509.15971),
+  Anthropic harness papers (Nov 2025 + Mar 2026) on `eval-curator`
+  contracts.
+- `templates/data/data-analyst-notebook/references.md` — marimo idioms
+  (reactive graph, `marimo pair`, `marimo export script` as the
+  Restart-and-Run-All CI gate), DuckDB-vs-Snowflake decision matrix for
+  local-then-remote workflows, chart-critic canonical-sins reference
+  (Mineault rules; ReviewNB + Recce sources), sample-then-scale guidance,
+  the 36% non-reproducible-Jupyter statistic from HE §2.1.
+- `templates/data/ml-pipeline/references.md` — MLflow 3.5.1+ vs W&B Weave
+  comparison and tracking-required mechanics, leakage-detector references
+  (arXiv 2509.15971 + the regex→AST upgrade follow-up), point-in-time
+  correctness patterns and feature-store leakage guards, Databricks
+  Mosaic / Unity Catalog ACL flow, eval-suite-isolated-package conventions.
+- `templates/data/llm-app/references.md` — Husain & Shankar three-tier
+  eval (LLM Evals FAQ, Jan 15 2026), evaluator-in-a-different-family rule
+  (10–25% self-preference bias), Inspect AI vs Langfuse selection
+  (sandbox-isolated agent eval vs trace-as-eval-source), Anthropic
+  Default-FAIL contract for `eval-curator`, MLflow 3.5.1+ GenAI tracing
+  surface, model-version-pin discipline.
+- `templates/data/analytics-engineering/references.md` —
+  `dbt-labs/dbt-agent-skills` (10 vendor-stewarded skills, Feb 9 2026), dbt
+  remote MCP (GA Oct 2025), dbt MetricFlow + semantic-layer-as-source-of-
+  truth, dbt contracts + unit tests (`.tftest`-style discipline), semantic-
+  layer-vs-text-to-SQL benchmark, lineage-doc conventions.
+
+## 8. Migration & retirement
 
 Phase B follows the meta-spec §3 commit sequence (a 10-step cycle proven by
 the devops graduation, May 21–22 2026). Each step is a separate commit;
@@ -614,7 +695,123 @@ shapes assemble until the very last commit — same approach `web/` and
     `./assemble.sh data/llm-app/harness.config.yml .`, or
     `./assemble.sh data/analytics-engineering/harness.config.yml .`.
 
-## 8. Non-goals
+## 9. Success criteria — representative addon combinations
+
+`assemble.sh` must produce a valid harness for each of the 4 data sub-domains
+on its own. Beyond the per-sub-domain baseline, the following representative
+addon combinations must assemble cleanly without lost fragments, broken
+agent frontmatter, or `bash -n` hook failures. The Phase B step 8 commit
+(`test: extend assemble-coverage + structure-lint to discover data pack`)
+encodes these as `assert_assembles` lines; this list **is** the test target.
+
+```bash
+./assemble.sh data/data-analyst-notebook/harness.config.yml /tmp/test-out
+```
+Sub-domain default set — exercises `uv + polars + marimo + duckdb-mcp +
+snowflake-mcp` + 3 shared agents + 4 shared hooks + `notebook-architect` /
+`notebook-implementer` / `chart-critic` / `restart-run-all-checker` rosters.
+Covers the GA-only warehouse posture for `data-analyst-notebook`.
+
+```bash
+./assemble.sh data/ml-pipeline/harness.config.yml /tmp/test-out
+```
+Sub-domain default set — exercises `uv + polars + mlflow + wandb-mcp +
+inspect-ai + databricks-mcp` (the last being preview-tagged) + the addon-
+contributed `run-comparator` agent (from `mlflow`) + the `require-tracking.sh`
+addon hook. Verifies the addons-contribute-agents pattern and the
+preview-tagged-in-default resolution from §4.
+
+```bash
+./assemble.sh data/llm-app/harness.config.yml /tmp/test-out
+```
+Sub-domain default set — exercises `uv + langfuse + inspect-ai + mlflow +
+wandb-mcp` + the addon-contributed `trace-triager` agent (from `langfuse`) +
+the three-tier-eval / prompt-regression / model-version-pin skills.
+
+```bash
+./assemble.sh data/analytics-engineering/harness.config.yml /tmp/test-out
+```
+Sub-domain default set with **all four warehouses including both preview
+ones** — exercises `uv + dbt-core + snowflake-mcp + bigquery-mcp +
+databricks-mcp + duckdb-mcp` + the addon-contributed `semantic-modeler` /
+`contract-author` agents (from `dbt-core`) + the 10 dbt-labs skills. This is
+the **highest-coverage assemble test** in the pack: four warehouse MCP
+fragments merging into a single `.mcp.json`, two addon-contributed agents,
+ten addon-contributed skills, plus the four shared hooks. If this passes,
+fragment-merge and file-name-collision behaviour is verified across the
+warehouse-MCP family.
+
+```bash
+./assemble.sh data/ml-pipeline/harness.config.yml /tmp/test-out \
+  --addons uv,polars
+```
+Cross-sub-domain Python-toolchain minimum — exercises the `uv + polars`
+combination on `ml-pipeline` without warehouse or tracker addons. Verifies
+the toolchain addons stand alone, and that `lockfile-frozen.sh` (the only
+hook either toolchain addon ships) installs without conflict.
+
+```bash
+./assemble.sh data/data-analyst-notebook/harness.config.yml /tmp/test-out \
+  --addons uv,polars,marimo,duckdb-mcp,snowflake-mcp,bigquery-mcp,databricks-mcp
+```
+Notebook-with-all-warehouses opt-in — exercises the same warehouse-MCP
+fragment-merge as analytics-engineering but on `data-analyst-notebook`,
+where preview warehouses are opt-in rather than default. Verifies the
+preview-tagged addons assemble identically whether installed by default set
+or by opt-in.
+
+## 10. Risks & open questions
+
+- **CLAUDE.md length stacking.** A loaded `data-analyst-notebook` install
+  pulls base + modules + `data/domain.claude-md.md` +
+  `data-analyst-notebook/claude-md.md` + 5 addon claude-md snippets (`uv`,
+  `polars`, `marimo`, `duckdb-mcp`, `snowflake-mcp`); `analytics-engineering`
+  is worse — same shared layer plus 6 addon snippets including `dbt-core`'s
+  contract-first guidance. Stacked CLAUDE.md context bloat is real. Mitigation
+  inherits devops's: cap every addon claude-md at 15 lines (already specified
+  in §5 entries), cap domain.claude-md and sub-domain claude-md at 30 lines,
+  and prune ruthlessly when the threshold is breached during Phase B.
+- **Addon file-name collisions are unvalidated.** `mlflow`, `wandb-mcp`,
+  `langfuse` are all `llm-app` defaults; if two ship an agent or hook file
+  with the same name, `assemble.sh` silently overwrites the earlier copy.
+  This design picks unique agent names by hand (`run-comparator` ←
+  `mlflow`; `trace-triager` ← `langfuse`; `semantic-modeler` /
+  `contract-author` ← `dbt-core`) and the only addon-shipped hooks are
+  `uv/lockfile-frozen.sh` and `mlflow/require-tracking.sh` (no overlap).
+  Accepted as a known limitation matching devops's stance; documented in
+  `docs/AGENT_ROLES.md` when this design implements.
+- **Vendor-MCP availability is the user's problem.** `snowflake-mcp`,
+  `bigquery-mcp`, `databricks-mcp`, `duckdb-mcp`, `mlflow`, `wandb-mcp`,
+  `langfuse`, and `dbt-core` all wire vendor MCPs that the user must
+  provision (Cortex tenant for Snowflake, GCP project + WIF for BigQuery,
+  Unity Catalog + workspace for Databricks, MotherDuck account or local
+  install for DuckDB, tracker host + creds for MLflow / W&B, Langfuse
+  deployment, dbt Cloud account or remote-MCP token). `assemble.sh` writes
+  the MCP config but cannot validate the user has access; assemble succeeds,
+  runtime fails the first time the agent calls the MCP. Mitigation: each
+  addon's `MODULE.md` opens with a one-paragraph "Provision before install"
+  block enumerating what the user must have ready.
+- **Preview-status drift on BigQuery / Databricks MCPs.** `bigquery-mcp`
+  is preview as of Jan 2026; `databricks-mcp` is Public Preview as of May 7
+  2026. When either moves to GA, the §4 default-set resolution and the
+  install-time warning posture both need re-validation — and if either is
+  withdrawn / renamed (the cycle that nuked `arize-phoenix-mcp` early in 2026
+  is the precedent), the addon shipping the now-stale MCP config breaks
+  assemble for any sub-domain that includes it in defaults. Mitigation: the
+  quarterly `Verified: 2026-MM` refresh on `references.md` is the formal
+  catch-point; addon `MODULE.md` annotates `preview: true` explicitly so
+  refresh sweeps know which addons need re-verification first.
+- **Evaluator-model-family drift in `judge-runner`.** The `llm-app`
+  `judge-runner` agent refuses if `--judge-model` matches the generator's
+  family (10–25% self-preference bias). Family-membership is currently a
+  hand-maintained allowlist embedded in the agent spec; new model releases
+  (a new GPT family, a new Anthropic generation, a new Gemini SKU) require
+  updating that allowlist or the rule degrades to false-negatives. Mitigation:
+  the `llm-app/references.md` quarterly refresh names the allowlist as a
+  refresh target; the rule is documented as policy-not-static-data so users
+  know to update on model GAs.
+
+## 11. Non-goals
 
 - No changes to `_base/`, `_modules/`, `assemble.sh`, or the
   `harness.config.yml` schema. The mechanics are settled and reused
