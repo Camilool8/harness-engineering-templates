@@ -1,0 +1,8 @@
+# Appfile — see https://docs.fastlane.tools/advanced/Appfile
+
+app_identifier(ENV["IOS_BUNDLE_ID"] || "com.example.app")
+apple_id(ENV["APPLE_ID"] || "you@example.com")
+team_id(ENV["APPLE_TEAM_ID"] || "ABCDE12345")
+
+package_name(ENV["ANDROID_PACKAGE_NAME"] || "com.example.app")
+json_key_file(ENV["GOOGLE_PLAY_JSON_KEY_PATH"] || File.expand_path("~/.config/play-service-account.json"))
