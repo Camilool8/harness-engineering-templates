@@ -12,7 +12,7 @@ For walk-throughs, decision flows, and the full doc set, see [`../docs/`](../doc
 # pick a domain recipe and assemble into your project
 ./assemble.sh generic/harness.config.yml ./my-project          # base only
 ./assemble.sh web/frontend-app/harness.config.yml ./my-app     # curated web sub-domain
-./assemble.sh data/harness.config.yml ./my-data-project        # v1 thin recipe
+./assemble.sh data/ml-pipeline/harness.config.yml ./my-ml-project  # curated data sub-domain
 ```
 
 Full tutorial: [`../docs/tutorials/getting-started.md`](../docs/tutorials/getting-started.md).
@@ -45,8 +45,11 @@ web/                             curated three-layer domain pack
   design-system/  frontend-app/  fullstack-app/  api-service/  distributed-backend/
     SUBDOMAIN.md, harness.config.yml, references.md, claude-md.md, files/.claude/
 
-data/ devops/ finance/ mobile/ game/ embedded/
-scientific/ security/ content/ ops/ generic/                  v1 thin recipes
+data/ devops/                                                 curated three-layer packs
+  DOMAIN.md, references.md, domain.claude-md.md, _addons/, <sub-domain>/...
+
+finance/ mobile/ game/ embedded/ scientific/ security/
+content/ ops/ generic/                                        v1 thin recipes
   harness.config.yml, README.md, claude-md.md, files/.claude/
 
 tests/                           offline test suite
