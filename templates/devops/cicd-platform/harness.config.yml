@@ -1,0 +1,49 @@
+# ============================================================================
+# harness.config.yml — devops / cicd-platform sub-domain
+#
+# Reusable workflows, pipeline templates, release engineering for many teams.
+#
+# Assemble:  ./assemble.sh devops/cicd-platform/harness.config.yml ./my-pipelines
+# ============================================================================
+
+project:
+  name: my-cicd-platform
+
+memory:
+  backend: md-files
+
+progress:
+  backend: github-issues
+
+methodology:
+  tdd: true            # workflow tests + supply-chain attestation tests.
+  spec_driven: true
+  eval_driven: false
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: true
+  kill_switch: true
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: devops
+  subdomain: cicd-platform
+  addons: []           # typical: [github-actions, sigstore-cosign, aws]
+                       #          [azure-devops, sigstore-cosign, azure]
+                       #          [gitlab-ci, sigstore-cosign, gcp]
+
+agents:
+  team: curated
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true
