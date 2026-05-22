@@ -6,7 +6,7 @@ Terms used throughout this repo's documentation. Where the term overlaps with a 
 
 ### Addon
 
-A domain-scoped optional extra. Lives under `templates/<domain>/_addons/<addon>/`. Same shape as a [module](#module) — `MODULE.md`, `claude-md.md`, `files/` — but applied only when the active [domain pack](#domain-pack) loads it. `web/`, `devops/`, and `data/` ship addons today.
+A domain-scoped optional extra. Lives under `templates/<domain>/_addons/<addon>/`. Same shape as a [module](#module) — `MODULE.md`, `claude-md.md`, `files/` — but applied only when the active [domain pack](#domain-pack) loads it. `web/`, `devops/`, `data/`, and `mobile/` ship addons today.
 
 ### Agent
 
@@ -26,7 +26,7 @@ One of the twelve top-level categories of project this repo supports: `web`, `da
 
 ### Domain pack
 
-A curated, three-layer bundle of harness content for a [domain](#domain): a domain layer (`DOMAIN.md`, `domain.claude-md.md`), one or more [sub-domains](#sub-domain), and optional [addons](#addon). Today `web/`, `devops/`, and `data/` are three-layer packs; the other eight domains ship as v1 thin recipes (see [`reference/domains.md`](domains.md)).
+A curated, three-layer bundle of harness content for a [domain](#domain): a domain layer (`DOMAIN.md`, `domain.claude-md.md`), one or more [sub-domains](#sub-domain), and optional [addons](#addon). Today `web/`, `devops/`, `data/`, and `mobile/` are three-layer packs; the other seven domains ship as v1 thin recipes (see [`reference/domains.md`](domains.md)).
 
 ### Harness
 
@@ -64,7 +64,7 @@ A pre-filled `harness.config.yml` plus the directory it sits in. Pass it to `ass
 ./templates/assemble.sh templates/data/harness.config.yml .
 ```
 
-Two recipe shapes today: v1 thin recipes (eight domains) and the curated three-layer packs (`web/`, `devops/`, `data/`).
+Two recipe shapes today: v1 thin recipes (seven domains) and the curated three-layer packs (`web/`, `devops/`, `data/`, `mobile/`).
 
 ### Settings fragment
 
@@ -84,7 +84,7 @@ The human-readable decision guide every [sub-domain](#sub-domain) ships. Require
 
 ### Thin recipe
 
-A domain that ships as a single `harness.config.yml` + `files/` tree, with no `DOMAIN.md`, no [sub-domains](#sub-domain), and no [addons](#addon). Eleven domains are thin recipes today (everything except `web/`). They assemble and work; curating them into the three-layer shape is part of the maintainer roadmap.
+A domain that ships as a single `harness.config.yml` + `files/` tree, with no `DOMAIN.md`, no [sub-domains](#sub-domain), and no [addons](#addon). Seven domains are thin recipes today (everything except `web/`, `devops/`, `data/`, `mobile/`). They assemble and work; curating them into the three-layer shape is part of the maintainer roadmap.
 
 ### Two-key
 

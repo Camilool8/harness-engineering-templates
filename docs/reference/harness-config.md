@@ -147,8 +147,8 @@ Curated, layered domain content. See [`reference/domains.md`](domains.md) for th
 | Key | Type | Behaviour |
 |---|---|---|
 | `domain.pack` | enum or `""` | The domain pack to layer on top. Empty string = base-only. |
-| `domain.subdomain` | string or `""` | For three-layer packs (`web/`, `devops/`, `data/`), the sub-domain to assemble — e.g. `frontend-app`, `infrastructure`, `ml-pipeline`. Empty for v1 thin recipes. |
-| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. Curated packs (`web/`, `devops/`, `data/`) ship addons; see [`templates/web/_addons/`](../../templates/web/_addons/), [`templates/devops/_addons/`](../../templates/devops/_addons/), [`templates/data/_addons/`](../../templates/data/_addons/). |
+| `domain.subdomain` | string or `""` | For three-layer packs (`web/`, `devops/`, `data/`, `mobile/`), the sub-domain to assemble — e.g. `frontend-app`, `infrastructure`, `ml-pipeline`, `react-native-expo`. Empty for v1 thin recipes. |
+| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. Curated packs (`web/`, `devops/`, `data/`, `mobile/`) ship addons; see [`templates/web/_addons/`](../../templates/web/_addons/), [`templates/devops/_addons/`](../../templates/devops/_addons/), [`templates/data/_addons/`](../../templates/data/_addons/), [`templates/mobile/_addons/`](../../templates/mobile/_addons/). |
 
 **Detection rules** (handled by `assemble.sh`):
 
