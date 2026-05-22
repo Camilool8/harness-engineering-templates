@@ -14,7 +14,7 @@ Pick the closest match. When two fit, pick the one with the *stricter* domain ga
 |---|---|---|
 | A website, SPA, SSR app, SaaS, or API service | `web` (three-layer pack) | accessibility-tree verify loop, lint+type PostToolUse |
 | Data analysis, ML training, or an LLM/RAG application | `data` | unbounded-SQL block, leakage / p-hacking sentinels, eval ≠ code |
-| Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops` | plan-before-apply, kubectl context guard, OIDC-only |
+| Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops/<sub>` (three-layer pack — see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md)) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
 | Trading, accounting, payments, anything regulated as financial | `finance` | paper-by-default, two-key, immutable audit, double-entry |
 | iOS / Android / React Native / Flutter app | `mobile` | simulator-in-the-loop, structured build logs |
 | A game (Unity, Unreal, Godot, custom engine) | `game` | hot-reload + screenshot loop, asset-GUID awareness |
@@ -31,7 +31,7 @@ Full catalog: [`reference/domains.md`](../reference/domains.md).
 
 ## Question 2 — Three-layer or thin recipe?
 
-Today only **`web/`** is a three-layer pack. The other eleven domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
+Today **`web/`** and **`devops/`** are three-layer packs. The other ten domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
 
 **If you picked `web/`**, continue to question 3.
 

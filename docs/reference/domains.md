@@ -4,8 +4,8 @@ Every domain pack under [`templates/`](../../templates/). Pick the closest match
 
 Two shapes today:
 
-- **Three-layer pack** — domain → sub-domain → addons. Only `web/` ships this layout. The sub-domain config is the assemble unit.
-- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Eleven of the twelve domains ship this shape today, pending curation into three-layer packs.
+- **Three-layer pack** — domain → sub-domain → addons. `web/` and `devops/` ship this layout. The sub-domain config is the assemble unit.
+- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Ten of the twelve domains ship this shape today, pending curation into three-layer packs.
 
 ---
 
@@ -15,7 +15,7 @@ Two shapes today:
 |---|---|---|---|
 | **web** | curated (3-layer) | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
 | **data** | v1 thin | [`templates/data/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, eval ≠ code |
-| **devops** | v1 thin | [`templates/devops/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only |
+| **devops** | curated (3-layer) | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
 | **finance** | v1 thin | [`templates/finance/harness.config.yml`](../../templates/finance/) | paper-by-default, two-key, immutable audit, double-entry |
 | **mobile** | v1 thin | [`templates/mobile/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, structured build logs |
 | **game** | v1 thin | [`templates/game/harness.config.yml`](../../templates/game/) | hot-reload + screenshot loop, asset-GUID awareness |
@@ -62,9 +62,38 @@ Each addon ships a `MODULE.md` with adopt-if / skip-if guidance.
 
 ---
 
+## The `devops/` pack (curated)
+
+Four sub-domains, partitioned by deliverable shape — what you ship:
+
+| Sub-domain | Adopt if… | Assemble |
+|---|---|---|
+| [`infrastructure`](../../templates/devops/infrastructure/) | Cloud resources via IaC — reusable modules and/or operated environments. Workflow shape is selected by addon. | `./assemble.sh devops/infrastructure/harness.config.yml .` |
+| [`kubernetes-platform`](../../templates/devops/kubernetes-platform/) | A cluster (or fleet) + GitOps + addons + paved-path manifests for app teams. | `./assemble.sh devops/kubernetes-platform/harness.config.yml .` |
+| [`cicd-platform`](../../templates/devops/cicd-platform/) | Reusable workflows / pipeline templates / release engineering / supply-chain attestation. | `./assemble.sh devops/cicd-platform/harness.config.yml .` |
+| [`observability-sre`](../../templates/devops/observability-sre/) | Telemetry, dashboards, alerts, SLOs/error budgets, on-call automation; agents reach prod via MCP. | `./assemble.sh devops/observability-sre/harness.config.yml .` |
+
+### `devops/` addons
+
+Fifteen addons in the initial set, grouped by category:
+
+| Category | Addons |
+|---|---|
+| Cloud | `aws` · `azure` · `gcp` |
+| IaC | `terraform` · `pulumi` |
+| Workflow-shape | `reusable-modules` · `multi-env-state` |
+| CI/CD | `github-actions` · `azure-devops` · `gitlab-ci` |
+| Kubernetes | `argo-cd` · `kyverno` |
+| Observability | `opentelemetry` · `datadog` |
+| Supply chain | `sigstore-cosign` |
+
+Three shared agents install with any devops sub-domain: `incident-commander`, `supply-chain-auditor`, `cost-auditor`. Additional specialists arrive via the sub-domain and via addons that contribute agents (e.g. `argo-cd` ships `gitops-promoter`; `kyverno` ships `policy-author`).
+
+---
+
 ## The v1 thin recipes
 
-Eleven domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
+Ten domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
 
 - One `harness.config.yml` at the recipe root.
 - One `claude-md.md` snippet.
@@ -74,7 +103,6 @@ Eleven domains ship as thin recipes today. They are functionally complete — th
 Each recipe's `README.md` documents what it picks, what gates it adds, and what anti-patterns it prevents. See:
 
 - [`templates/data/README.md`](../../templates/data/README.md) — data & ML
-- [`templates/devops/README.md`](../../templates/devops/README.md) — infrastructure & CI/CD
 - [`templates/finance/README.md`](../../templates/finance/README.md) — quant, trading, accounting
 - [`templates/mobile/README.md`](../../templates/mobile/README.md) — iOS / Android / React Native
 - [`templates/game/README.md`](../../templates/game/README.md) — game dev
