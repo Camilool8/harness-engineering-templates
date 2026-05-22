@@ -1,0 +1,62 @@
+# ============================================================================
+# harness.config.yml — data / ml-pipeline sub-domain
+#
+# Training, eval, packaging, registry. Deliverable is a versioned model
+# artifact + the eval suite that gates it.
+#
+# Assemble:  ./assemble.sh data/ml-pipeline/harness.config.yml ./my-ml-project
+# ============================================================================
+
+project:
+  name: my-ml-pipeline
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # training and eval code get real tests.
+  spec_driven: true    # the modeling question is a contract.
+  eval_driven: true    # ON — a model is only as trustworthy as its eval set.
+  bdd: false
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false       # model artifact publish is the human action.
+  kill_switch: true    # out-of-band stop for long training runs.
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: data
+  subdomain: ml-pipeline
+  addons: [uv, polars, mlflow, wandb-mcp, inspect-ai, databricks-mcp]
+  # databricks-mcp is preview-tagged but Databricks is a primary ML platform
+  # target; preview-in-default per §4 resolution of the spec.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated        # installs pipeline-architect, training-implementer,
+                       # eval-implementer, data-versioner + shared 3.
+                       # run-comparator is contributed by mlflow addon.
+  exclude: []
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true   # wire Context7 for live mlflow / wandb / inspect-ai /
+                       # polars / torch docs.
