@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "bigquery": {
+    "type": "http",
+    "url": "https://bigquery.googleapis.com/mcp",
+    "headers": { "Authorization": "Bearer ${BIGQUERY_OAUTH_TOKEN}" }
+  }
+} }
