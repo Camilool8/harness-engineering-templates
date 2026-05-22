@@ -4,8 +4,8 @@ Every domain pack under [`templates/`](../../templates/). Pick the closest match
 
 Two shapes today:
 
-- **Three-layer pack** — domain → sub-domain → addons. `web/` and `devops/` ship this layout. The sub-domain config is the assemble unit.
-- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Ten of the twelve domains ship this shape today, pending curation into three-layer packs.
+- **Three-layer pack** — domain → sub-domain → addons. `web/`, `devops/`, and `data/` ship this layout. The sub-domain config is the assemble unit.
+- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Eight of the twelve domains ship this shape today, pending curation into three-layer packs.
 
 ---
 
@@ -14,7 +14,7 @@ Two shapes today:
 | Domain | Status | Recipe path | Headline gates |
 |---|---|---|---|
 | **web** | curated (3-layer) | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
-| **data** | v1 thin | [`templates/data/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, eval ≠ code |
+| **data** | curated (3-layer) | [`templates/data/<sub>/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, block-static-warehouse-creds, eval ≠ code |
 | **devops** | curated (3-layer) | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
 | **finance** | v1 thin | [`templates/finance/harness.config.yml`](../../templates/finance/) | paper-by-default, two-key, immutable audit, double-entry |
 | **mobile** | v1 thin | [`templates/mobile/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, structured build logs |
@@ -91,9 +91,37 @@ Three shared agents install with any devops sub-domain: `incident-commander`, `s
 
 ---
 
+## The `data/` pack (curated)
+
+Four sub-domains, partitioned by deliverable shape — what you ship:
+
+| Sub-domain | Adopt if… | Assemble |
+|---|---|---|
+| [`data-analyst-notebook`](../../templates/data/data-analyst-notebook/) | Exploratory analysis or ad-hoc reporting; output is a reactive, reproducible notebook reading from a warehouse. | `./assemble.sh data/data-analyst-notebook/harness.config.yml .` |
+| [`ml-pipeline`](../../templates/data/ml-pipeline/) | Training, evaluation, packaging, registry, or inference; tracking discipline + lockfile-frozen envs. | `./assemble.sh data/ml-pipeline/harness.config.yml .` |
+| [`llm-app`](../../templates/data/llm-app/) | LLM products — RAG, agentic pipelines, prompt-driven products; unit test is the eval suite. | `./assemble.sh data/llm-app/harness.config.yml .` |
+| [`analytics-engineering`](../../templates/data/analytics-engineering/) | dbt models with contracts, unit tests, semantic layer, and lineage. | `./assemble.sh data/analytics-engineering/harness.config.yml .` |
+
+### `data/` addons
+
+Twelve addons in the initial set, grouped by category:
+
+| Category | Addons |
+|---|---|
+| Python toolchain | `uv` · `polars` |
+| Warehouse-MCP | `snowflake-mcp` · `bigquery-mcp` (preview) · `databricks-mcp` (preview) · `duckdb-mcp` |
+| Analytics-engineering | `dbt-core` |
+| Notebooks | `marimo` |
+| ML tracking | `mlflow` · `wandb-mcp` |
+| LLM eval & observability | `langfuse` · `inspect-ai` |
+
+Three shared agents install with any data sub-domain: `eval-curator`, `dataset-card-author`, `query-provenance-auditor`. Additional specialists arrive via the sub-domain and via addons that contribute agents (e.g. `dbt-core` ships `semantic-modeler` and `contract-author`; `mlflow` ships `run-comparator`; `langfuse` ships `trace-triager`).
+
+---
+
 ## The v1 thin recipes
 
-Ten domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
+Eight domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
 
 - One `harness.config.yml` at the recipe root.
 - One `claude-md.md` snippet.
@@ -102,7 +130,6 @@ Ten domains ship as thin recipes today. They are functionally complete — they 
 
 Each recipe's `README.md` documents what it picks, what gates it adds, and what anti-patterns it prevents. See:
 
-- [`templates/data/README.md`](../../templates/data/README.md) — data & ML
 - [`templates/finance/README.md`](../../templates/finance/README.md) — quant, trading, accounting
 - [`templates/mobile/README.md`](../../templates/mobile/README.md) — iOS / Android / React Native
 - [`templates/game/README.md`](../../templates/game/README.md) — game dev

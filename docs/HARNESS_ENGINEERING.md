@@ -823,6 +823,15 @@ Prefer **Altair** and **Observable Plot** — grammar-of-graphics constraints ma
 7. **Letting the agent silently modify the lockfile.** PostToolUse hook on `Bash` detects `pip install` / `uv add` and routes through `uv add --frozen` or blocks outside controlled "deps update" mode.
 8. **Treating the agent's plan as the audit trail.** The plan is fiction until validated; the audit trail is the recorded list of tool calls with inputs, outputs, costs, timestamps.
 
+### 2.10 Analytics-engineering as a separate sub-domain
+
+Per the 2026 practitioner consensus and the data domain pack (May 2026),
+analytics-engineering — dbt-centric warehouse modeling with contracts,
+unit tests, semantic layer, and lineage — is a separate sub-domain from
+notebook analysis. dbt's official agent-skills catalog (`dbt-labs/dbt-agent-skills`,
+Feb 9 2026), the dbt remote MCP (GA Oct 2025), and the semantic-layer-as-LLM-
+interface pattern justify the partition. See `templates/data/analytics-engineering/`.
+
 ---
 
 ## 3. DevOps, SRE & Platform Engineering

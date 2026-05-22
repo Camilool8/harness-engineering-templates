@@ -13,7 +13,7 @@ Pick the closest match. When two fit, pick the one with the *stricter* domain ga
 | Your project is… | Recipe | Headline gates |
 |---|---|---|
 | A website, SPA, SSR app, SaaS, or API service | `web` (three-layer pack) | accessibility-tree verify loop, lint+type PostToolUse |
-| Data analysis, ML training, or an LLM/RAG application | `data` | unbounded-SQL block, leakage / p-hacking sentinels, eval ≠ code |
+| Data analysis, ML training, or an LLM/RAG application | `data/<sub>` (three-layer pack — see [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md)) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, eval ≠ code |
 | Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops/<sub>` (three-layer pack — see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md)) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
 | Trading, accounting, payments, anything regulated as financial | `finance` | paper-by-default, two-key, immutable audit, double-entry |
 | iOS / Android / React Native / Flutter app | `mobile` | simulator-in-the-loop, structured build logs |
@@ -31,9 +31,11 @@ Full catalog: [`reference/domains.md`](../reference/domains.md).
 
 ## Question 2 — Three-layer or thin recipe?
 
-Today **`web/`** and **`devops/`** are three-layer packs. The other ten domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
+Today **`web/`**, **`devops/`**, and **`data/`** are three-layer packs. The other eight domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
 
 **If you picked `web/`**, continue to question 3.
+
+**If you picked `data/`**, continue to question 4.
 
 **If you picked anything else**, you have a single recipe to assemble:
 
@@ -73,7 +75,20 @@ Then assemble:
 
 ---
 
-## Question 4 — Which addons?
+## Question 4 — Which data sub-domain?
+
+**Data work?** Pick the sub-domain that matches your deliverable shape:
+
+- A notebook explaining a question → `data/data-analyst-notebook`
+- A trained model + eval suite → `data/ml-pipeline`
+- An LLM product → `data/llm-app`
+- dbt models with contracts + semantic layer → `data/analytics-engineering`
+
+See [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md) for the full decision guide.
+
+---
+
+## Question 5 — Which addons?
 
 Addons are *optional* extras. The sub-domain config pre-fills a sensible default list under `domain.addons`. You can edit the list before assembling.
 
