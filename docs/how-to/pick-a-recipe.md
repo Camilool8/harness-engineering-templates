@@ -16,7 +16,7 @@ Pick the closest match. When two fit, pick the one with the *stricter* domain ga
 | Data analysis, ML training, or an LLM/RAG application | `data/<sub>` (three-layer pack — see [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md)) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, eval ≠ code |
 | Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops/<sub>` (three-layer pack — see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md)) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
 | Trading, accounting, payments, anything regulated as financial | `finance` | paper-by-default, two-key, immutable audit, double-entry |
-| iOS / Android / React Native / Flutter app | `mobile` | simulator-in-the-loop, structured build logs |
+| iOS / Android / React Native / Flutter app | `mobile/<sub>` (three-layer pack — see [`templates/mobile/DOMAIN.md`](../../templates/mobile/DOMAIN.md)) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure |
 | A game (Unity, Unreal, Godot, custom engine) | `game` | hot-reload + screenshot loop, asset-GUID awareness |
 | Firmware, IoT, embedded Linux | `embedded` | never-flash-without-dry-run, HIL gate |
 | Scientific computing, reproducible research, manuscripts | `scientific` | pinned-env reproducibility, manuscript pipeline |
@@ -31,11 +31,13 @@ Full catalog: [`reference/domains.md`](../reference/domains.md).
 
 ## Question 2 — Three-layer or thin recipe?
 
-Today **`web/`**, **`devops/`**, and **`data/`** are three-layer packs. The other eight domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
+Today **`web/`**, **`devops/`**, **`data/`**, and **`mobile/`** are three-layer packs. The other seven domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
 
 **If you picked `web/`**, continue to question 3.
 
 **If you picked `data/`**, continue to question 4.
+
+**If you picked `mobile/`**, continue to question 5.
 
 **If you picked anything else**, you have a single recipe to assemble:
 
@@ -88,7 +90,22 @@ See [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md) for the full de
 
 ---
 
-## Question 5 — Which addons?
+## Question 5 — Which mobile sub-domain?
+
+Pick by **team composition and platform targets**, not by framework popularity.
+
+- **JS / TS team, cross-platform iOS + Android** → `mobile/react-native-expo`. Deepest AI-tooling MCP coverage in 2026 (XcodeBuildMCP + Expo MCP + Sentry MCP + Firebase MCP, all OAuth-first); OTA JS updates via EAS Update.
+- **Native team, iOS-only or iOS-first** → `mobile/native-ios`. Foundation Models, App Intents, deep Apple Intelligence integration.
+- **Native team, Android-only or Android-first** → `mobile/native-android`. Gemini Nano / AICore, foreground services, Photo Picker.
+- **Design-led cross-platform with heavy custom animation** → `mobile/flutter-app`. Impeller renderer; Riverpod state.
+
+If you need shared business logic with platform-native UI per OS, build with `mobile/native-ios` + `mobile/native-android` and document the shared layer manually; the Kotlin Multiplatform sub-domain is a v2 graduation target.
+
+See [`templates/mobile/DOMAIN.md`](../../templates/mobile/DOMAIN.md) for the full decision guide.
+
+---
+
+## Question 6 — Which addons?
 
 Addons are *optional* extras. The sub-domain config pre-fills a sensible default list under `domain.addons`. You can edit the list before assembling.
 

@@ -1116,6 +1116,16 @@ Colorado, California, Texas, Illinois 2026 statutes now reference "kill switch" 
 
 **Apple App Store (2026):** Updated Guideline 5.1.2(i) requires explicit disclosure when personal data is shared with third-party AI, and identification of the AI provider by name. Apple briefly blocked vibe-coding apps including Replit; emerging guidance favors **schema-based App Intents** as the legitimate surface for agentic capability.
 
+### 5.6 Mobile — sub-domains by stack family, not by platform
+
+Per the mobile domain pack (May 2026), the mobile harness decomposes by *stack family* (native-ios, native-android, react-native-expo, flutter-app), not by platform (iOS / Android). This is deliberate.
+
+A 2026 mobile project's harness is shaped by its toolchain (Xcode vs Gradle vs Expo CLI vs Flutter CLI), its UI framework (SwiftUI vs Compose vs RN+Expo-Router vs Flutter-Widget), its test runner (Swift Testing vs JUnit vs Jest+Maestro vs flutter_test+Patrol), and its distribution path (TestFlight via fastlane vs Play Internal via fastlane vs EAS Submit). Platform (iOS vs Android) is orthogonal — cross-platform stacks ship to both, native stacks ship to one.
+
+Stack-family decomposition keeps the agent's mental model coherent: one sub-domain's `claude-md.md` covers the *whole* development loop end-to-end. A platform-decomposed pack would force every cross-platform stack into two recipes (the iOS path and the Android path) and miss the shared truths (Expo Router structure is the same on both; Compose Multiplatform UI lives in `commonMain`).
+
+Compliance scaffolds (`privacy-manifest-ios`, `play-data-safety`) are platform-shaped addons that layer on top of any sub-domain. iOS-targeting sub-domains default-on `privacy-manifest-ios`; Android-targeting sub-domains default-on `play-data-safety`; cross-platform sub-domains default-on both. See `templates/mobile/`.
+
 ---
 
 ## 6. Game Development
