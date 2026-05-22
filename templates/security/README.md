@@ -2,9 +2,8 @@
 > For authorized security researchers doing red-team, blue-team, and CTF work.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference and
-> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
-> It assembles and works today; sub-domains and curated agent teams are coming.
+> pack (see `web/` for the curated reference). It assembles and works today;
+> sub-domains and curated agent teams are part of the maintainer roadmap.
 
 > **Authorized use only.** This recipe is for authorized penetration testing,
 > CTF challenges, and defensive security research. Every target must be covered
@@ -61,6 +60,8 @@
   defensive analysis (or vice versa) by sharing one context.
 - Treating a clean SAST run as a security clearance.
 
-## Deeper reference
+## See also
 
-docs/HARNESS_ENGINEERING.md §9
+- [`docs/HARNESS_ENGINEERING.md`](../../docs/HARNESS_ENGINEERING.md) §9 — Security Research.
+- [`docs/reference/domains.md`](../../docs/reference/domains.md) — full domain catalog and recipe status.
+- [`docs/how-to/customize-modules.md`](../../docs/how-to/customize-modules.md) — change a recipe's defaults.

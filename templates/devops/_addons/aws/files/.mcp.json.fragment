@@ -1,0 +1,3 @@
+{ "mcpServers": {
+  "aws": { "command": "npx", "args": ["-y", "@aws/agent-toolkit-mcp@latest"] }
+} }

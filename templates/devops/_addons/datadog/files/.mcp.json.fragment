@@ -1,0 +1,3 @@
+{ "mcpServers": {
+  "datadog": { "command": "npx", "args": ["-y", "@datadog/mcp-server@latest"] }
+} }

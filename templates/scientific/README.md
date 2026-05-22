@@ -2,9 +2,8 @@
 > For researchers and computational scientists shipping reproducible manuscripts.
 
 > **Status: v1 thin recipe** — pending deep curation into a three-layer domain
-> pack (see `web/` for the curated reference and
-> `docs/superpowers/specs/2026-05-15-curated-domain-packs-design.md`).
-> It assembles and works today; sub-domains and curated agent teams are coming.
+> pack (see `web/` for the curated reference). It assembles and works today;
+> sub-domains and curated agent teams are part of the maintainer roadmap.
 
 ## What this recipe picks
 
@@ -53,6 +52,8 @@
 - Judgment calls (model choice, outlier handling) made ad hoc with no eval
   trail.
 
-## Deeper reference
+## See also
 
-docs/HARNESS_ENGINEERING.md §8
+- [`docs/HARNESS_ENGINEERING.md`](../../docs/HARNESS_ENGINEERING.md) §8 — Scientific & Reproducible Research.
+- [`docs/reference/domains.md`](../../docs/reference/domains.md) — full domain catalog and recipe status.
+- [`docs/how-to/customize-modules.md`](../../docs/how-to/customize-modules.md) — change a recipe's defaults.

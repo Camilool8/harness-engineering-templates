@@ -5,7 +5,8 @@
         "matcher": "Bash",
         "hooks": [
           { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/plan-before-apply.sh" },
-          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/kubectl-context-guard.sh" }
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/kubectl-context-guard.sh" },
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/cosign-tlog-required.sh" }
         ]
       }
     ]

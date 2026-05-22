@@ -153,6 +153,14 @@ The parent should expect a *typed* return from a subagent — JSON with named fi
 
 Same-model evaluation is sycophantic. When you generate with Sonnet, evaluate with Opus or with a Gemini/GPT-class model. **One of the few places to deliberately mix providers.**
 
+### Addons may contribute agents
+
+Addons (`templates/<pack>/_addons/<addon>/files/.claude/agents/*.md`) may ship their own agent definitions in addition to the sub-domain's curated team. This is the assemble-time mechanism by which an addon specialises a sub-domain — e.g. the `reusable-modules` addon contributes `contract-tester` to the `infrastructure` sub-domain; the `kyverno` addon contributes `policy-author` to `kubernetes-platform`; the `argo-cd` addon contributes `gitops-promoter`.
+
+Addon-contributed agents must obey the same four invariants as sub-domain-shipped agents (least-privilege tools, model routing, typed return contracts, evaluator-in-a-different-family). They are subject to the same `agents.exclude` / `agents.include` overrides as any other curated-team member.
+
+**Filename collisions are unvalidated.** Two addons contributing the same-named agent file will collide; `assemble.sh` copies whichever is layered last. Addon authors must use unique agent names — the existing `structure-lint` check does not catch collisions.
+
 ---
 
 ## 5. The fresh-subagent-per-task pattern
@@ -316,3 +324,12 @@ That, more than anything else, is the agentic frontier the harness has to keep u
 - [wshobson/agents](https://github.com/wshobson/agents)
 - [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)
 - [Augment — Best AI Model for Coding Agents in 2026: A Routing Guide](https://www.augmentcode.com/guides/ai-model-routing-guide)
+
+---
+
+## See also (within this repo)
+
+- [`docs/README.md`](README.md) — full documentation index organised by Diátaxis quadrant.
+- [`docs/reference/modules.md`](reference/modules.md) — orchestration modules (`supervisor-worker`, `pipeline`, `blackboard`) and when to switch.
+- [`docs/how-to/customize-modules.md`](how-to/customize-modules.md) — escalating from `single-agent` deliberately.
+- [`docs/HARNESS_ENGINEERING.md`](HARNESS_ENGINEERING.md) and [`docs/METHODOLOGIES.md`](METHODOLOGIES.md) — companion deep references.

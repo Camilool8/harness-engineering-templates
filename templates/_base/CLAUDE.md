@@ -30,6 +30,10 @@
   reset --hard) without explicit human approval.
 - Never mark work complete without running the verification commands above and
   reading the resulting diff.
+- Never add a `Co-Authored-By: Claude` / `Co-Authored-By: Anthropic` /
+  `Generated with Claude Code` trailer (or any AI-tool attribution) to commit
+  messages, PR bodies, or release notes. The human is the author and the one
+  guiding the work; the agent is a tool, not a co-author.
 
 ## Workflow
 

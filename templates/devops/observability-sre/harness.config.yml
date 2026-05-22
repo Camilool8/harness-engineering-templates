@@ -1,0 +1,47 @@
+# ============================================================================
+# harness.config.yml — devops / observability-sre sub-domain
+#
+# Telemetry collection, SLOs as code, alert hygiene, on-call automation.
+#
+# Assemble:  ./assemble.sh devops/observability-sre/harness.config.yml ./my-obs
+# ============================================================================
+
+project:
+  name: my-observability-sre
+
+memory:
+  backend: md-files
+
+progress:
+  backend: github-issues
+
+methodology:
+  tdd: true            # SLO math + alert rules get tests.
+  spec_driven: true
+  eval_driven: false
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: true        # PagerDuty MCP trigger_incident requires typed-token.
+  kill_switch: true
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: devops
+  subdomain: observability-sre
+  addons: []           # typical: [opentelemetry, datadog, aws]
+
+agents:
+  team: curated
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true

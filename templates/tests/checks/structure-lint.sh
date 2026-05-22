@@ -16,7 +16,7 @@ while IFS= read -r m; do
     grep -qF "$s" "$m" || miss="$miss [$s]"
   done
   if [ -z "$miss" ]; then ok "MODULE.md  $m"; else fail "MODULE.md  $m —$miss"; fi
-done < <(find _modules web -name 'MODULE.md' 2>/dev/null | sort)
+done < <(find _modules web devops -name 'MODULE.md' 2>/dev/null | sort)
 
 echo "== structure-lint: agent frontmatter + least-privilege =="
 while IFS= read -r a; do
@@ -36,7 +36,7 @@ while IFS= read -r a; do
       esac;;
   esac
   if [ -z "$miss" ]; then ok "agent  $a"; else fail "agent  $a —$miss"; fi
-done < <(find _modules web -path '*/agents/*.md' 2>/dev/null | sort)
+done < <(find _modules web devops -path '*/agents/*.md' 2>/dev/null | sort)
 
 echo "== structure-lint: SUBDOMAIN.md standard sections =="
 SUBDOMAIN_SECTIONS=("## Adopt if" "## Skip if" "## Addons that pair well" "## Agent team")
@@ -47,7 +47,7 @@ while IFS= read -r sd; do
     grep -qF "$s" "$sd" || miss="$miss [$s]"
   done
   if [ -z "$miss" ]; then ok "SUBDOMAIN.md  $sd"; else fail "SUBDOMAIN.md  $sd —$miss"; fi
-done < <(find web -name 'SUBDOMAIN.md' 2>/dev/null | sort)
+done < <(find web devops -name 'SUBDOMAIN.md' 2>/dev/null | sort)
 
 echo "== structure-lint: SKILL.md frontmatter =="
 while IFS= read -r s; do
@@ -62,7 +62,7 @@ echo "== structure-lint: references.md Verified header =="
 while IFS= read -r r; do
   if grep -q '^> Verified:' "$r"; then ok "dossier  $r"
   else fail "dossier  $r — missing '> Verified:' header"; fi
-done < <(find web -name 'references.md' 2>/dev/null | sort)
+done < <(find web devops -name 'references.md' 2>/dev/null | sort)
 
 echo "== structure-lint: JSON validity =="
 while IFS= read -r j; do

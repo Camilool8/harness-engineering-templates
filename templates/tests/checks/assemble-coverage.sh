@@ -21,7 +21,7 @@ assert_assembled() {
 }
 
 echo "== coverage: thin recipes + root manifest =="
-for d in generic data devops finance mobile game embedded scientific security content ops; do
+for d in generic data finance mobile game embedded scientific security content ops; do
   out="$(mktemp -d)"
   if ./assemble.sh "$d/harness.config.yml" "$out" >/dev/null 2>&1; then
     assert_assembled "$out" "recipe:$d"
@@ -33,14 +33,15 @@ out="$(mktemp -d)"
   || fail "root-manifest — assemble exited non-zero"
 rm -rf "$out"
 
-echo "== coverage: web sub-domains =="
+echo "== coverage: pack sub-domains =="
 while IFS= read -r sd; do
+  pack="$(basename "$(dirname "$(dirname "$sd")")")"
   name="$(basename "$(dirname "$sd")")"
   out="$(mktemp -d)"
-  if ./assemble.sh "$sd" "$out" >/dev/null 2>&1; then assert_assembled "$out" "subdomain:$name"
-  else fail "subdomain:$name — assemble exited non-zero"; fi
+  if ./assemble.sh "$sd" "$out" >/dev/null 2>&1; then assert_assembled "$out" "subdomain:$pack/$name"
+  else fail "subdomain:$pack/$name — assemble exited non-zero"; fi
   rm -rf "$out"
-done < <(find web -mindepth 2 -maxdepth 2 -name 'harness.config.yml' | sort)
+done < <(find web devops -mindepth 2 -maxdepth 2 -name 'harness.config.yml' 2>/dev/null | sort)
 
 echo "== coverage: cross-cutting modules =="
 # probe: copy the root manifest, flip the one key that selects this module.
@@ -76,23 +77,34 @@ while IFS= read -r moddir; do
   rm -rf "$out" "$f"
 done < <(find _modules -mindepth 2 -maxdepth 2 -type d | sort)
 
-echo "== coverage: web addons =="
-# probe: a real web sub-domain config with domain.addons set to just this addon.
+echo "== coverage: pack addons =="
+# probe: a real sub-domain config with domain.addons set to just this addon.
 # The probe must live inside a sub-domain dir so assemble.sh detects the pack.
-PROBE_HOST="web/frontend-app"
+# Per-pack probe host: any sub-domain accepts any of its pack's addons because
+# assemble.sh treats addon-sub-domain pairing as advisory, not enforced.
+probe_host_for_pack() {
+  case "$1" in
+    web)    echo "web/frontend-app" ;;
+    devops) echo "devops/infrastructure" ;;
+    *)      echo "" ;;
+  esac
+}
 while IFS= read -r addondir; do
   addon="$(basename "$addondir")"
-  f="$PROBE_HOST/.probe-${addon}.harness.config.yml"
-  sed "s/^\(  addons:\).*/\1 [$addon]/" "$PROBE_HOST/harness.config.yml" > "$f"
+  pack="$(basename "$(dirname "$(dirname "$addondir")")")"
+  host="$(probe_host_for_pack "$pack")"
+  if [ -z "$host" ]; then fail "addon:$pack/$addon — no probe host for pack '$pack'"; continue; fi
+  f="$host/.probe-${addon}.harness.config.yml"
+  sed "s/^\(  addons:\).*/\1 [$addon]/" "$host/harness.config.yml" > "$f"
   out="$(mktemp -d)"
   log="$(./assemble.sh "$f" "$out" 2>&1)"; rc=$?
   if [ "$rc" -eq 0 ] && ! printf '%s' "$log" | grep -q "addon not found"; then
-    assert_assembled "$out" "addon:$addon"
+    assert_assembled "$out" "addon:$pack/$addon"
   else
-    fail "addon:$addon — assemble failed or addon not found"
+    fail "addon:$pack/$addon — assemble failed or addon not found"
   fi
   rm -rf "$out" "$f"
-done < <(find web/_addons -mindepth 1 -maxdepth 1 -type d | sort)
+done < <(find web/_addons devops/_addons -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 echo "== coverage: .mcp.json deep-merge fixture =="
 out="$(mktemp -d)"
