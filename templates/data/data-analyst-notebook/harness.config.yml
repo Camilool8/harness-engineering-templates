@@ -1,0 +1,59 @@
+# ============================================================================
+# harness.config.yml — data / data-analyst-notebook sub-domain
+#
+# Exploratory analysis. Deliverable is a reactive, reproducible notebook.
+#
+# Assemble:  ./assemble.sh data/data-analyst-notebook/harness.config.yml ./my-analysis
+# ============================================================================
+
+project:
+  name: my-notebook-analysis
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: filesystem
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # cells lifted out of notebooks get real tests.
+  spec_driven: true    # the analysis question is a contract.
+  eval_driven: false   # ad-hoc analysis is not eval-driven; ML / LLM are.
+  bdd: false
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: false       # notebooks read; warehouse writes blocked by hook.
+  kill_switch: false
+  sandbox: false
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: data
+  subdomain: data-analyst-notebook
+  addons: [uv, polars, marimo, duckdb-mcp, snowflake-mcp]
+  # Preview-tagged warehouses (bigquery-mcp, databricks-mcp) are opted in per
+  # project; notebook analysis typically pins to one primary warehouse.
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated        # installs notebook-architect, notebook-implementer,
+                       # chart-critic, restart-run-all-checker + shared 3.
+  exclude: []
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true   # wire Context7 for live polars / duckdb / marimo docs.
