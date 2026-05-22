@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "mlflow": {
+    "command": "uvx",
+    "args": ["mlflow-mcp@latest"],
+    "env": { "MLFLOW_TRACKING_URI": "${MLFLOW_TRACKING_URI}" }
+  }
+} }
