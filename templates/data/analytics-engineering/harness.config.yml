@@ -1,0 +1,53 @@
+# ============================================================================
+# harness.config.yml — data / analytics-engineering sub-domain
+#
+# dbt-centric: warehouse-modeled tables + contracts + unit tests +
+# semantic layer + lineage.
+#
+# Assemble:  ./assemble.sh data/analytics-engineering/harness.config.yml ./my-dbt-project
+# ============================================================================
+
+project:
+  name: my-dbt-project
+
+memory:
+  backend: md-files
+
+progress:
+  backend: filesystem
+
+methodology:
+  tdd: true            # dbt unit tests + contracts before models.
+  spec_driven: true    # the model contract IS the spec.
+  eval_driven: false
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: false       # dbt run is the human / CI action.
+  kill_switch: false
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: data
+  subdomain: analytics-engineering
+  addons: [uv, dbt-core, snowflake-mcp, bigquery-mcp, databricks-mcp, duckdb-mcp]
+  # All four warehouse MCPs default in. Most multi-warehouse-by-default
+  # sub-domain in the pack; preview-in-default per §4 resolution.
+
+agents:
+  team: curated        # installs analytics-architect, dbt-implementer,
+                       # lineage-auditor + shared 3.
+                       # semantic-modeler + contract-author via dbt-core addon.
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true   # wire Context7 for live dbt / Snowflake / BigQuery /
+                       # Databricks docs.
