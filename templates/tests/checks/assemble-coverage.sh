@@ -41,7 +41,7 @@ while IFS= read -r sd; do
   if ./assemble.sh "$sd" "$out" >/dev/null 2>&1; then assert_assembled "$out" "subdomain:$pack/$name"
   else fail "subdomain:$pack/$name — assemble exited non-zero"; fi
   rm -rf "$out"
-done < <(find web devops data -mindepth 2 -maxdepth 2 -name 'harness.config.yml' 2>/dev/null | sort)
+done < <(find web devops data mobile -mindepth 2 -maxdepth 2 -name 'harness.config.yml' 2>/dev/null | sort)
 
 echo "== coverage: cross-cutting modules =="
 # probe: copy the root manifest, flip the one key that selects this module.
@@ -87,6 +87,7 @@ probe_host_for_pack() {
     web)    echo "web/frontend-app" ;;
     devops) echo "devops/infrastructure" ;;
     data)   echo "data/analytics-engineering" ;;
+    mobile) echo "mobile/react-native-expo" ;;
     *)      echo "" ;;
   esac
 }
@@ -105,7 +106,7 @@ while IFS= read -r addondir; do
     fail "addon:$pack/$addon — assemble failed or addon not found"
   fi
   rm -rf "$out" "$f"
-done < <(find web/_addons devops/_addons data/_addons -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+done < <(find web/_addons devops/_addons data/_addons mobile/_addons -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 echo "== coverage: .mcp.json deep-merge fixture =="
 out="$(mktemp -d)"
