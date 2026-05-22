@@ -1,0 +1,58 @@
+# ============================================================================
+# harness.config.yml — devops / infrastructure sub-domain
+#
+# Cloud resources provisioned and/or operated via IaC. Workflow shape
+# (publish-modules vs operate-envs) is selected by addon.
+#
+# Assemble:  ./assemble.sh devops/infrastructure/harness.config.yml ./my-platform
+# ============================================================================
+
+project:
+  name: my-infrastructure
+
+# ── MEMORY ──────────────────────────────────────────────────────────────────
+memory:
+  backend: md-files
+
+# ── PROGRESS TRACKING ───────────────────────────────────────────────────────
+progress:
+  backend: github-issues
+
+# ── METHODOLOGY ─────────────────────────────────────────────────────────────
+methodology:
+  tdd: true            # policy-as-code + module logic get tests.
+  spec_driven: true    # plan/diff before any infra change.
+  eval_driven: false
+  bdd: false
+
+# ── ORCHESTRATION ───────────────────────────────────────────────────────────
+orchestration:
+  topology: single-agent
+
+# ── SAFETY ──────────────────────────────────────────────────────────────────
+safety:
+  two_key: true        # prod-touching infra requires typed-token confirmation.
+  kill_switch: true    # out-of-band stop for long apply loops.
+  sandbox: false       # the agent proposes; humans/CI apply.
+
+# ── HUMAN-IN-THE-LOOP ───────────────────────────────────────────────────────
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+# ── DOMAIN PACK ─────────────────────────────────────────────────────────────
+domain:
+  pack: devops
+  subdomain: infrastructure
+  addons: []           # add: [terraform, aws, multi-env-state]  (typical)
+                       #      [pulumi, aws, reusable-modules, sigstore-cosign]
+
+# ── AGENTS ──────────────────────────────────────────────────────────────────
+agents:
+  team: curated        # installs infra-architect, infra-implementer + shared 3.
+  exclude: []
+  include: []
+
+# ── DOCS ────────────────────────────────────────────────────────────────────
+docs:
+  context7_mcp: true   # Wire Context7 for live Terraform / Pulumi / cloud docs.
