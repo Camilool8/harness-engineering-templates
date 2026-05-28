@@ -4,13 +4,21 @@
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/secret-scan.sh" }
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/secret-scan.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/tdd-guard.sh" }
         ]
       },
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/command-guard.sh" }
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/command-guard.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/two-key-confirm.sh" }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/kill-switch.sh" }
         ]
       }
     ],
@@ -25,7 +33,9 @@
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/verify-gate.sh" }
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/verify-gate.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/eval-gate.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/kill-switch.sh" }
         ]
       }
     ]
