@@ -54,7 +54,8 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 - [`reference/assemble-cli.md`](reference/assemble-cli.md) — `./templates/assemble.sh` invocation, inputs, outputs, exit codes, `HARNESS.lock`.
 - [`reference/assembled-output.md`](reference/assembled-output.md) — the file tree a fully-assembled project ends up with; what each file does.
 - [`reference/modules.md`](reference/modules.md) — catalog of every module under `templates/_modules/`.
-- [`reference/domains.md`](reference/domains.md) — catalog of every domain pack and its status (curated vs v1 thin).
+- [`reference/domains.md`](reference/domains.md) — catalog of the four curated domain packs.
+- [`reference/recommended-permissions.md`](reference/recommended-permissions.md) — opt-in `permissions` block to paste into `.claude/settings.json` if you want one.
 - [`reference/tests.md`](reference/tests.md) — every check under `templates/tests/checks/`; what it asserts, how it fails.
 - [`reference/glossary.md`](reference/glossary.md) — base, module, addon, sub-domain, recipe, domain pack, hook, MCP.
 - [`reference/troubleshooting.md`](reference/troubleshooting.md) — common stumbles and how to fix them.

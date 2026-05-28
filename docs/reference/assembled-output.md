@@ -13,7 +13,7 @@ What ends up in your project after `./templates/assemble.sh` succeeds. This is t
 ├── .mcp.json                           MCP servers wired for this project
 ├── .gitignore                          baseline ignores (.env, secrets/, build artefacts)
 └── .claude/
-    ├── settings.json                   permissions + hooks registry
+    ├── settings.json                   hooks registry (no permissions block)
     ├── HARNESS.lock                    informational: what was assembled
     ├── verify.sh.example               template for the project-specific Stop gate
     │
@@ -60,15 +60,10 @@ The `.claude/` directory is Claude Code's project-local configuration root. Ever
 
 ### `.claude/settings.json`
 
-Permissions and hooks registry. The `_base` shape:
+Hooks registry. The `_base` shape:
 
 ```json
 {
-  "permissions": {
-    "allow": ["Read", "Grep", "Glob"],
-    "deny":  ["Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)", "Bash(rm -rf /*)"],
-    "defaultMode": "ask"
-  },
   "hooks": {
     "PreToolUse":  [ { "matcher": "Write|Edit|MultiEdit", "hooks": [ secret-scan.sh ] },
                      { "matcher": "Bash",                 "hooks": [ command-guard.sh ] } ],
@@ -79,6 +74,8 @@ Permissions and hooks registry. The `_base` shape:
 ```
 
 Modules add to `hooks` arrays via `settings.fragment.json` files that `assemble.sh` deep-merges (see [`reference/assemble-cli.md`](assemble-cli.md#merge-semantics)).
+
+No `permissions` block ships by default — `_base` enforces via hooks, and the `permissions` allow/deny/ask layer is opinionated per project. See [`reference/recommended-permissions.md`](recommended-permissions.md) for a copy-paste starting point if you want one.
 
 ### `.claude/hooks/` — the four `_base` hooks
 

@@ -1,14 +1,4 @@
 {
-  "permissions": {
-    "allow": ["Read", "Grep", "Glob"],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
-      "Bash(rm -rf /*)"
-    ],
-    "defaultMode": "ask"
-  },
   "hooks": {
     "PreToolUse": [
       {
