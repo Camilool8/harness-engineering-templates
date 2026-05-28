@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/cosign-tlog-required.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/kubectl-context-guard.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/plan-before-apply.sh" }
+        ]
+      }
+    ]
+  }
+}
