@@ -23,10 +23,10 @@ There are no flags or environment variables. The behaviour is fully determined b
 
 ## Examples
 
-Assemble the generic recipe into the current directory:
+Assemble a base-only harness from the root manifest:
 
 ```bash
-./templates/assemble.sh templates/generic/harness.config.yml .
+./templates/assemble.sh templates/harness.config.yml .
 ```
 
 Assemble a web sub-domain:
@@ -53,9 +53,7 @@ Assemble a base-only harness from a custom config:
    - `methodology/{tdd,spec-driven,eval-driven,bdd}` for each `true` flag.
    - `orchestration/<topology>` if topology is not `single-agent`.
    - `safety/{two-key,kill-switch,sandbox}` for each `true` flag.
-4. **Layers a domain pack** when the config lives under `templates/<domain>/`:
-   - If `<domain>/DOMAIN.md` exists, it is a three-layer pack: the domain layer and the sub-domain layer are applied in that order, and the `domain.addons` list is processed.
-   - Otherwise it is a v1 thin recipe: only the `files/` and `claude-md.md` at the config's directory apply; addons are *not* loaded.
+4. **Layers a domain pack** when the config lives under `templates/<domain>/<subdomain>/` with a `DOMAIN.md` sibling in `<domain>/`. The domain layer and the sub-domain layer are applied in that order, and the `domain.addons` list is processed. If the config lives elsewhere (e.g. the root manifest), the domain step is skipped entirely.
 5. **Applies addons** in order from `domain.addons`. Missing addons print `! addon not found: <name> (skipped)` and continue.
 6. **Adjusts the agent roster**:
    - `agents.team: none` deletes every non-`README.md` agent file from `.claude/agents/`.

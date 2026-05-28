@@ -37,7 +37,7 @@ hitl:
   diff_review_required: <bool>
 
 domain:
-  pack:      "" | web | data | devops | finance | mobile | game | embedded | scientific | security | content | ops | generic
+  pack:      "" | web | data | devops | mobile
   subdomain: "" | <subdomain-name>
   addons:    [<addon>, …]
 
@@ -147,13 +147,12 @@ Curated, layered domain content. See [`reference/domains.md`](domains.md) for th
 | Key | Type | Behaviour |
 |---|---|---|
 | `domain.pack` | enum or `""` | The domain pack to layer on top. Empty string = base-only. |
-| `domain.subdomain` | string or `""` | For three-layer packs (`web/`, `devops/`, `data/`, `mobile/`), the sub-domain to assemble — e.g. `frontend-app`, `infrastructure`, `ml-pipeline`, `react-native-expo`. Empty for v1 thin recipes. |
-| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. Curated packs (`web/`, `devops/`, `data/`, `mobile/`) ship addons; see [`templates/web/_addons/`](../../templates/web/_addons/), [`templates/devops/_addons/`](../../templates/devops/_addons/), [`templates/data/_addons/`](../../templates/data/_addons/), [`templates/mobile/_addons/`](../../templates/mobile/_addons/). |
+| `domain.subdomain` | string or `""` | The sub-domain to assemble — e.g. `frontend-app`, `infrastructure`, `ml-pipeline`, `react-native-expo`. Required when `domain.pack` is set. |
+| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. See [`templates/web/_addons/`](../../templates/web/_addons/), [`templates/devops/_addons/`](../../templates/devops/_addons/), [`templates/data/_addons/`](../../templates/data/_addons/), [`templates/mobile/_addons/`](../../templates/mobile/_addons/). |
 
-**Detection rules** (handled by `assemble.sh`):
+**Detection rule** (handled by `assemble.sh`):
 
-- If the config path is `<domain>/<subdomain>/harness.config.yml` *and* there is a `DOMAIN.md` in `<domain>/`, the pack is applied as **domain + sub-domain**, and addons are layered.
-- If the config path is `<domain>/harness.config.yml`, it is treated as a **v1 thin recipe** — only the `files/` and `claude-md.md` at that level apply; addons are not loaded.
+The config path must be `<domain>/<subdomain>/harness.config.yml` with a `DOMAIN.md` sibling in `<domain>/`. The pack is applied as **domain + sub-domain**, and addons are layered on top. Passing a config from anywhere else (e.g. the root `templates/harness.config.yml` for base-only) skips the domain layer entirely.
 
 ---
 

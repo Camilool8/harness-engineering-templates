@@ -2,31 +2,22 @@
 
 Every domain pack under [`templates/`](../../templates/). Pick the closest match to your project; the recipe pre-fills the manifest and adds the domain-specific hooks and skills.
 
-Two shapes today:
-
-- **Three-layer pack** — domain → sub-domain → addons. `web/`, `devops/`, `data/`, and `mobile/` ship this layout. The sub-domain config is the assemble unit.
-- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Seven of the twelve domains ship this shape today, pending curation into three-layer packs.
+Every pack ships the same three-layer shape: domain → sub-domain → addons. The sub-domain config is the assemble unit.
 
 ---
 
 ## The full catalog
 
-| Domain | Status | Recipe path | Headline gates |
-|---|---|---|---|
-| **web** | curated (3-layer) | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
-| **data** | curated (3-layer) | [`templates/data/<sub>/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, block-static-warehouse-creds, eval ≠ code |
-| **devops** | curated (3-layer) | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
-| **finance** | v1 thin | [`templates/finance/harness.config.yml`](../../templates/finance/) | paper-by-default, two-key, immutable audit, double-entry |
-| **mobile** | curated (3-layer) | [`templates/mobile/<sub>/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure, Play AI-content labeling |
-| **game** | v1 thin | [`templates/game/harness.config.yml`](../../templates/game/) | hot-reload + screenshot loop, asset-GUID awareness |
-| **embedded** | v1 thin | [`templates/embedded/harness.config.yml`](../../templates/embedded/) | never-flash-without-dry-run, HIL gate |
-| **scientific** | v1 thin | [`templates/scientific/harness.config.yml`](../../templates/scientific/) | pinned-env reproducibility, manuscript pipeline |
-| **security** | v1 thin | [`templates/security/harness.config.yml`](../../templates/security/) | engagement-scope authorization gate, red / blue separation |
-| **content** | v1 thin | [`templates/content/harness.config.yml`](../../templates/content/) | brand-voice guard, schema.org validation |
-| **ops** | v1 thin | [`templates/ops/harness.config.yml`](../../templates/ops/) | refund threshold gate, drafter ≠ publisher |
-| **generic** | base-only | [`templates/generic/harness.config.yml`](../../templates/generic/) | none beyond `_base`. Start here if unsure. |
+| Domain | Recipe path | Headline gates |
+|---|---|---|
+| **web** | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
+| **data** | [`templates/data/<sub>/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, block-static-warehouse-creds, eval ≠ code |
+| **devops** | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
+| **mobile** | [`templates/mobile/<sub>/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure, Play AI-content labeling |
 
-`generic` is intentionally not a domain pack — it ships base-only and is not slated for graduation to three-layer.
+If your work doesn't fit any of the four packs, you can still assemble a base-only harness by pointing `assemble.sh` at the root [`templates/harness.config.yml`](../../templates/harness.config.yml) — you get the four `_base` non-negotiables plus whatever cross-cutting modules you pick.
+
+New curated packs are welcome contributions — see [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
 ---
 
@@ -149,30 +140,6 @@ Three shared agents install with any mobile sub-domain: `app-store-compliance-au
 - **Bitrise MCP, MobSF MCP** — PAT/API-key only as of May 2026 (post-Anodot posture gap).
 - **App Store Connect / Play Console first-party MCP** — none exist; reach via EAS Submit, fastlane `deliver` / `supply`.
 - **Wearables, TV, CarPlay, VisionOS** — out of scope; pick a base sub-domain and document the secondary target.
-
----
-
-## The v1 thin recipes
-
-Seven domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
-
-- One `harness.config.yml` at the recipe root.
-- One `claude-md.md` snippet.
-- A `files/` tree with domain-specific hooks and skills.
-- No `DOMAIN.md`, no sub-domains, no `_addons/`.
-
-Each recipe's `README.md` documents what it picks, what gates it adds, and what anti-patterns it prevents. See:
-
-- [`templates/finance/README.md`](../../templates/finance/README.md) — quant, trading, accounting
-- [`templates/game/README.md`](../../templates/game/README.md) — game dev
-- [`templates/embedded/README.md`](../../templates/embedded/README.md) — firmware / IoT
-- [`templates/scientific/README.md`](../../templates/scientific/README.md) — research & manuscripts
-- [`templates/security/README.md`](../../templates/security/README.md) — offensive + defensive security
-- [`templates/content/README.md`](../../templates/content/README.md) — content & marketing
-- [`templates/ops/README.md`](../../templates/ops/README.md) — customer support & ops
-- [`templates/generic/README.md`](../../templates/generic/README.md) — base-only starter
-
-Curating a thin recipe into a three-layer pack is part of the maintainer roadmap; external contributions add modules, addons, and sub-domains inside an already-curated pack rather than driving pack-shape evolution.
 
 ---
 

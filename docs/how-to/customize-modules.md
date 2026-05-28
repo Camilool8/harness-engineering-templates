@@ -124,7 +124,7 @@ safety:
   two_key: true
 ```
 
-Every production deploy, money movement, or destructive action requires a typed token a human issues out-of-band. The model cannot self-issue the token. Standard for finance, devops in prod, and anything irreversible.
+Every production deploy, money movement, or destructive action requires a typed token a human issues out-of-band. The model cannot self-issue the token. Standard for devops in prod, payment-system work, and anything irreversible.
 
 ### Kill-switch for autonomous loops
 
@@ -174,7 +174,7 @@ docs:
   context7_mcp: true
 ```
 
-The key is a no-op unless the active domain pack ships a `files/.claude/context7.mcp.json.fragment`. Today, `web/` does; the other domains do not. If you want Context7 on a v1 thin recipe, drop a `context7` entry into `.mcp.json` by hand:
+The key is a no-op unless the active domain pack ships a `files/.claude/context7.mcp.json.fragment`. Today `web/` does; the other packs do not. If you want Context7 on a pack that does not ship the fragment, drop a `context7` entry into `.mcp.json` by hand:
 
 ```json
 {

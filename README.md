@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/Camilool8/harness-engineering-templates/actions/workflows/ci.yml/badge.svg)
 
-A library of opinionated **Claude Code harness templates** for software engineering across twelve domains — web, data, DevOps, finance, mobile, game, embedded, scientific, security, content, ops, and generic.
+A library of opinionated **Claude Code harness templates** for software engineering across four curated domains — web, data, DevOps, and mobile.
 
 The premise (per Birgitta Böckeler, Anthropic engineering, METR, and the practitioner consensus of 2025–2026):
 
@@ -17,7 +17,7 @@ The full reasoning lives in [`docs/explanation/why-harness.md`](docs/explanation
 ```bash
 git clone https://github.com/Camilool8/harness-engineering-templates.git
 cd harness-engineering-templates
-./templates/assemble.sh templates/generic/harness.config.yml /path/to/your/project
+./templates/assemble.sh templates/web/frontend-app/harness.config.yml /path/to/your/project
 ```
 
 Full walk-through with prerequisites and a "watch a hook fire" demo: [`docs/tutorials/getting-started.md`](docs/tutorials/getting-started.md).
@@ -30,7 +30,7 @@ A copy-and-go harness for any software project. You pick a [recipe](docs/referen
 
 - **Four non-negotiable safety hooks** — secret scanning, command guarding, append-only audit log, verification gate. See [why](docs/explanation/non-negotiables.md).
 - **Opt-in modules** for memory backend, progress tracking, methodology (TDD / spec-driven / eval-driven / BDD), orchestration topology, and additional safety gates. Each ships with adopt-if / skip-if guidance.
-- **Domain recipes** that pre-fill the manifest and add domain-specific gates (accessibility verify loop for web, unbounded-SQL block for data, paper-by-default for finance, etc.).
+- **Curated domain packs** that pre-fill the manifest and add domain-specific gates (accessibility verify loop for web, unbounded-SQL block for data, plan-before-apply for devops, simulator-in-the-loop for mobile).
 - **A test suite** (`./templates/tests/run.sh`) that runs offline and is what CI runs.
 
 Every module is independently removable. Every default is the 2026 practitioner consensus.
@@ -79,9 +79,10 @@ templates/                         the plug-and-play harness
     methodology/                   tdd | spec-driven | eval-driven | bdd
     orchestration/                 supervisor-worker | pipeline | blackboard
     safety/                        two-key | kill-switch | sandbox
-  web/                             curated three-layer pack (5 sub-domains, 9 addons)
-  data/ devops/ finance/ mobile/ game/ embedded/
-  scientific/ security/ content/ ops/ generic/   11 domain recipes
+  web/                             curated pack (5 sub-domains, 9 addons)
+  data/                            curated pack (4 sub-domains, 11 addons)
+  devops/                          curated pack (4 sub-domains, 14 addons)
+  mobile/                          curated pack (4 sub-domains)
 
 scripts/                           CI governance helpers
 ```

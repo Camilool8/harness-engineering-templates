@@ -26,7 +26,7 @@ Every module has a *default state*:
 
 The defaults are *the 2026 practitioner consensus* — what the average engineering project should run with. Where there is a strong case to deviate (e.g. `eval_driven` should be on for any LLM-output project), the relevant module's `MODULE.md` says so explicitly under **Adopt if**.
 
-This means the friction of doing the *right* thing is low. You start with `assemble.sh templates/generic/harness.config.yml .` and you have a reasonable setup. You change one flag when you have a reason. You read one `MODULE.md` when you are deciding whether to flip it.
+This means the friction of doing the *right* thing is low. You start with `assemble.sh templates/web/frontend-app/harness.config.yml .` (or the curated pack that matches your work) and you have a reasonable setup. You change one flag when you have a reason. You read one `MODULE.md` when you are deciding whether to flip it.
 
 ---
 

@@ -35,7 +35,7 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 
 ### Tutorials
 
-- [`tutorials/getting-started.md`](tutorials/getting-started.md) — clone the repo, assemble the generic recipe into a fresh project, run Claude Code, watch a hook fire.
+- [`tutorials/getting-started.md`](tutorials/getting-started.md) — clone the repo, assemble the `web/frontend-app` recipe into a fresh project, run Claude Code, watch a hook fire.
 - [`tutorials/your-first-contribution.md`](tutorials/your-first-contribution.md) — fork → small fix → tests → PR → merge, end-to-end.
 
 ### How-to guides

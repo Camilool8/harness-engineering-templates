@@ -1,6 +1,6 @@
 # `templates/` — the plug-and-play harness
 
-This directory is the **assemble unit**. You do not adopt the whole thing: you pick a [recipe](../docs/reference/domains.md), edit the [config](../docs/reference/harness-config.md) if you want to deviate from defaults, and run `assemble.sh`.
+This directory is the **assemble unit**. You do not adopt the whole thing: you pick a [domain pack and sub-domain](../docs/reference/domains.md), edit the [config](../docs/reference/harness-config.md) if you want to deviate from defaults, and run `assemble.sh`.
 
 For walk-throughs, decision flows, and the full doc set, see [`../docs/`](../docs/).
 
@@ -9,11 +9,11 @@ For walk-throughs, decision flows, and the full doc set, see [`../docs/`](../doc
 ## Quickstart
 
 ```bash
-# pick a domain recipe and assemble into your project
-./assemble.sh generic/harness.config.yml ./my-project          # base only
-./assemble.sh web/frontend-app/harness.config.yml ./my-app     # curated web sub-domain
-./assemble.sh data/ml-pipeline/harness.config.yml ./my-ml-project  # curated data sub-domain
-./assemble.sh mobile/react-native-expo/harness.config.yml ./my-rn-app  # curated mobile sub-domain
+# pick a curated domain pack + sub-domain and assemble into your project
+./assemble.sh web/frontend-app/harness.config.yml ./my-app             # web SPA / SSR app
+./assemble.sh data/ml-pipeline/harness.config.yml ./my-ml-project      # ML training + eval
+./assemble.sh devops/infrastructure/harness.config.yml ./my-iac        # cloud IaC
+./assemble.sh mobile/react-native-expo/harness.config.yml ./my-rn-app  # cross-platform mobile
 ```
 
 Full tutorial: [`../docs/tutorials/getting-started.md`](../docs/tutorials/getting-started.md).
@@ -48,10 +48,6 @@ web/                             curated three-layer domain pack
 
 data/ devops/ mobile/                                         curated three-layer packs
   DOMAIN.md, references.md, domain.claude-md.md, _addons/, <sub-domain>/...
-
-finance/ game/ embedded/ scientific/ security/
-content/ ops/ generic/                                        v1 thin recipes
-  harness.config.yml, README.md, claude-md.md, files/.claude/
 
 tests/                           offline test suite
   run.sh, checks/{structure-lint,hook-lint,assemble-coverage}.sh

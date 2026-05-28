@@ -97,30 +97,23 @@ Repeat for each module from [`reference/modules.md`](../reference/modules.md).
 
 ## Step 3 — Apply a domain layer
 
-If you picked a v1 thin recipe (every domain except `web/`):
+Every curated pack (`web`, `data`, `devops`, `mobile`) ships a domain layer plus sub-domain layers. Apply the domain layer first, then the sub-domain layer of your choice:
 
 ```bash
-cp -R templates/data/files/. ./
-printf '\n' >> CLAUDE.md
-cat templates/data/claude-md.md >> CLAUDE.md
-chmod +x .claude/hooks/*.sh
-```
-
-If you picked a `web/` sub-domain, apply the domain layer first and then the sub-domain layer:
-
-```bash
-# domain layer
+# domain layer (example: web)
 cp -R templates/web/files/. ./ 2>/dev/null || true
 printf '\n' >> CLAUDE.md
 cat templates/web/domain.claude-md.md >> CLAUDE.md
 
-# sub-domain layer
+# sub-domain layer (example: frontend-app)
 cp -R templates/web/frontend-app/files/. ./
 printf '\n' >> CLAUDE.md
 cat templates/web/frontend-app/claude-md.md >> CLAUDE.md
 
 chmod +x .claude/hooks/*.sh
 ```
+
+Replace `web/frontend-app` with the sub-domain you picked (e.g. `data/ml-pipeline`, `devops/infrastructure`, `mobile/react-native-expo`).
 
 Then merge any new `.claude/settings.fragment.json` and `.mcp.json.fragment` the way Step 2 describes.
 

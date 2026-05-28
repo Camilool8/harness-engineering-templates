@@ -2,7 +2,7 @@
 
 You are starting a new project and need to choose which recipe to assemble. This guide walks you through the decision in three questions.
 
-If you do not know yet what you are building, use `generic` and switch recipes later — the friction cost is one re-run of `assemble.sh` against the new config.
+The repo ships four curated domain packs: `web`, `data`, `devops`, `mobile`. Each has sub-domains and addons. If your work does not fit any of them, you can still assemble the base-only harness by passing the root `templates/harness.config.yml` — see [`reference/domains.md`](../reference/domains.md).
 
 ---
 
@@ -12,40 +12,28 @@ Pick the closest match. When two fit, pick the one with the *stricter* domain ga
 
 | Your project is… | Recipe | Headline gates |
 |---|---|---|
-| A website, SPA, SSR app, SaaS, or API service | `web` (three-layer pack) | accessibility-tree verify loop, lint+type PostToolUse |
-| Data analysis, ML training, or an LLM/RAG application | `data/<sub>` (three-layer pack — see [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md)) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, eval ≠ code |
-| Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops/<sub>` (three-layer pack — see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md)) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
-| Trading, accounting, payments, anything regulated as financial | `finance` | paper-by-default, two-key, immutable audit, double-entry |
-| iOS / Android / React Native / Flutter app | `mobile/<sub>` (three-layer pack — see [`templates/mobile/DOMAIN.md`](../../templates/mobile/DOMAIN.md)) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure |
-| A game (Unity, Unreal, Godot, custom engine) | `game` | hot-reload + screenshot loop, asset-GUID awareness |
-| Firmware, IoT, embedded Linux | `embedded` | never-flash-without-dry-run, HIL gate |
-| Scientific computing, reproducible research, manuscripts | `scientific` | pinned-env reproducibility, manuscript pipeline |
-| Offensive or defensive security work | `security` | engagement-scope authorization gate, red / blue separation |
-| Content, marketing copy, brand-voice writing | `content` | brand-voice guard, schema.org validation |
-| Customer support, ops automation, refund flows | `ops` | refund threshold gate, drafter ≠ publisher |
-| Not sure yet | `generic` | base only — graduate later |
+| A website, SPA, SSR app, SaaS, or API service | `web/<sub>` (see [`templates/web/DOMAIN.md`](../../templates/web/DOMAIN.md)) | accessibility-tree verify loop, lint+type PostToolUse |
+| Data analysis, ML training, or an LLM/RAG application | `data/<sub>` (see [`templates/data/DOMAIN.md`](../../templates/data/DOMAIN.md)) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, eval ≠ code |
+| Infrastructure-as-code, CI/CD, Kubernetes, cloud platform | `devops/<sub>` (see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md)) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
+| iOS / Android / React Native / Flutter app | `mobile/<sub>` (see [`templates/mobile/DOMAIN.md`](../../templates/mobile/DOMAIN.md)) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure |
+| None of the above | base-only via root manifest | the four `_base` non-negotiables, no domain gates |
 
 Full catalog: [`reference/domains.md`](../reference/domains.md).
 
+If your domain isn't covered, contributions of new curated packs are welcome — see [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
 ---
 
-## Question 2 — Three-layer or thin recipe?
+## Question 2 — Which sub-domain?
 
-Today **`web/`**, **`devops/`**, **`data/`**, and **`mobile/`** are three-layer packs. The other seven domains are v1 thin recipes — they work, they pass tests, they install domain-specific gates, but they have no sub-domains, no addons, and no curated agent teams yet.
+Every curated pack has sub-domains. Continue to the matching question:
 
-**If you picked `web/`**, continue to question 3.
+- **`web/`** → question 3
+- **`data/`** → question 4
+- **`devops/`** → see [`templates/devops/DOMAIN.md`](../../templates/devops/DOMAIN.md) for the four sub-domains (`infrastructure`, `kubernetes-platform`, `cicd-platform`, `observability-sre`)
+- **`mobile/`** → question 5
 
-**If you picked `data/`**, continue to question 4.
-
-**If you picked `mobile/`**, continue to question 5.
-
-**If you picked anything else**, you have a single recipe to assemble:
-
-```bash
-./templates/assemble.sh templates/<domain>/harness.config.yml ./my-project
-```
-
-You can still pick and discard cross-cutting modules (memory, progress, methodology, orchestration, safety, HITL) by editing the recipe's `harness.config.yml` first. See [`customize-modules.md`](customize-modules.md).
+You can pick and discard cross-cutting modules (memory, progress, methodology, orchestration, safety, HITL) by editing the chosen sub-domain's `harness.config.yml` first. See [`customize-modules.md`](customize-modules.md).
 
 ---
 
@@ -141,4 +129,4 @@ Open [`getting-started.md`](../tutorials/getting-started.md) from step 4 onward 
 
 - [`reference/harness-config.md`](../reference/harness-config.md) — every config key.
 - [`reference/domains.md`](../reference/domains.md) — full domain catalog.
-- [`customize-modules.md`](customize-modules.md) — change a recipe's defaults, including for v1 thin recipes.
+- [`customize-modules.md`](customize-modules.md) — change a recipe's defaults.

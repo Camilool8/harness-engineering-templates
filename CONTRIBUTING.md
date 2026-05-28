@@ -36,7 +36,7 @@ The template system has four layers:
 
 1. **`_base/`** — the universal starter every assembled project copies. Sets up the foundational `.claude/` structure: `settings.json`, `CLAUDE.md`, and the four non-negotiable hooks (secret-scan, command-guard, audit-log, verify-gate).
 2. **`_modules/<category>/<option>/`** — cross-cutting opt-in modules. Each ships an adopt-if / skip-if / install / remove decision guide.
-3. **Domain packs** — `web/` is the curated three-layer reference (DOMAIN.md, sub-domains, addons). The other eleven domains are v1 thin recipes pending curation.
+3. **Domain packs** — four curated three-layer packs: `web/`, `data/`, `devops/`, `mobile/`. Each ships a `DOMAIN.md`, sub-domains, and addons.
 4. **`assemble.sh`** — the one-command assembler. Reads a `harness.config.yml`, merges `_base/` + selected modules + a domain layer + any addons, writes a ready-to-use project directory.
 
 Deep reference: [`docs/HARNESS_ENGINEERING.md`](docs/HARNESS_ENGINEERING.md), [`docs/METHODOLOGIES.md`](docs/METHODOLOGIES.md), [`docs/AGENT_ROLES.md`](docs/AGENT_ROLES.md).
@@ -87,7 +87,7 @@ Regardless of the label, the `verify` job (which runs `./templates/tests/run.sh`
 
 The core consists of `templates/_base/`, `templates/assemble.sh`, the `harness.config.yml` schema, and `templates/tests/`. These components affect every assembled project and every consumer of this library. Changes here receive extra review scrutiny.
 
-- **`_base/`** changes must remain backward-compatible with all eleven existing thin recipes and the web domain pack. If a change would require every recipe to update its config, that is a breaking change and requires discussion.
+- **`_base/`** changes must remain backward-compatible with all four curated domain packs. If a change would require every recipe to update its config, that is a breaking change and requires discussion.
 - **`assemble.sh`** changes must keep the existing merge semantics for `settings.json`, `.mcp.json`, and `CLAUDE.md`. Run the full test suite before and after.
 - **Test engine changes** (under `templates/tests/`) must not reduce coverage. Adding a new check is welcome; tightening an existing check is welcome; silencing or removing a check requires a very clear justification in the PR.
 

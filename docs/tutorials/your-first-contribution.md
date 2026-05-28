@@ -58,8 +58,8 @@ The branch name will become part of the PR URL; keep it short and descriptive.
 
 For this tutorial, pick *any* user-facing README and fix something tiny — a typo, a broken-looking sentence, an unclear word. Good candidates:
 
-- `templates/generic/README.md`
 - `templates/web/DOMAIN.md`
+- `templates/data/DOMAIN.md`
 - `docs/tutorials/getting-started.md`
 
 If you cannot find a typo, add a single missing serial comma or rephrase an awkward sentence. The exercise is the workflow, not the prose.
@@ -98,8 +98,8 @@ For a documentation-only change to a README that is not under `templates/_module
 Stage the file and commit:
 
 ```bash
-git add templates/generic/README.md
-git commit -m "docs: tighten one sentence in the generic recipe README"
+git add templates/web/DOMAIN.md
+git commit -m "docs: tighten one sentence in the web DOMAIN.md"
 ```
 
 Use a conventional-style prefix (`docs:`, `fix:`, `feat:`, `ci:`, `test:`) so the commit history stays scannable. The repo's existing commit log is the style reference.
@@ -116,7 +116,7 @@ git push -u origin docs-typo-fix-getting-started
 
 GitHub prints a URL — open it. The PR template loads with four sections:
 
-- **Summary** — fill in one or two sentences. For this change: *"Fixes a typo in `templates/generic/README.md`."*
+- **Summary** — fill in one or two sentences. For this change: *"Fixes a typo in `templates/web/DOMAIN.md`."*
 - **Type of change** — check **Documentation**.
 - **Checklist** — tick the items that apply. For docs-only changes, the agent/dossier items are not relevant; the `tests/run.sh` item is.
 - **Deletions** — leave `None.` (this PR deletes nothing).

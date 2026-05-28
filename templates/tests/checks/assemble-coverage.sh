@@ -20,14 +20,7 @@ assert_assembled() {
   ok "$label"
 }
 
-echo "== coverage: thin recipes + root manifest =="
-for d in generic finance game embedded scientific security content ops; do
-  out="$(mktemp -d)"
-  if ./assemble.sh "$d/harness.config.yml" "$out" >/dev/null 2>&1; then
-    assert_assembled "$out" "recipe:$d"
-  else fail "recipe:$d — assemble exited non-zero"; fi
-  rm -rf "$out"
-done
+echo "== coverage: root manifest (base-only) =="
 out="$(mktemp -d)"
 ./assemble.sh harness.config.yml "$out" >/dev/null 2>&1 && assert_assembled "$out" "root-manifest" \
   || fail "root-manifest — assemble exited non-zero"
@@ -110,7 +103,7 @@ done < <(find web/_addons devops/_addons data/_addons mobile/_addons -mindepth 1
 
 echo "== coverage: .mcp.json deep-merge fixture =="
 out="$(mktemp -d)"
-./assemble.sh generic/harness.config.yml "$out" >/dev/null 2>&1
+./assemble.sh harness.config.yml "$out" >/dev/null 2>&1
 cp tests/fixtures/mcp-merge/.mcp.json.fragment "$out/.mcp.json.fragment"
 merged="$(jq -s '
   def dm($a;$b): reduce ($b|keys_unsorted[]) as $k ($a;

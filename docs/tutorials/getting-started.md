@@ -3,10 +3,10 @@
 This tutorial walks you from an empty directory to a working Claude Code harness in about ten minutes. You will:
 
 1. Clone this repository.
-2. Assemble the `generic` recipe into a fresh project.
+2. Assemble the `web/frontend-app` recipe into a fresh project.
 3. Open Claude Code and watch a safety hook block an unsafe command.
 
-You only need the *generic* recipe for this lesson — it is base-only and assumes nothing about your domain. You can graduate to a domain-specific recipe once the basics make sense.
+We use `web/frontend-app` for this lesson because it is the most universally legible: any client-side app shape (React, Vue, Svelte) recognises its conventions. The four `_base` hooks fire identically across every recipe, so the lesson transfers as you graduate to `data/`, `devops/`, or `mobile/`.
 
 > Tutorials are about learning, not deciding. We pick everything for you here. The [how-to guides](../how-to/) cover *your* project's choices.
 
@@ -51,13 +51,13 @@ This is the directory `assemble.sh` will write into. The harness adds files at t
 
 ---
 
-## Step 3 — Assemble the generic recipe
+## Step 3 — Assemble the recipe
 
-Run the assembler. It takes two arguments: the config to use, and the target directory. We pass the generic recipe's config and `.` for *current directory*:
+Run the assembler. It takes two arguments: the config to use, and the target directory. We pass the `web/frontend-app` sub-domain config and `.` for *current directory*:
 
 ```bash
 ~/harness-engineering-templates/templates/assemble.sh \
-  ~/harness-engineering-templates/templates/generic/harness.config.yml .
+  ~/harness-engineering-templates/templates/web/frontend-app/harness.config.yml .
 ```
 
 Expected output (truncated):
@@ -65,7 +65,9 @@ Expected output (truncated):
 ```
 → base
   · merged settings.fragment.json
-→ generic
+→ domain: web
+  · merged settings.fragment.json
+→ sub-domain: frontend-app
   · merged settings.fragment.json
 → wrote .claude/HARNESS.lock
 ```
@@ -139,12 +141,13 @@ For the secret scanner, ask Claude to add a line like `AWS_SECRET_ACCESS_KEY=AKI
 
 ## What you have now
 
-A complete, base-only Claude Code harness with:
+A complete `web/frontend-app` Claude Code harness with:
 
 - Four `_base` hooks: secret-scan, command-guard, audit-log, verify-gate.
 - `tdd` + `spec_driven` methodology modules enforced.
 - `filesystem` progress tracking under `.claude/progress/`.
 - `md-files` memory under `.claude/memory/`.
+- The `web` domain layer (accessibility-tree verify loop, lint+type PostToolUse) and the `frontend-app` sub-domain agent team.
 - A `.claude/HARNESS.lock` manifest recording what was assembled.
 
 You can commit this to git and start working.
@@ -153,7 +156,7 @@ You can commit this to git and start working.
 
 ## What to read next
 
-- [`how-to/pick-a-recipe.md`](../how-to/pick-a-recipe.md) — when you are ready to swap `generic` for a domain-specific recipe (web, data, devops, finance, …).
+- [`how-to/pick-a-recipe.md`](../how-to/pick-a-recipe.md) — pick the right domain pack and sub-domain for your project (web, data, devops, mobile).
 - [`how-to/customize-modules.md`](../how-to/customize-modules.md) — swap memory backend, add orchestration, turn on safety gates.
 - [`reference/harness-config.md`](../reference/harness-config.md) — every config key explained.
 - [`explanation/why-harness.md`](../explanation/why-harness.md) — the philosophy behind the contract-not-prose design.

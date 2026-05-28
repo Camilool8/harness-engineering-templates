@@ -32,7 +32,7 @@ Wait for a maintainer thumbs-up before writing the PR. This step costs you nothi
 If the capability does not fit any of these five, it is probably not a module. It might be:
 
 - A domain-scoped extra → that is an **[addon](add-an-addon.md)**.
-- A new domain → that is a [whole-domain contribution](add-a-subdomain.md) (or a v1 thin recipe).
+- A new domain → that is a [whole-domain contribution](add-a-subdomain.md).
 - A standalone skill → drop a `SKILL.md` under `_base/.claude/skills/` instead.
 
 ---

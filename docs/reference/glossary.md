@@ -22,11 +22,11 @@ A Markdown fragment shipped by every [module](#module) and [addon](#addon). When
 
 ### Domain
 
-One of the twelve top-level categories of project this repo supports: `web`, `data`, `devops`, `finance`, `mobile`, `game`, `embedded`, `scientific`, `security`, `content`, `ops`, `generic`. Each domain has a recipe; some have a full domain pack.
+One of the four top-level categories of project this repo curates today: `web`, `data`, `devops`, `mobile`. Each is shipped as a [domain pack](#domain-pack). New domains are welcome contributions.
 
 ### Domain pack
 
-A curated, three-layer bundle of harness content for a [domain](#domain): a domain layer (`DOMAIN.md`, `domain.claude-md.md`), one or more [sub-domains](#sub-domain), and optional [addons](#addon). Today `web/`, `devops/`, `data/`, and `mobile/` are three-layer packs; the other seven domains ship as v1 thin recipes (see [`reference/domains.md`](domains.md)).
+A curated, three-layer bundle of harness content for a [domain](#domain): a domain layer (`DOMAIN.md`, `domain.claude-md.md`), one or more [sub-domains](#sub-domain), and optional [addons](#addon). Four packs ship today: `web/`, `devops/`, `data/`, `mobile/` (see [`reference/domains.md`](domains.md)).
 
 ### Harness
 
@@ -58,13 +58,11 @@ The four `_base` hooks that always ship and are not configurable: `secret-scan.s
 
 ### Recipe
 
-A pre-filled `harness.config.yml` plus the directory it sits in. Pass it to `assemble.sh` to get a fully configured harness for a [domain](#domain) in one step:
+A pre-filled `harness.config.yml` plus the directory it sits in. Pass it to `assemble.sh` to get a fully configured harness for a [sub-domain](#sub-domain) of a [domain pack](#domain-pack) in one step:
 
 ```bash
-./templates/assemble.sh templates/data/harness.config.yml .
+./templates/assemble.sh templates/data/ml-pipeline/harness.config.yml .
 ```
-
-Two recipe shapes today: v1 thin recipes (seven domains) and the curated three-layer packs (`web/`, `devops/`, `data/`, `mobile/`).
 
 ### Settings fragment
 
@@ -81,10 +79,6 @@ The assemble unit within a three-layer [domain pack](#domain-pack). For `web/`, 
 ### `SUBDOMAIN.md`
 
 The human-readable decision guide every [sub-domain](#sub-domain) ships. Required sections: `# <title>`, `## Adopt if`, `## Skip if`, `## Addons that pair well`, `## Agent team`. Enforced by [`structure-lint`](tests.md#structure-lint).
-
-### Thin recipe
-
-A domain that ships as a single `harness.config.yml` + `files/` tree, with no `DOMAIN.md`, no [sub-domains](#sub-domain), and no [addons](#addon). Seven domains are thin recipes today (everything except `web/`, `devops/`, `data/`, `mobile/`). They assemble and work; curating them into the three-layer shape is part of the maintainer roadmap.
 
 ### Two-key
 

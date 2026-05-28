@@ -2,7 +2,7 @@
 
 A sub-domain is a distinct deliverable shape within a three-layer [domain pack](../reference/glossary.md#domain-pack). For `web/`, the existing sub-domains are `design-system`, `frontend-app`, `fullstack-app`, `api-service`, `distributed-backend`. Each represents a project shape with its own agent team, addon pairings, and conventions.
 
-Today only the `web/` pack ships sub-domains. Adding a sub-domain to a domain that does not yet have any (i.e. curating a v1 thin recipe into a three-layer pack) is part of the maintainer roadmap — this guide covers sub-domains *within an already-curated pack*.
+This guide covers adding a sub-domain to one of the four curated packs (`web`, `data`, `devops`, `mobile`). Adding a whole new domain pack is a larger effort — open a discussion issue first.
 
 ---
 

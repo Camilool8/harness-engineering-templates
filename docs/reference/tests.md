@@ -16,7 +16,7 @@ The final line is either `ALL CHECKS PASSED` or `N CHECK(S) FAILED`. The script'
 |---|---|---|
 | `structure-lint` | Every `MODULE.md`, `SUBDOMAIN.md`, agent file, and skill is shaped to the conventions. | [`tests/checks/structure-lint.sh`](../../templates/tests/checks/structure-lint.sh) |
 | `hook-lint` | Every `*.sh` in the repo passes `bash -n`; passes `shellcheck -S error` when installed. | [`tests/checks/hook-lint.sh`](../../templates/tests/checks/hook-lint.sh) |
-| `assemble-coverage` | Every thin recipe, every web sub-domain, every cross-cutting module, and every web addon assembles cleanly into a temp dir. | [`tests/checks/assemble-coverage.sh`](../../templates/tests/checks/assemble-coverage.sh) |
+| `assemble-coverage` | The root base-only manifest, every sub-domain in every curated pack, every cross-cutting module, and every addon assembles cleanly into a temp dir. | [`tests/checks/assemble-coverage.sh`](../../templates/tests/checks/assemble-coverage.sh) |
 
 Run them individually when iterating:
 
@@ -131,7 +131,7 @@ For every assembly:
 
 ### Bonus
 
-A fixture exercises the `.mcp.json` deep-merge: it assembles `generic`, drops in a known-shape `.mcp.json.fragment`, runs the merge, and asserts the additional MCP server is present in the result.
+A fixture exercises the `.mcp.json` deep-merge: it assembles the root base-only manifest, drops in a known-shape `.mcp.json.fragment`, runs the merge, and asserts the additional MCP server is present in the result.
 
 ### Why this matters
 
