@@ -1,0 +1,7 @@
+# Matchfile — see https://docs.fastlane.tools/actions/match/
+
+git_url(ENV["MATCH_GIT_URL"] || "git@github.com:your-org/your-match-repo.git")
+storage_mode("git")
+type("development")  # change per lane via match(type: …)
+app_identifier([ENV["IOS_BUNDLE_ID"] || "com.example.app"])
+username(ENV["APPLE_ID"] || "you@example.com")

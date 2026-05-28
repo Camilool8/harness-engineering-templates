@@ -4,6 +4,8 @@ A module is a cross-cutting opt-in capability under `templates/_modules/<categor
 
 This guide walks you through adding a new module end-to-end: open the issue, create the directory, satisfy the structure check, submit the PR.
 
+> **Two mirrored trees.** This repo maintains the content in two places that stay in sync: the `templates/` tree (the eject/assembler source) and the `plugins/harness-*/` tree (the marketplace). New cross-cutting content lands in `templates/_modules/` and in the corresponding location inside `plugins/harness-base/` so both stay aligned. Your change must pass **both** test suites before merge — `./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`. The steps below cover the `templates/` shape; mirror the same content into the plugin and validate it in step 8.
+
 ---
 
 ## Step 1 — Open an issue first
@@ -32,7 +34,7 @@ Wait for a maintainer thumbs-up before writing the PR. This step costs you nothi
 If the capability does not fit any of these five, it is probably not a module. It might be:
 
 - A domain-scoped extra → that is an **[addon](add-an-addon.md)**.
-- A new domain → that is a [whole-domain contribution](add-a-subdomain.md) (or a v1 thin recipe).
+- A new domain → that is a [whole-domain contribution](add-a-subdomain.md).
 - A standalone skill → drop a `SKILL.md` under `_base/.claude/skills/` instead.
 
 ---
@@ -156,19 +158,24 @@ Also add the key to the reference manifest `templates/harness.config.yml` with a
 
 ---
 
-## Step 8 — Run the test suite
+## Step 8 — Mirror into the plugin tree and run both test suites
+
+Mirror the same module content into `plugins/harness-base/` so the marketplace stays in sync with the eject tree, then run both suites:
 
 ```bash
-./templates/tests/run.sh
+./templates/tests/run.sh              # eject tree
+./plugins/tests/run-plugin-tests.sh   # marketplace tree
 ```
 
-Expected last line: `ALL CHECKS PASSED`. The `assemble-coverage` check discovers your new module automatically and assembles it — no test edit required.
+Expected last lines: `ALL CHECKS PASSED` and `ALL PLUGIN CHECKS PASSED`. The `assemble-coverage` check discovers your new module automatically and assembles it — no test edit required. The plugin suite runs `claude plugin validate --strict` against `harness-base` plus the convention lint.
 
 If `structure-lint` fails, the message tells you which `MODULE.md` section is missing. Fix and rerun.
 
 If `hook-lint` fails on your new shell script, fix the syntax / shellcheck error.
 
 If `assemble-coverage` fails, your fragment may not deep-merge cleanly, or a hook may not be executable. See [`troubleshooting.md`](../reference/troubleshooting.md#tests).
+
+If the plugin suite fails, the `claude plugin validate --strict` output names the offending manifest field or path — fix the plugin mirror so it matches the `templates/` content.
 
 ---
 

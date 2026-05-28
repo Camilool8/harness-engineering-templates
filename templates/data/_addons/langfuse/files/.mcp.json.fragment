@@ -1,0 +1,10 @@
+{ "mcpServers": {
+  "langfuse": {
+    "type": "http",
+    "url": "${LANGFUSE_HOST}/api/public/mcp",
+    "headers": {
+      "X-Langfuse-Public-Key": "${LANGFUSE_PUBLIC_KEY}",
+      "X-Langfuse-Secret-Key": "${LANGFUSE_SECRET_KEY}"
+    }
+  }
+} }

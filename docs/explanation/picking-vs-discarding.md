@@ -26,7 +26,7 @@ Every module has a *default state*:
 
 The defaults are *the 2026 practitioner consensus* — what the average engineering project should run with. Where there is a strong case to deviate (e.g. `eval_driven` should be on for any LLM-output project), the relevant module's `MODULE.md` says so explicitly under **Adopt if**.
 
-This means the friction of doing the *right* thing is low. You start with `assemble.sh templates/generic/harness.config.yml .` and you have a reasonable setup. You change one flag when you have a reason. You read one `MODULE.md` when you are deciding whether to flip it.
+This means the friction of doing the *right* thing is low. You start with `assemble.sh templates/web/frontend-app/harness.config.yml .` (or the curated pack that matches your work) and you have a reasonable setup. You change one flag when you have a reason. You read one `MODULE.md` when you are deciding whether to flip it.
 
 ---
 
@@ -41,7 +41,7 @@ The harness's value compounds when modules layer cleanly:
 
 The implementation enforces this in two ways:
 
-1. **Isolation in the file tree.** Every module's files live under its own subtree in `.claude/`. There are no shared mutable files where one module steps on another. The merge semantics ([deep-merge for `settings.json` and `.mcp.json`](../reference/assemble-cli.md#merge-semantics), append for `CLAUDE.md`) guarantee additive composition.
+1. **Isolation in the file tree.** Every module's files live under its own subtree in `.claude/`. There are no shared mutable files where one module steps on another. The merge semantics ([deep-merge for `settings.json` and `.mcp.json`](../reference/eject.md#merge-semantics), append for `CLAUDE.md`) guarantee additive composition.
 
 2. **A `Remove` section in every `MODULE.md`.** It tells you exactly which files to delete and which `CLAUDE.md` section to drop. Removing a module is always: delete files + delete section. No tangle.
 

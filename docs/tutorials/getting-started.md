@@ -2,11 +2,12 @@
 
 This tutorial walks you from an empty directory to a working Claude Code harness in about ten minutes. You will:
 
-1. Clone this repository.
-2. Assemble the `generic` recipe into a fresh project.
-3. Open Claude Code and watch a safety hook block an unsafe command.
+1. Add the `harness-engineering` plugin marketplace.
+2. Install the `harness-web` pack and run `/harness-web:init`.
+3. Watch a non-negotiable safety hook block an unsafe command.
+4. Optionally arm one opt-in discipline (TDD) and watch its hook fire too.
 
-You only need the *generic* recipe for this lesson — it is base-only and assumes nothing about your domain. You can graduate to a domain-specific recipe once the basics make sense.
+We use `harness-web` for this lesson because it is the most universally legible: any client-side app shape (React, Vue, Svelte) recognises its conventions. The four base hooks fire identically across every pack, so the lesson transfers as you graduate to `harness-data`, `harness-devops`, or `harness-mobile`.
 
 > Tutorials are about learning, not deciding. We pick everything for you here. The [how-to guides](../how-to/) cover *your* project's choices.
 
@@ -16,144 +17,125 @@ You only need the *generic* recipe for this lesson — it is base-only and assum
 
 You need:
 
-- `bash` 3.2+ (default on macOS and Linux)
-- `jq` — `brew install jq` / `apt install jq` / `dnf install jq`
-- `git`
-- [Claude Code](https://docs.claude.com/en/docs/agents-and-tools/claude-code/overview) installed and authenticated
+- [Claude Code](https://docs.claude.com/en/docs/agents-and-tools/claude-code/overview) installed and authenticated.
+- `git`, and a project directory (an empty folder is fine for this lesson).
 
-`shellcheck` is recommended but optional (it tightens the hook-lint check; without it, that check skips the shellcheck pass).
+That is all. The plugin flow needs no `bash` assembler, no `jq`, and no clone of this repo — Claude Code fetches the marketplace for you.
 
----
-
-## Step 1 — Clone the repository
-
-Pick a directory you do *not* mind cloning into. For this tutorial we will work from your home directory:
-
-```bash
-cd ~
-git clone https://github.com/Camilool8/harness-engineering-templates.git
-```
-
-This gives you the templates library. You will not modify it; you will *copy from* it into a target project in the next step.
+> Prefer committed `.claude/` artifacts checked into your repo instead of installed plugins? That is the **eject path** — see [`reference/eject.md`](../reference/eject.md). This tutorial uses the plugin flow, which is the path most users want.
 
 ---
 
-## Step 2 — Create a target project
+## Step 1 — Create a project to work in
 
-Create the directory you want to drop the harness into. For the tutorial, an empty folder is fine:
+Open a directory you want the harness to operate on. For the tutorial, an empty folder is fine:
 
 ```bash
 mkdir ~/my-first-harness
 cd ~/my-first-harness
-```
-
-This is the directory `assemble.sh` will write into. The harness adds files at the root (`CLAUDE.md`, `.mcp.json`, `.gitignore`) and a `.claude/` subtree.
-
----
-
-## Step 3 — Assemble the generic recipe
-
-Run the assembler. It takes two arguments: the config to use, and the target directory. We pass the generic recipe's config and `.` for *current directory*:
-
-```bash
-~/harness-engineering-templates/templates/assemble.sh \
-  ~/harness-engineering-templates/templates/generic/harness.config.yml .
-```
-
-Expected output (truncated):
-
-```
-→ base
-  · merged settings.fragment.json
-→ generic
-  · merged settings.fragment.json
-→ wrote .claude/HARNESS.lock
-```
-
-Verify what landed:
-
-```bash
-ls -la
-ls .claude/
-cat .claude/HARNESS.lock
-```
-
-You should see `CLAUDE.md`, `.mcp.json`, `.gitignore`, and a `.claude/` directory containing `settings.json`, `hooks/`, `skills/`, `agents/`, and the lock file that records exactly which modules were assembled. See [`reference/assembled-output.md`](../reference/assembled-output.md) for the full inventory.
-
----
-
-## Step 4 — Verify hooks are executable
-
-`assemble.sh` runs `chmod +x` on every hook itself, so this is just a verification step. Check the four `_base` hooks landed and are executable:
-
-```bash
-ls -l .claude/hooks/
-# -rwxr-xr-x  audit-log.sh
-# -rwxr-xr-x  command-guard.sh
-# -rwxr-xr-x  secret-scan.sh
-# -rwxr-xr-x  verify-gate.sh
-```
-
-If any hook is not executable (e.g. you copied `_base/` by hand without running the assembler), run `chmod +x .claude/hooks/*.sh`.
-
-These are the four non-negotiable hooks every harness ships — see [`explanation/non-negotiables.md`](../explanation/non-negotiables.md) for *why*.
-
----
-
-## Step 5 — Fill in `CLAUDE.md` placeholders
-
-Open `CLAUDE.md` in your editor. It is a project-shaped template with placeholders:
-
-- Replace `<PROJECT_NAME>` with whatever you want to call your project.
-- Replace the `<cmd>` placeholders under `## Commands` with the shell commands your project actually uses (if you have none yet, fill in something like `echo "not yet"` — you can refine later).
-
-The agent reads `CLAUDE.md` on every turn. Keep it under ~60 lines; long context is not free.
-
----
-
-## Step 6 — Open Claude Code
-
-From the project directory:
-
-```bash
 claude
 ```
 
-Claude Code reads `.claude/settings.json` and registers the four base hooks. You will see a normal Claude Code prompt.
+Claude Code is now running in your project. The next steps are slash commands you type **inside** the Claude Code session.
 
 ---
 
-## Step 7 — Watch a hook fire
+## Step 2 — Add the marketplace
 
-Ask Claude to run a destructive command, e.g.:
+Add the `harness-engineering` marketplace once. You only do this a single time per machine:
+
+```
+/plugin marketplace add Camilool8/harness-engineering-templates
+```
+
+Claude Code fetches the marketplace manifest and lists the five plugins it offers: `harness-base`, `harness-web`, `harness-data`, `harness-devops`, and `harness-mobile`.
+
+---
+
+## Step 3 — Install the web pack
+
+Install the pack for your domain. For this lesson, web:
+
+```
+/plugin install harness-web@harness-engineering
+```
+
+You never install `harness-base` directly — installing `harness-web` pulls it in automatically via the dependency cascade. `harness-base` is what ships the four non-negotiable safety hooks; the domain pack layers web-specific sub-domains, agents, and gates on top.
+
+The full plugin catalog and what each pack adds is in [`reference/plugins.md`](../reference/plugins.md).
+
+---
+
+## Step 4 — Run the init command
+
+Pick your sub-domain with the pack's `init` command:
+
+```
+/harness-web:init
+```
+
+Claude asks which of the five web sub-domains fits — `api-service`, `design-system`, `distributed-backend`, `frontend-app`, or `fullstack-app`. For the tutorial, choose **frontend-app**.
+
+The command writes a single file into your project, `.claude/HARNESS.toml`, recording your choice:
+
+```toml
+[web]
+subdomain = "frontend-app"
+```
+
+This is the only file the plugins write into your repo. The matching skills and hooks read it to know which sub-domain conventions to apply. (Editing a YAML config to pick a sub-domain is the *eject* path — in the plugin flow, the `init` command owns this file.)
+
+---
+
+## Step 5 — Watch a non-negotiable hook fire
+
+The four base hooks are now armed, with no configuration required. Watch one block a destructive command. Ask Claude:
 
 > *"Please run `rm -rf /tmp/some-fake-path` for me."*
 
-The `command-guard.sh` hook intercepts the `Bash` tool call before it runs, exits with code 2, and feeds the reason back to the agent. Claude does **not** execute the command; you will see the agent reasoning about an alternative.
+The `command-guard` hook intercepts the `Bash` tool call before it runs, exits with code 2, and feeds the reason back to the agent. Claude does **not** execute the command; you will see the agent reasoning about a safer alternative.
 
-This is the contract. Documentation is a suggestion the model is free to ignore; a `PreToolUse` hook returning exit code 2 is not.
+This is the contract. Documentation is a suggestion the model is free to ignore; a `PreToolUse` hook returning exit code 2 is not. The same is true of the secret scanner — ask Claude to add a line like `AWS_SECRET_ACCESS_KEY=AKIA...` to a file and `secret-scan` blocks the write the same way.
 
-For the secret scanner, ask Claude to add a line like `AWS_SECRET_ACCESS_KEY=AKIA...` to a file. The `secret-scan.sh` hook blocks the write the same way.
+These four hooks (secret-scan, command-guard, audit-log, verify-gate) are always on and not configurable. See [`explanation/non-negotiables.md`](../explanation/non-negotiables.md) for *why*.
+
+---
+
+## Step 6 — (Optional) Arm an opt-in discipline
+
+The base pack also ships four *opt-in* hooks that stay inert until you arm them with a flag. Try TDD. Add a `[harness]` table to `.claude/HARNESS.toml`:
+
+```toml
+[harness]
+tdd = true       # arms tdd-guard
+
+[web]
+subdomain = "frontend-app"
+```
+
+Now ask Claude to edit an implementation file before any failing test exists for it. The `tdd-guard` hook blocks the edit and tells the agent to write a failing test first. Remove `tdd = true` and the same hook goes inert again — that is how an always-loaded plugin hook becomes a per-project opt-in.
+
+The other three flags work the same way: `eval = true` (eval-gate), `two_key = true` (two-key-confirm), `kill_switch = true` (kill-switch). The full flag table is in [`reference/plugins.md`](../reference/plugins.md#claudeharnesstoml-the-project-marker).
 
 ---
 
 ## What you have now
 
-A complete, base-only Claude Code harness with:
+A complete `harness-web` / `frontend-app` Claude Code harness with:
 
-- Four `_base` hooks: secret-scan, command-guard, audit-log, verify-gate.
-- `tdd` + `spec_driven` methodology modules enforced.
-- `filesystem` progress tracking under `.claude/progress/`.
-- `md-files` memory under `.claude/memory/`.
-- A `.claude/HARNESS.lock` manifest recording what was assembled.
+- The `harness-base` pack and its four always-on hooks: secret-scan, command-guard, audit-log, verify-gate.
+- The `harness-web` pack: the accessibility-tree verify loop, lint+type checks, and the `frontend-app` agent team.
+- A `.claude/HARNESS.toml` marker recording your sub-domain and any opt-in flags you armed.
+- An append-only audit log under `.claude/audit/audit.jsonl` — in your project, so it commits with your work.
 
-You can commit this to git and start working.
+The plugins live in Claude Code's cache, not your repo, so there is nothing else to commit beyond `.claude/HARNESS.toml` (and whatever your project produces).
 
 ---
 
 ## What to read next
 
-- [`how-to/pick-a-recipe.md`](../how-to/pick-a-recipe.md) — when you are ready to swap `generic` for a domain-specific recipe (web, data, devops, finance, …).
-- [`how-to/customize-modules.md`](../how-to/customize-modules.md) — swap memory backend, add orchestration, turn on safety gates.
-- [`reference/harness-config.md`](../reference/harness-config.md) — every config key explained.
+- [`how-to/pick-a-recipe.md`](../how-to/pick-a-recipe.md) — pick the right pack and sub-domain for your project (web, data, devops, mobile).
+- [`how-to/customize-modules.md`](../how-to/customize-modules.md) — arm opt-in hooks, let skills auto-load, set your permissions.
+- [`reference/plugins.md`](../reference/plugins.md) — the plugin catalog and the `HARNESS.toml` schema.
+- [`reference/eject.md`](../reference/eject.md) — the bash assembler, if you want committed `.claude/` artifacts instead of installed plugins.
 - [`explanation/why-harness.md`](../explanation/why-harness.md) — the philosophy behind the contract-not-prose design.

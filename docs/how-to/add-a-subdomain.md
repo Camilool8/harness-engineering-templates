@@ -2,7 +2,9 @@
 
 A sub-domain is a distinct deliverable shape within a three-layer [domain pack](../reference/glossary.md#domain-pack). For `web/`, the existing sub-domains are `design-system`, `frontend-app`, `fullstack-app`, `api-service`, `distributed-backend`. Each represents a project shape with its own agent team, addon pairings, and conventions.
 
-Today only the `web/` pack ships sub-domains. Adding a sub-domain to a domain that does not yet have any (i.e. curating a v1 thin recipe into a three-layer pack) is part of the maintainer roadmap — this guide covers sub-domains *within an already-curated pack*.
+This guide covers adding a sub-domain to one of the four curated packs (`web`, `data`, `devops`, `mobile`). Adding a whole new domain pack is a larger effort — open a discussion issue first.
+
+> **Two mirrored trees.** This repo maintains the content in two places that stay in sync: the `templates/` tree (the eject/assembler source) and the `plugins/harness-*/` tree (the marketplace). A new sub-domain lands under `templates/<domain>/<sub-domain>/` **and** in the matching domain plugin (e.g. `plugins/harness-web/`) — including a line in that pack's `/<domain>:init` command so the new sub-domain is offered. Your change must pass **both** test suites before merge — `./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`. The steps below cover the `templates/` shape; mirror the same content into the plugin and validate it in step 9.
 
 ---
 
@@ -207,15 +209,20 @@ Register hooks via `files/.claude/settings.fragment.json`. Same shape as for mod
 
 ---
 
-## Step 9 — Run the test suite
+## Step 9 — Mirror into the plugin tree and run both test suites
+
+Mirror the sub-domain into the matching domain plugin (e.g. `plugins/harness-web/`), including a one-line entry in that pack's `/<domain>:init` command so the new sub-domain is offered to users. Then run both suites:
 
 ```bash
-./templates/tests/run.sh
+./templates/tests/run.sh              # eject tree
+./plugins/tests/run-plugin-tests.sh   # marketplace tree
 ```
 
 `assemble-coverage` discovers your new sub-domain automatically (any `harness.config.yml` under `web/<subdir>/` is treated as a sub-domain). It assembles your config into a temp dir and validates the output.
 
 `structure-lint` validates `SUBDOMAIN.md`, every agent file's frontmatter, and the `references.md` `Verified:` header.
+
+The plugin suite runs `claude plugin validate --strict` against the domain plugin plus the convention lint, so the mirrored sub-domain (and its `init` entry) must be valid there too.
 
 If any check fails, see [`troubleshooting.md`](../reference/troubleshooting.md#tests).
 

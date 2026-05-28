@@ -1,180 +1,72 @@
-# How to customise modules
+# How to customise your harness
 
-You have a recipe assembled, or you are about to assemble one, and you want to change a default — swap the memory backend, add a methodology, turn on a safety gate. This guide is the recipe set.
+You have a pack installed (or you are about to install one) and you want to tune it — arm a discipline, change how memory or progress tracking behaves, wire an MCP server, set your permissions. In the plugin world you customise through four levers, none of which require editing plugin files:
 
-Two timelines:
+1. **Arm opt-in hooks** via flags under `[harness]` in `.claude/HARNESS.toml`.
+2. **Let skills auto-load** — memory, progress, methodology, and orchestration ship as skills the agent loads on demand.
+3. **Add opt-in MCP snippets** copied from the relevant skill body.
+4. **Set permissions yourself** — plugins ship none.
 
-- **Before assembly** — edit `harness.config.yml`, then run `./templates/assemble.sh`.
-- **After assembly** — follow the target module's `MODULE.md` → **Install (manual)** / **Remove** sections directly on the assembled project.
-
-The before-assembly path is easier; prefer it.
+> **Eject path.** If you assemble committed `.claude/` artifacts instead of installing plugins, the same choices map to keys in `harness.config.yml`. Each section below ends with the config key equivalent. See [`reference/harness-config.md`](../reference/harness-config.md) and [`reference/eject.md`](../reference/eject.md).
 
 ---
 
-## Swap the memory backend
+## 1. Arm an opt-in hook
 
-Default: `md-files`. Alternatives: `vector-store`, `knowledge-graph`, `none`.
+`harness-base` ships four always-on hooks (secret-scan, command-guard, audit-log, verify-gate) and four *opt-in* hooks that load but stay inert until you set their flag. You arm them by adding flags to a `[harness]` table in `.claude/HARNESS.toml`:
 
-### Before assembly
+```toml
+[harness]
+tdd = true           # arms tdd-guard       — blocks impl edits without a failing test
+eval = true          # arms eval-gate       — blocks "done" if the fast eval subset fails
+two_key = true       # arms two-key-confirm  — typed token for irreversible actions
+kill_switch = true   # arms kill-switch     — out-of-band throttle/pause/stop
 
-```yaml
-# in harness.config.yml
-memory:
-  backend: vector-store
+[web]                # written by /harness-<domain>:init — leave it alone
+subdomain = "frontend-app"
 ```
 
-Then run `./templates/assemble.sh`. The `vector-store` module's files land in `.claude/`, and its `claude-md.md` section is appended to `CLAUDE.md`.
+Remove a flag (or set it `false`) and the corresponding hook goes inert again. This is how an always-loaded plugin hook becomes a per-project opt-in. The full flag table is in [`reference/plugins.md`](../reference/plugins.md#always-on-vs-opt-in-hooks).
 
-### After assembly
+When to arm each:
 
-1. Follow `_modules/memory/md-files/MODULE.md` → **Remove** to strip the current backend.
-2. Follow `_modules/memory/vector-store/MODULE.md` → **Install (manual)** to add the new one.
-
-### Choose
-
-| Backend | Switch to it when |
+| Flag | Arm when |
 |---|---|
-| `md-files` | **Default.** Cheap, git-diffable, human-auditable. |
-| `vector-store` | The corpus is too large for context and is naturally semantic-retrieval-shaped. |
-| `knowledge-graph` | Regulated work where facts have provenance and decay; multi-hop reasoning. |
-| `none` | One-shot or CI agents with no durable memory. |
+| `tdd` | You want the agent to write a failing test before touching implementation. Rarely wrong; the default discipline for production code. |
+| `eval` | LLM/ML work where "done" must mean the fast eval subset passes, not just unit tests. |
+| `two_key` | Production deploys, money movement, or destructive actions need a human-issued typed token the model cannot self-issue. Standard for devops in prod and anything irreversible. |
+| `kill_switch` | Any agent that runs longer than a human attention span — file-based, env-var, and signal stops. |
 
-Full guidance: [`reference/harness-config.md` §memory](../reference/harness-config.md#memory).
-
----
-
-## Add or remove a methodology
-
-The four methodology keys are independent booleans. Defaults: `tdd: true`, `spec_driven: true`, `eval_driven: false`, `bdd: false`.
-
-### Add `eval_driven` for an LLM/ML project
-
-```yaml
-methodology:
-  tdd: true
-  spec_driven: true
-  eval_driven: true     # ← turn on
-  bdd: false
-```
-
-Reassemble (or manually install [`_modules/methodology/eval-driven/`](../../templates/_modules/methodology/eval-driven/MODULE.md)).
-
-### Remove `tdd` for a spike
-
-```yaml
-methodology:
-  tdd: false            # ← turn off
-  spec_driven: true
-  eval_driven: false
-  bdd: false
-```
-
-After assembly: follow `_modules/methodology/tdd/MODULE.md` → **Remove**. Delete the hook, delete the marker file, delete the `## Test-Driven Development` section from `CLAUDE.md`, drop the hook entry from `.claude/settings.json`.
-
-**Note.** Turning off `tdd` is rarely right. Spikes turn into production code, and removing the discipline mid-stream is harder than working around it. Prefer `git stash` of the TDD marker for a short detour.
+> **Eject equivalent.** `methodology.tdd` / `methodology.eval_driven` become methodology modules; `safety.two_key` / `safety.kill_switch` / `safety.sandbox` become safety modules. Set the boolean in `harness.config.yml` and reassemble.
 
 ---
 
-## Switch the progress-tracking backend
+## 2. Let skills auto-load (memory, progress, methodology, orchestration)
 
-Default: `filesystem`. Alternatives: `github-issues`, `linear`, `jira`, `none`.
+In the plugin world, the cross-cutting capabilities that used to be assembled modules ship as **skills** inside `harness-base`. The agent loads them on demand when the work calls for them — you do not install or remove them per project.
 
-```yaml
-progress:
-  backend: github-issues
-```
+- **Memory** — the memory skills teach the agent how to write durable knowledge as markdown notes by default, and how to use a vector store or knowledge graph when one is wired (see MCP snippets below). The cheap, git-diffable markdown path is the default; reach for vector/graph only when the corpus is too large for context or facts need provenance and decay.
+- **Progress tracking** — the progress skills default to filesystem plans under `.claude/progress/`, and switch to a ticketing backend (GitHub Issues, Linear, Jira) when its MCP is wired and the work is cross-team.
+- **Methodology** — the methodology guidance (TDD, spec-driven, eval-driven, BDD) loads as skills; the *enforcement* of TDD and eval is what the `[harness]` flags above arm.
+- **Orchestration** — start with one well-equipped agent. The orchestration skills and the eight base agents let you escalate to supervisor-worker, pipeline, or blackboard topologies only when the work decomposes naturally and aggregation is cheap. The most common failure mode is cargo-culting a multi-agent topology onto sequential tasks. Full guide: [`AGENT_ROLES.md`](../AGENT_ROLES.md).
 
-This is the typical move when a project graduates from solo to a team that already runs on a ticketing system. The `filesystem` backend stays useful for short-lived plans; the ticketed backend takes over for cross-team work.
+You do not "switch a backend" in the plugin flow — you wire the MCP server for the backend you want (next section) and the matching skill takes over.
 
-After assembly: see [`_modules/progress-tracking/github-issues/MODULE.md`](../../templates/_modules/progress-tracking/github-issues/MODULE.md).
-
----
-
-## Escalate orchestration
-
-Default: `single-agent`. Alternatives: `supervisor-worker`, `pipeline`, `blackboard`.
-
-```yaml
-orchestration:
-  topology: supervisor-worker
-```
-
-**Do not do this on day one.** The 2026 consensus: start with one well-equipped agent; escalate to isolated subagents only when the work decomposes naturally and aggregation is cheap. The most common failure mode is cargo-culting `supervisor-worker` onto sequential tasks.
-
-When to switch:
-
-| To | Switch when |
-|---|---|
-| `supervisor-worker` | Tasks decompose into independent sub-questions (Anthropic's research system: 90.2% uplift over single Opus on multi-question research). |
-| `pipeline` | Steps are knowable in advance and gating between them is valuable (spec → review → implement → test). |
-| `blackboard` | State is durable, agents are heterogeneous, the next action depends on shared context. |
-
-Full topology guide: [`AGENT_ROLES.md`](../AGENT_ROLES.md).
+> **Eject equivalent.** These are the `memory.backend`, `progress.backend`, `methodology.*`, and `orchestration.topology` keys in `harness.config.yml`, selected at assemble time. See [`reference/harness-config.md`](../reference/harness-config.md).
 
 ---
 
-## Turn on a safety gate
+## 3. Add an opt-in MCP server snippet
 
-Defaults: all three off. The four `_base` hooks (secret-scan, command-guard, audit-log, verify-gate) always ship — see [`explanation/non-negotiables.md`](../explanation/non-negotiables.md). Safety modules layer on top.
+Domain packs auto-start only **secretless** MCP servers (e.g. `context7`, `playwright`, `chrome-devtools`, `duckdb`, and the cloud OAuth servers). Servers that need a secret token — Snowflake, BigQuery, Databricks, dbt Cloud, Langfuse, W&B, Mem0, Zep, GitHub/Jira/Linear — are **not** auto-started, because Claude Code has no per-server opt-out and shipping them would prompt every user for every token on install.
 
-### Two-key for production
+Instead, each token-bearing server lives as a copy-paste `.mcp.json` snippet inside the relevant skill body. To wire one:
 
-```yaml
-safety:
-  two_key: true
-```
+1. Open the skill that documents the server (e.g. the memory skill for Mem0/Zep, the progress skill for Jira/Linear, a data skill for BigQuery).
+2. Copy its `.mcp.json` snippet into your project's `.mcp.json`.
+3. Set the env var the snippet references.
 
-Every production deploy, money movement, or destructive action requires a typed token a human issues out-of-band. The model cannot self-issue the token. Standard for finance, devops in prod, and anything irreversible.
-
-### Kill-switch for autonomous loops
-
-```yaml
-safety:
-  kill_switch: true
-```
-
-Three-level out-of-band stop: file-based, env-var, signal. Standard for any agent that runs longer than a human attention span.
-
-### Sandbox for untrusted input
-
-```yaml
-safety:
-  sandbox: true
-```
-
-Restricts filesystem and network egress. Turn on when the agent ingests PR descriptions, issue bodies, web fetches, or anything else the model treats as input but an attacker could shape.
-
----
-
-## Disable HITL gates (think first)
-
-Defaults: both on. The harness directs human attention; it does not remove the human.
-
-```yaml
-hitl:
-  plan_mode_default: false       # rarely right
-  diff_review_required: false    # very rarely right
-```
-
-Disable only when:
-
-- The work is a one-shot CI agent with no human in the loop *by design*.
-- The session is a sandboxed spike not landing on `main`.
-
-For normal development, both gates stay on. Removing them is the single most common silent regression in agentic-coding setups.
-
----
-
-## Wire the Context7 docs MCP
-
-The `docs.context7_mcp` key wires the [Context7](https://context7.com/) live-docs MCP so agents fetch current library documentation at runtime rather than recalling stale training-data versions.
-
-```yaml
-docs:
-  context7_mcp: true
-```
-
-The key is a no-op unless the active domain pack ships a `files/.claude/context7.mcp.json.fragment`. Today, `web/` does; the other domains do not. If you want Context7 on a v1 thin recipe, drop a `context7` entry into `.mcp.json` by hand:
+For example, to wire the Context7 live-docs MCP by hand on a pack that does not auto-start it:
 
 ```json
 {
@@ -188,26 +80,26 @@ The key is a no-op unless the active domain pack ships a `files/.claude/context7
 }
 ```
 
+Add only the servers you actually use. The MCP/secret model is documented in full in [`reference/plugins.md`](../reference/plugins.md#mcp-servers-and-secrets).
+
+> **Eject equivalent.** The `docs.context7_mcp` key wires Context7 when the active domain pack ships a `context7.mcp.json.fragment`; other servers are added to `.mcp.json` by hand the same way. See [`reference/harness-config.md`](../reference/harness-config.md).
+
 ---
 
-## Customise the agent roster (web pack only)
+## 4. Set your permissions
 
-After picking a sub-domain, you can prune or extend the curated agent team:
+Plugins ship **no** `permissions` block — the plugin manifest has no such field, and permissions are a per-project decision. The hooks are the enforcement layer; permissions are yours to set.
 
-```yaml
-agents:
-  team: curated                              # or: none
-  exclude: [web-perf-auditor]                # drop named agents
-  include: [web/api-service/api-architect]   # add agents by path
-```
+For an opinionated allow/deny starting point you can paste into `.claude/settings.json`, see [`reference/recommended-permissions.md`](../reference/recommended-permissions.md). The harness also keeps two human-in-the-loop habits on by default — plan mode and diff review — which you should leave on for normal development; removing them is the single most common silent regression in agentic-coding setups.
 
-`agents.team: none` removes every specialist agent from `.claude/agents/` after copy; the `_base` general-purpose set stays.
+> **Eject equivalent.** The assembler also ships no `permissions` block. The `hitl.plan_mode_default` and `hitl.diff_review_required` keys gate plan mode and diff review at assemble time.
 
 ---
 
 ## See also
 
-- [`reference/harness-config.md`](../reference/harness-config.md) — schema and defaults.
-- [`reference/modules.md`](../reference/modules.md) — module catalog with `MODULE.md` links.
-- [`pick-a-recipe.md`](pick-a-recipe.md) — start-of-project recipe selection.
-- [`assemble-by-hand.md`](assemble-by-hand.md) — applying modules without re-running `assemble.sh`.
+- [`reference/plugins.md`](../reference/plugins.md) — the `HARNESS.toml` schema, the hook table, and the MCP/secret model.
+- [`reference/recommended-permissions.md`](../reference/recommended-permissions.md) — an opt-in permissions starting point.
+- [`pick-a-recipe.md`](pick-a-recipe.md) — choose a pack and sub-domain.
+- [`reference/harness-config.md`](../reference/harness-config.md) — the config keys these levers map to on the eject path.
+- [`reference/eject.md`](../reference/eject.md) — the assembler, for committed artifacts.

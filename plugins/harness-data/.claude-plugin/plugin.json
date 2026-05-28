@@ -1,0 +1,18 @@
+{
+  "name": "harness-data",
+  "displayName": "Harness Data",
+  "version": "0.1.0",
+  "description": "Curated data engineering pack with four sub-domains — analytics-engineering, data-analyst-notebook, llm-app, and ml-pipeline — wiring domain skills, read-only architect/auditor agents, warehouse read-only and sample-then-scale guards, provenance audit logging, and eval-separation discipline.",
+  "author": { "name": "Camilo Joga", "url": "https://github.com/Camilool8" },
+  "homepage": "https://github.com/Camilool8/harness-engineering-templates",
+  "repository": "https://github.com/Camilool8/harness-engineering-templates",
+  "license": "MIT",
+  "keywords": ["data", "ml", "llm", "warehouse", "evals"],
+  "dependencies": ["harness-base"],
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "context7": { "command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"] },
+    "duckdb": { "command": "uvx", "args": ["motherduck-mcp@latest"] }
+  }
+}

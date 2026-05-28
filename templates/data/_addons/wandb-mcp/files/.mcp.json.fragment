@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "wandb": {
+    "command": "uvx",
+    "args": ["wandb-mcp@latest"],
+    "env": { "WANDB_API_KEY": "${WANDB_API_KEY}" }
+  }
+} }

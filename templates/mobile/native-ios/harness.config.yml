@@ -1,0 +1,39 @@
+project:
+  name: my-ios-app
+
+memory:
+  backend: md-files
+
+progress:
+  backend: linear
+
+methodology:
+  tdd: true
+  spec_driven: true
+  eval_driven: false
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: false
+  kill_switch: false
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: mobile
+  subdomain: native-ios
+  addons: [xcodebuild-mcp, sentry-mcp, privacy-manifest-ios, fastlane]
+
+agents:
+  team: curated
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true

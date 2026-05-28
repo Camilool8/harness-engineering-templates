@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "databricks": {
+    "type": "http",
+    "url": "https://${DATABRICKS_WORKSPACE}.cloud.databricks.com/api/2.0/mcp",
+    "headers": { "Authorization": "Bearer ${DATABRICKS_OAUTH_TOKEN}" }
+  }
+} }

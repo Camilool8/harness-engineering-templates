@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/block-static-store-creds.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|mcp__XcodeBuildMCP__.*|mcp__xcodebuildmcp__.*|mcp__expo__.*|mcp__firebase__.*|mcp__sentry__.*",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks/audit-log-mobile-build.sh" }
+        ]
+      }
+    ]
+  }
+}

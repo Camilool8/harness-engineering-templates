@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "snowflake": {
+    "type": "http",
+    "url": "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/cortex/mcp",
+    "headers": { "Authorization": "Bearer ${SNOWFLAKE_OAUTH_TOKEN}" }
+  }
+} }

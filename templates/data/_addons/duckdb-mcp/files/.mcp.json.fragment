@@ -1,0 +1,6 @@
+{ "mcpServers": {
+  "duckdb": {
+    "command": "uvx",
+    "args": ["motherduck-mcp@latest"]
+  }
+} }

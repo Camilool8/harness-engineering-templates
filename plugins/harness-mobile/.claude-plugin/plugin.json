@@ -1,0 +1,26 @@
+{
+  "name": "harness-mobile",
+  "displayName": "Harness Mobile",
+  "version": "0.1.0",
+  "description": "Curated mobile engineering pack with four sub-domains — flutter-app, native-android, native-ios, and react-native-expo — wiring domain skills, read-only compliance/UX-critic agents, a simulator/emulator-in-the-loop verification skill, store-compliance gates, and an OAuth-first credential posture.",
+  "author": { "name": "Camilo Joga", "url": "https://github.com/Camilool8" },
+  "homepage": "https://github.com/Camilool8/harness-engineering-templates",
+  "repository": "https://github.com/Camilool8/harness-engineering-templates",
+  "license": "MIT",
+  "keywords": ["mobile", "ios", "android", "react-native", "flutter"],
+  "dependencies": ["harness-base"],
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "context7": { "command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"] },
+    "XcodeBuildMCP": {
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest", "mcp"],
+      "env": { "XCODEBUILDMCP_SENTRY_DISABLED": "true" }
+    },
+    "ios-simulator": { "command": "npx", "args": ["-y", "ios-simulator-mcp@latest"] },
+    "firebase": { "command": "npx", "args": ["-y", "firebase-tools@latest", "mcp"] },
+    "expo": { "type": "http", "url": "https://mcp.expo.dev/mcp" },
+    "sentry": { "type": "http", "url": "https://mcp.sentry.dev/mcp" }
+  }
+}

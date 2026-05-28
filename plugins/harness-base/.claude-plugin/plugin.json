@@ -1,0 +1,12 @@
+{
+  "name": "harness-base",
+  "displayName": "Harness Base",
+  "version": "0.1.0",
+  "description": "Four non-negotiable safety hooks (command-guard, secret-scan, verify-gate, audit-log) plus cross-cutting engineering modules as auto-loading skills. Every Harness domain pack depends on this.",
+  "author": { "name": "Camilo Joga", "url": "https://github.com/Camilool8" },
+  "homepage": "https://github.com/Camilool8/harness-engineering-templates",
+  "repository": "https://github.com/Camilool8/harness-engineering-templates",
+  "license": "MIT",
+  "keywords": ["safety", "hooks", "tdd", "spec-driven", "memory", "audit", "harness"],
+  "hooks": "./hooks/hooks.json"
+}

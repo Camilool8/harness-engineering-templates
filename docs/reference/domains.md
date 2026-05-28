@@ -2,31 +2,22 @@
 
 Every domain pack under [`templates/`](../../templates/). Pick the closest match to your project; the recipe pre-fills the manifest and adds the domain-specific hooks and skills.
 
-Two shapes today:
-
-- **Three-layer pack** — domain → sub-domain → addons. `web/` and `devops/` ship this layout. The sub-domain config is the assemble unit.
-- **v1 thin recipe** — a single `harness.config.yml` plus a `files/` tree. Ten of the twelve domains ship this shape today, pending curation into three-layer packs.
+Every pack ships the same three-layer shape: domain → sub-domain → addons. The sub-domain config is the assemble unit.
 
 ---
 
 ## The full catalog
 
-| Domain | Status | Recipe path | Headline gates |
-|---|---|---|---|
-| **web** | curated (3-layer) | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
-| **data** | v1 thin | [`templates/data/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, eval ≠ code |
-| **devops** | curated (3-layer) | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
-| **finance** | v1 thin | [`templates/finance/harness.config.yml`](../../templates/finance/) | paper-by-default, two-key, immutable audit, double-entry |
-| **mobile** | v1 thin | [`templates/mobile/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, structured build logs |
-| **game** | v1 thin | [`templates/game/harness.config.yml`](../../templates/game/) | hot-reload + screenshot loop, asset-GUID awareness |
-| **embedded** | v1 thin | [`templates/embedded/harness.config.yml`](../../templates/embedded/) | never-flash-without-dry-run, HIL gate |
-| **scientific** | v1 thin | [`templates/scientific/harness.config.yml`](../../templates/scientific/) | pinned-env reproducibility, manuscript pipeline |
-| **security** | v1 thin | [`templates/security/harness.config.yml`](../../templates/security/) | engagement-scope authorization gate, red / blue separation |
-| **content** | v1 thin | [`templates/content/harness.config.yml`](../../templates/content/) | brand-voice guard, schema.org validation |
-| **ops** | v1 thin | [`templates/ops/harness.config.yml`](../../templates/ops/) | refund threshold gate, drafter ≠ publisher |
-| **generic** | base-only | [`templates/generic/harness.config.yml`](../../templates/generic/) | none beyond `_base`. Start here if unsure. |
+| Domain | Recipe path | Headline gates |
+|---|---|---|
+| **web** | [`templates/web/<sub>/harness.config.yml`](../../templates/web/) | accessibility-tree verify loop, lint+type PostToolUse |
+| **data** | [`templates/data/<sub>/harness.config.yml`](../../templates/data/) | unbounded-SQL block, leakage / p-hacking sentinels, audit-log warehouse query, block-static-warehouse-creds, eval ≠ code |
+| **devops** | [`templates/devops/<sub>/harness.config.yml`](../../templates/devops/) | plan-before-apply, kubectl context guard, OIDC-only, cosign tlog required |
+| **mobile** | [`templates/mobile/<sub>/harness.config.yml`](../../templates/mobile/) | simulator-in-the-loop, audit-log-mobile-build, block-static-store-creds, 5.1.2(i) AI disclosure, Play AI-content labeling |
 
-`generic` is intentionally not a domain pack — it ships base-only and is not slated for graduation to three-layer.
+If your work doesn't fit any of the four packs, you can still assemble a base-only harness by pointing `assemble.sh` at the root [`templates/harness.config.yml`](../../templates/harness.config.yml) — you get the four `_base` non-negotiables plus whatever cross-cutting modules you pick.
+
+New curated packs are welcome contributions — see [`CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
 ---
 
@@ -91,29 +82,64 @@ Three shared agents install with any devops sub-domain: `incident-commander`, `s
 
 ---
 
-## The v1 thin recipes
+## The `data/` pack (curated)
 
-Ten domains ship as thin recipes today. They are functionally complete — they assemble, they pass tests, and they install the domain's gating hooks — but they have not yet been curated into the three-layer shape:
+Four sub-domains, partitioned by deliverable shape — what you ship:
 
-- One `harness.config.yml` at the recipe root.
-- One `claude-md.md` snippet.
-- A `files/` tree with domain-specific hooks and skills.
-- No `DOMAIN.md`, no sub-domains, no `_addons/`.
+| Sub-domain | Adopt if… | Assemble |
+|---|---|---|
+| [`data-analyst-notebook`](../../templates/data/data-analyst-notebook/) | Exploratory analysis or ad-hoc reporting; output is a reactive, reproducible notebook reading from a warehouse. | `./assemble.sh data/data-analyst-notebook/harness.config.yml .` |
+| [`ml-pipeline`](../../templates/data/ml-pipeline/) | Training, evaluation, packaging, registry, or inference; tracking discipline + lockfile-frozen envs. | `./assemble.sh data/ml-pipeline/harness.config.yml .` |
+| [`llm-app`](../../templates/data/llm-app/) | LLM products — RAG, agentic pipelines, prompt-driven products; unit test is the eval suite. | `./assemble.sh data/llm-app/harness.config.yml .` |
+| [`analytics-engineering`](../../templates/data/analytics-engineering/) | dbt models with contracts, unit tests, semantic layer, and lineage. | `./assemble.sh data/analytics-engineering/harness.config.yml .` |
 
-Each recipe's `README.md` documents what it picks, what gates it adds, and what anti-patterns it prevents. See:
+### `data/` addons
 
-- [`templates/data/README.md`](../../templates/data/README.md) — data & ML
-- [`templates/finance/README.md`](../../templates/finance/README.md) — quant, trading, accounting
-- [`templates/mobile/README.md`](../../templates/mobile/README.md) — iOS / Android / React Native
-- [`templates/game/README.md`](../../templates/game/README.md) — game dev
-- [`templates/embedded/README.md`](../../templates/embedded/README.md) — firmware / IoT
-- [`templates/scientific/README.md`](../../templates/scientific/README.md) — research & manuscripts
-- [`templates/security/README.md`](../../templates/security/README.md) — offensive + defensive security
-- [`templates/content/README.md`](../../templates/content/README.md) — content & marketing
-- [`templates/ops/README.md`](../../templates/ops/README.md) — customer support & ops
-- [`templates/generic/README.md`](../../templates/generic/README.md) — base-only starter
+Twelve addons in the initial set, grouped by category:
 
-Curating a thin recipe into a three-layer pack is part of the maintainer roadmap; external contributions add modules, addons, and sub-domains inside an already-curated pack rather than driving pack-shape evolution.
+| Category | Addons |
+|---|---|
+| Python toolchain | `uv` · `polars` |
+| Warehouse-MCP | `snowflake-mcp` · `bigquery-mcp` (preview) · `databricks-mcp` (preview) · `duckdb-mcp` |
+| Analytics-engineering | `dbt-core` |
+| Notebooks | `marimo` |
+| ML tracking | `mlflow` · `wandb-mcp` |
+| LLM eval & observability | `langfuse` · `inspect-ai` |
+
+Three shared agents install with any data sub-domain: `eval-curator`, `dataset-card-author`, `query-provenance-auditor`. Additional specialists arrive via the sub-domain and via addons that contribute agents (e.g. `dbt-core` ships `semantic-modeler` and `contract-author`; `mlflow` ships `run-comparator`; `langfuse` ships `trace-triager`).
+
+---
+
+## The `mobile/` pack (curated)
+
+Four sub-domains, partitioned by stack family — *not* by platform. Cross-platform stacks ship to both iOS and Android; native stacks ship to one:
+
+| Sub-domain | Adopt if… | Assemble |
+|---|---|---|
+| [`native-ios`](../../templates/mobile/native-ios/) | Swift / SwiftUI app to the App Store with maximum platform integration (Foundation Models, App Intents); iOS-only or iOS-first team. | `./assemble.sh mobile/native-ios/harness.config.yml .` |
+| [`native-android`](../../templates/mobile/native-android/) | Kotlin / Compose app to Google Play with maximum Android integration (Gemini Nano / AICore, foreground services); Android-only or Android-first team. | `./assemble.sh mobile/native-android/harness.config.yml .` |
+| [`react-native-expo`](../../templates/mobile/react-native-expo/) | Cross-platform iOS + Android with a JS/TS team; deepest AI-tooling MCP coverage; OTA JS updates via EAS Update. | `./assemble.sh mobile/react-native-expo/harness.config.yml .` |
+| [`flutter-app`](../../templates/mobile/flutter-app/) | Pixel-perfect uniform UI with heavy custom animation; Dart team or willingness to build one; Impeller renderer. | `./assemble.sh mobile/flutter-app/harness.config.yml .` |
+
+### `mobile/` addons
+
+Ten addons grouped by category. Compliance addons are platform-shaped — iOS-targeting sub-domains default-on `privacy-manifest-ios`, Android-targeting sub-domains default-on `play-data-safety`, cross-platform sub-domains default-on both:
+
+| Category | Addons |
+|---|---|
+| MCPs | `xcodebuild-mcp` · `expo-mcp` · `firebase-mcp` · `sentry-mcp` |
+| E2E testing | `maestro-e2e` · `patrol-flutter` |
+| Build & distribution | `eas-build` · `fastlane` |
+| Compliance scaffolds | `privacy-manifest-ios` · `play-data-safety` |
+
+Three shared agents install with any mobile sub-domain: `app-store-compliance-auditor`, `mobile-release-coordinator`, `mobile-ux-screenshot-critic`. The shared `verifying-on-simulator` skill is inherited by every sub-domain. Additional specialists arrive via the sub-domain (`ios-architect`, `compose-implementer`, `expo-architect`, `riverpod-state-modeler`, etc.) and via addons that contribute agents (e.g. `firebase-mcp` ships `crashlytics-triager`; `sentry-mcp` ships `mobile-crash-triager`; `eas-build` ships `eas-release-coordinator`).
+
+### What we deliberately do not curate (yet)
+
+- **Kotlin Multiplatform / Compose Multiplatform** — reshapes project structure too deeply for v1; v2 target.
+- **Bitrise MCP, MobSF MCP** — PAT/API-key only as of May 2026 (post-Anodot posture gap).
+- **App Store Connect / Play Console first-party MCP** — none exist; reach via EAS Submit, fastlane `deliver` / `supply`.
+- **Wearables, TV, CarPlay, VisionOS** — out of scope; pick a base sub-domain and document the secondary target.
 
 ---
 

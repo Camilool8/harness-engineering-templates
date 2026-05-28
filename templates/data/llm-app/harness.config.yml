@@ -1,0 +1,49 @@
+# ============================================================================
+# harness.config.yml — data / llm-app sub-domain
+#
+# LLM products — RAG, agents, prompt-driven apps. Unit test is the eval suite.
+#
+# Assemble:  ./assemble.sh data/llm-app/harness.config.yml ./my-llm-app
+# ============================================================================
+
+project:
+  name: my-llm-app
+
+memory:
+  backend: md-files
+
+progress:
+  backend: filesystem
+
+methodology:
+  tdd: true            # tests around prompt I/O and eval shape.
+  spec_driven: true    # the product behavior is a contract.
+  eval_driven: true    # ON — the eval suite is the unit-test surface.
+  bdd: false
+
+orchestration:
+  topology: single-agent
+
+safety:
+  two_key: true        # production model-version pin bumps require typed-token.
+  kill_switch: true
+  sandbox: false
+
+hitl:
+  plan_mode_default: true
+  diff_review_required: true
+
+domain:
+  pack: data
+  subdomain: llm-app
+  addons: [uv, langfuse, inspect-ai, mlflow, wandb-mcp]
+
+agents:
+  team: curated        # llm-app-architect, prompt-implementer, eval-author,
+                       # judge-runner + shared 3. trace-triager via langfuse.
+  exclude: []
+  include: []
+
+docs:
+  context7_mcp: true   # wire Context7 for live langfuse / inspect-ai / mlflow
+                       # / anthropic / openai docs.

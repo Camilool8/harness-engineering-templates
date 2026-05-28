@@ -1,0 +1,44 @@
+# Fastfile — see https://docs.fastlane.tools
+
+default_platform(:ios)
+
+before_all do |lane, options|
+  if [:release, :production].include?(lane)
+    UI.user_error!("Store-upload lane requires safety.two_key=true or TWO_KEY_TOKEN env. See claude-md.md.") unless ENV["TWO_KEY_TOKEN"]
+  end
+end
+
+platform :ios do
+  lane :beta do
+    match(type: "appstore", readonly: true)
+    build_app(scheme: ENV["IOS_SCHEME"] || "App", configuration: "Release")
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+
+  lane :release do
+    match(type: "appstore", readonly: true)
+    build_app(scheme: ENV["IOS_SCHEME"] || "App", configuration: "Release")
+    upload_to_app_store(submit_for_review: false, automatic_release: false)
+  end
+
+  lane :screenshots do
+    capture_screenshots
+    frame_screenshots
+  end
+end
+
+platform :android do
+  lane :internal do
+    gradle(task: "bundle", build_type: "Release")
+    upload_to_play_store(track: "internal", aab: "app/build/outputs/bundle/release/app-release.aab")
+  end
+
+  lane :production do
+    gradle(task: "bundle", build_type: "Release")
+    upload_to_play_store(track: "production", aab: "app/build/outputs/bundle/release/app-release.aab")
+  end
+
+  lane :screenshots do
+    capture_android_screenshots
+  end
+end

@@ -1,0 +1,20 @@
+{
+  "name": "harness-devops",
+  "displayName": "Harness DevOps",
+  "version": "0.1.0",
+  "description": "Curated DevOps engineering pack with four sub-domains — cicd-platform, infrastructure, kubernetes-platform, and observability-sre — wiring domain skills, read-only architect/auditor agents, propose-never-apply IaC and Kubernetes safety hooks, and a Sigstore supply-chain posture.",
+  "author": { "name": "Camilo Joga", "url": "https://github.com/Camilool8" },
+  "homepage": "https://github.com/Camilool8/harness-engineering-templates",
+  "repository": "https://github.com/Camilool8/harness-engineering-templates",
+  "license": "MIT",
+  "keywords": ["devops", "iac", "kubernetes", "ci-cd", "sre"],
+  "dependencies": ["harness-base"],
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "context7": { "command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"] },
+    "aws": { "command": "npx", "args": ["-y", "@aws/agent-toolkit-mcp@latest"] },
+    "azure": { "command": "npx", "args": ["-y", "@azure/mcp-server@latest"] },
+    "datadog": { "command": "npx", "args": ["-y", "@datadog/mcp-server@latest"] }
+  }
+}

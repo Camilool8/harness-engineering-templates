@@ -1,0 +1,7 @@
+{ "mcpServers": {
+  "dbt": {
+    "type": "http",
+    "url": "https://cloud.getdbt.com/mcp",
+    "headers": { "Authorization": "Bearer ${DBT_CLOUD_TOKEN}" }
+  }
+} }

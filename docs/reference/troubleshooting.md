@@ -38,14 +38,14 @@ jq -s '
 
 ```bash
 # from the repo root
-./templates/assemble.sh templates/generic/harness.config.yml ./my-project
+./templates/assemble.sh templates/web/frontend-app/harness.config.yml ./my-project
 ```
 
 ### `! addon not found: <name> (skipped)`
 
 **Cause.** The `domain.addons` list references an addon directory that does not exist under `templates/<domain>/_addons/`.
 
-**Fix.** Check the spelling against [`reference/domains.md`](domains.md). For the `web/` pack, see [`templates/web/_addons/`](../../templates/web/_addons/). Note that addons are only loaded when the config is a sub-domain config (its directory has a `DOMAIN.md` sibling) — addons in a v1 thin recipe are silently dropped.
+**Fix.** Check the spelling against [`reference/domains.md`](domains.md). For the `web/` pack, see [`templates/web/_addons/`](../../templates/web/_addons/). Addons are only loaded when the config is a sub-domain config (its directory has a `DOMAIN.md` sibling).
 
 ### `! agent not found: <path> (skipped)`
 
@@ -186,6 +186,6 @@ For a maintainer to waive the check, apply the `override-deletion` label. The `v
 ## See also
 
 - [`reference/tests.md`](tests.md) — the full test catalog.
-- [`reference/assemble-cli.md`](assemble-cli.md) — assembler behaviour and exit codes.
+- [`reference/eject.md`](eject.md) — assembler behaviour and exit codes.
 - [`reference/assembled-output.md`](assembled-output.md) — what the output tree should look like.
 - [`how-to/run-tests-locally.md`](../how-to/run-tests-locally.md) — running checks in isolation.

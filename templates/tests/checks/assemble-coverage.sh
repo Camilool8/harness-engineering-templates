@@ -20,14 +20,7 @@ assert_assembled() {
   ok "$label"
 }
 
-echo "== coverage: thin recipes + root manifest =="
-for d in generic data finance mobile game embedded scientific security content ops; do
-  out="$(mktemp -d)"
-  if ./assemble.sh "$d/harness.config.yml" "$out" >/dev/null 2>&1; then
-    assert_assembled "$out" "recipe:$d"
-  else fail "recipe:$d — assemble exited non-zero"; fi
-  rm -rf "$out"
-done
+echo "== coverage: root manifest (base-only) =="
 out="$(mktemp -d)"
 ./assemble.sh harness.config.yml "$out" >/dev/null 2>&1 && assert_assembled "$out" "root-manifest" \
   || fail "root-manifest — assemble exited non-zero"
@@ -41,7 +34,7 @@ while IFS= read -r sd; do
   if ./assemble.sh "$sd" "$out" >/dev/null 2>&1; then assert_assembled "$out" "subdomain:$pack/$name"
   else fail "subdomain:$pack/$name — assemble exited non-zero"; fi
   rm -rf "$out"
-done < <(find web devops -mindepth 2 -maxdepth 2 -name 'harness.config.yml' 2>/dev/null | sort)
+done < <(find web devops data mobile -mindepth 2 -maxdepth 2 -name 'harness.config.yml' 2>/dev/null | sort)
 
 echo "== coverage: cross-cutting modules =="
 # probe: copy the root manifest, flip the one key that selects this module.
@@ -86,6 +79,8 @@ probe_host_for_pack() {
   case "$1" in
     web)    echo "web/frontend-app" ;;
     devops) echo "devops/infrastructure" ;;
+    data)   echo "data/analytics-engineering" ;;
+    mobile) echo "mobile/react-native-expo" ;;
     *)      echo "" ;;
   esac
 }
@@ -104,11 +99,11 @@ while IFS= read -r addondir; do
     fail "addon:$pack/$addon — assemble failed or addon not found"
   fi
   rm -rf "$out" "$f"
-done < <(find web/_addons devops/_addons -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
+done < <(find web/_addons devops/_addons data/_addons mobile/_addons -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 echo "== coverage: .mcp.json deep-merge fixture =="
 out="$(mktemp -d)"
-./assemble.sh generic/harness.config.yml "$out" >/dev/null 2>&1
+./assemble.sh harness.config.yml "$out" >/dev/null 2>&1
 cp tests/fixtures/mcp-merge/.mcp.json.fragment "$out/.mcp.json.fragment"
 merged="$(jq -s '
   def dm($a;$b): reduce ($b|keys_unsorted[]) as $k ($a;

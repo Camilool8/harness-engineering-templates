@@ -120,7 +120,7 @@ TOPO="$(cfg orchestration.topology)"
 [ "$(cfg safety.kill_switch)" = "true" ] && install_module "safety/kill-switch"
 [ "$(cfg safety.sandbox)"     = "true" ] && install_module "safety/sandbox"
 
-# --- domain pack / sub-domain / thin-recipe layering ------------------------
+# --- domain pack / sub-domain layering --------------------------------------
 apply_layer() {           # apply_layer <dir> <claude-md-filename> <label>
   local dir="$1" cmd="$2" label="$3"
   [ -d "$dir/files" ] && { echo "→ $label"; cp -R "$dir/files/." "$TARGET/"; merge_fragments; }
@@ -131,18 +131,15 @@ apply_layer() {           # apply_layer <dir> <claude-md-filename> <label>
 
 CONFIG_DIR="$(cd "$(dirname "$CONFIG")" && pwd)"
 DOMAIN_DIR=""
-if [ "$CONFIG_DIR" != "$HERE" ]; then
-  if [ -f "$CONFIG_DIR/../DOMAIN.md" ]; then
-    # domain pack: config lives in a sub-domain folder
-    DOMAIN_DIR="$(cd "$CONFIG_DIR/.." && pwd)"
-    apply_layer "$DOMAIN_DIR" "domain.claude-md.md" "domain: $(basename "$DOMAIN_DIR")"
-    apply_layer "$CONFIG_DIR" "claude-md.md" "sub-domain: $(basename "$CONFIG_DIR")"
-    PICKED+=("domain/$(basename "$DOMAIN_DIR")/$(basename "$CONFIG_DIR")")
-  else
-    # v1 thin recipe
-    apply_layer "$CONFIG_DIR" "claude-md.md" "recipe: $(basename "$CONFIG_DIR")"
-    PICKED+=("recipe/$(basename "$CONFIG_DIR")")
-  fi
+# If the config lives inside a sub-domain folder of a curated pack
+# (i.e. its parent has a DOMAIN.md), layer the domain + sub-domain.
+# Any other location (the root manifest, a user's custom config, a test
+# probe) is treated as base-only — no domain layer is applied.
+if [ "$CONFIG_DIR" != "$HERE" ] && [ -f "$CONFIG_DIR/../DOMAIN.md" ]; then
+  DOMAIN_DIR="$(cd "$CONFIG_DIR/.." && pwd)"
+  apply_layer "$DOMAIN_DIR" "domain.claude-md.md" "domain: $(basename "$DOMAIN_DIR")"
+  apply_layer "$CONFIG_DIR" "claude-md.md" "sub-domain: $(basename "$CONFIG_DIR")"
+  PICKED+=("domain/$(basename "$DOMAIN_DIR")/$(basename "$CONFIG_DIR")")
 fi
 
 # --- addons (domain-scoped, _modules-shaped) --------------------------------

@@ -37,7 +37,7 @@ hitl:
   diff_review_required: <bool>
 
 domain:
-  pack:      "" | web | data | devops | finance | mobile | game | embedded | scientific | security | content | ops | generic
+  pack:      "" | web | data | devops | mobile
   subdomain: "" | <subdomain-name>
   addons:    [<addon>, …]
 
@@ -147,13 +147,12 @@ Curated, layered domain content. See [`reference/domains.md`](domains.md) for th
 | Key | Type | Behaviour |
 |---|---|---|
 | `domain.pack` | enum or `""` | The domain pack to layer on top. Empty string = base-only. |
-| `domain.subdomain` | string or `""` | For three-layer packs (currently `web/` only), the sub-domain to assemble — e.g. `frontend-app`. Empty for v1 thin recipes. |
-| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. Currently only `web/` ships addons; see [`templates/web/_addons/`](../../templates/web/_addons/). |
+| `domain.subdomain` | string or `""` | The sub-domain to assemble — e.g. `frontend-app`, `infrastructure`, `ml-pipeline`, `react-native-expo`. Required when `domain.pack` is set. |
+| `domain.addons` | list of strings | Domain-scoped extras layered after the sub-domain. See [`templates/web/_addons/`](../../templates/web/_addons/), [`templates/devops/_addons/`](../../templates/devops/_addons/), [`templates/data/_addons/`](../../templates/data/_addons/), [`templates/mobile/_addons/`](../../templates/mobile/_addons/). |
 
-**Detection rules** (handled by `assemble.sh`):
+**Detection rule** (handled by `assemble.sh`):
 
-- If the config path is `<domain>/<subdomain>/harness.config.yml` *and* there is a `DOMAIN.md` in `<domain>/`, the pack is applied as **domain + sub-domain**, and addons are layered.
-- If the config path is `<domain>/harness.config.yml`, it is treated as a **v1 thin recipe** — only the `files/` and `claude-md.md` at that level apply; addons are not loaded.
+The config path must be `<domain>/<subdomain>/harness.config.yml` with a `DOMAIN.md` sibling in `<domain>/`. The pack is applied as **domain + sub-domain**, and addons are layered on top. Passing a config from anywhere else (e.g. the root `templates/harness.config.yml` for base-only) skips the domain layer entirely.
 
 ---
 
@@ -192,13 +191,13 @@ If the active domain pack does not ship a Context7 fragment, this key is a no-op
 Two consequences worth remembering:
 
 1. The parser does *not* validate the schema. Misspelt keys are silently ignored (the corresponding module is just not installed). Run `./templates/tests/run.sh` after editing a config to catch drift.
-2. Add new top-level keys cautiously — `assemble.sh` only handles the ones above. See [`reference/assemble-cli.md`](assemble-cli.md) for how to extend the parser.
+2. Add new top-level keys cautiously — `assemble.sh` only handles the ones above. See [`reference/eject.md`](eject.md) for how to extend the parser.
 
 ---
 
 ## See also
 
-- [`reference/assemble-cli.md`](assemble-cli.md) — what `assemble.sh` does with this config.
+- [`reference/eject.md`](eject.md) — what `assemble.sh` does with this config.
 - [`reference/assembled-output.md`](assembled-output.md) — what the resulting `.claude/` tree contains.
 - [`how-to/customize-modules.md`](../how-to/customize-modules.md) — recipes for changing the values above.
 - [`templates/harness.config.yml`](../../templates/harness.config.yml) — the canonical reference manifest, with inline commentary.
