@@ -62,7 +62,7 @@ Every module ships a `MODULE.md` with adopt-if / skip-if / install / remove. Eve
 | You need… | Read |
 |---|---|
 | The full schema for `harness.config.yml` | [`../docs/reference/harness-config.md`](../docs/reference/harness-config.md) |
-| What `assemble.sh` does and exits with | [`../docs/reference/assemble-cli.md`](../docs/reference/assemble-cli.md) |
+| What `assemble.sh` does and exits with | [`../docs/reference/eject.md`](../docs/reference/eject.md) |
 | The catalog of every module + addon + domain | [`../docs/reference/modules.md`](../docs/reference/modules.md), [`../docs/reference/domains.md`](../docs/reference/domains.md) |
 | To pick a recipe for your project | [`../docs/how-to/pick-a-recipe.md`](../docs/how-to/pick-a-recipe.md) |
 | To swap a default (memory, methodology, orchestration, safety) | [`../docs/how-to/customize-modules.md`](../docs/how-to/customize-modules.md) |

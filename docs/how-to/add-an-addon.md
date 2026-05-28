@@ -1,8 +1,10 @@
 # How to add an addon
 
-An addon is a domain-scoped optional extra — a Next.js wiring, a Drizzle migration setup, an Auth.js flow, a Playwright E2E harness. Today, only the `web/` domain pack ships addons; they live at `templates/web/_addons/<addon>/`.
+An addon is a domain-scoped optional extra — a Next.js wiring, a Drizzle migration setup, an Auth.js flow, a Playwright E2E harness. They live at `templates/<domain>/_addons/<addon>/`; the `web/` pack ships the largest set.
 
 Addons are *not* cross-cutting modules. A module changes how the agent works regardless of project type; an addon adds project-type-specific scaffolding.
+
+> **Two mirrored trees.** This repo maintains the content in two places that stay in sync: the `templates/` tree (the eject/assembler source) and the `plugins/harness-*/` tree (the marketplace). A new addon lands in `templates/<domain>/_addons/` and in the matching domain plugin (e.g. `plugins/harness-web/`). Your change must pass **both** test suites before merge — `./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`. The steps below cover the `templates/` shape; mirror the same content into the plugin and validate it in step 8.
 
 ---
 
@@ -105,13 +107,16 @@ Update the default `domain.addons` list in `templates/web/<sub-domain>/harness.c
 
 ---
 
-## Step 8 — Run the test suite
+## Step 8 — Mirror into the plugin tree and run both test suites
+
+Mirror the addon into the matching domain plugin (e.g. `plugins/harness-web/`) so the marketplace stays in sync, then run both suites:
 
 ```bash
-./templates/tests/run.sh
+./templates/tests/run.sh              # eject tree
+./plugins/tests/run-plugin-tests.sh   # marketplace tree
 ```
 
-`assemble-coverage` automatically discovers every addon under `templates/web/_addons/` and assembles it against `web/frontend-app`'s config (with `domain.addons` set to just your addon). You do not edit the test.
+`assemble-coverage` automatically discovers every addon under `templates/web/_addons/` and assembles it against `web/frontend-app`'s config (with `domain.addons` set to just your addon). You do not edit the test. The plugin suite runs `claude plugin validate --strict` against the domain plugin plus the convention lint.
 
 If the addon depends on another addon being installed first, document it in `MODULE.md` → **Dependencies**, and order it correctly in any `harness.config.yml` `domain.addons` list that uses both.
 

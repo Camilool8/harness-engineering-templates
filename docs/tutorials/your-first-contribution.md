@@ -6,10 +6,12 @@ By the end, you will have:
 
 1. Forked the repo and created a working branch.
 2. Made a one-line change.
-3. Run the test suite locally.
-4. Opened a PR that passes both CI jobs.
+3. Run the test suites locally.
+4. Opened a PR that passes all CI jobs.
 
 If you are contributing something larger (a new module, addon, or sub-domain), do this tutorial first to learn the workflow, then read the relevant [how-to guide](../how-to/) for the substance.
+
+> **Two mirrored trees.** This repo maintains the content in two places that stay in sync: the `templates/` tree (the eject/assembler source) and the `plugins/harness-*/` tree (the marketplace). A typo fix touches only one file, but any new *domain content* must be added to **both** trees and validated by **both** test suites — `./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`. The relevant how-to for your contribution type spells this out.
 
 ---
 
@@ -75,21 +77,23 @@ git diff
 
 ## Step 4 — Run the tests locally
 
-The repository ships a test suite that runs entirely offline:
+The repository ships two offline test suites — one per tree. Run both:
 
 ```bash
-./templates/tests/run.sh
+./templates/tests/run.sh              # eject/assembler tree
+./plugins/tests/run-plugin-tests.sh   # marketplace tree
 ```
 
-Expected last line:
+Expected last lines:
 
 ```
 ALL CHECKS PASSED
+ALL PLUGIN CHECKS PASSED
 ```
 
 If a check fails, read its output, fix the issue, and rerun. See [`how-to/run-tests-locally.md`](../how-to/run-tests-locally.md) for the catalog of individual checks and what they assert.
 
-For a documentation-only change to a README that is not under `templates/_modules/`, `templates/web/_addons/`, or `templates/web/<sub-domain>/`, the structure-lint check does not apply — all three checks should pass trivially.
+For a documentation-only change to a README that is not under `templates/_modules/`, `templates/web/_addons/`, or `templates/web/<sub-domain>/`, the structure-lint check does not apply — everything should pass trivially. (No `claude` CLI? The plugin suite's `validate` step skips locally with a notice; CI runs it.)
 
 ---
 
@@ -127,12 +131,13 @@ Submit the PR.
 
 ## Step 7 — Watch CI
 
-Two jobs run on every PR:
+Three jobs run on every PR:
 
-- **verify** — runs `./templates/tests/run.sh`. Must be green.
+- **verify** — runs `./templates/tests/run.sh` over the eject tree. Must be green.
+- **plugins** — lints `plugins/` shell scripts then runs `./plugins/tests/run-plugin-tests.sh` over the marketplace tree. Must be green.
 - **governance** — runs `scripts/check-deletions.sh`. Must be green or waived with the `override-deletion` label.
 
-CI usually finishes in under two minutes. If either job fails, the PR page links to the run log. Read it, push a fix to the same branch, and CI re-runs automatically.
+CI usually finishes in under two minutes. If a job fails, the PR page links to the run log. Read it, push a fix to the same branch, and CI re-runs automatically.
 
 ---
 

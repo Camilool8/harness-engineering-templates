@@ -1,6 +1,6 @@
 # Documentation
 
-This directory is the user-facing documentation for **harness-engineering-templates**, organised by intent ([Diátaxis](https://diataxis.fr/)). Four quadrants, four jobs:
+This directory is the user-facing documentation for **harness-engineering-templates**, organised by intent ([Diátaxis](https://diataxis.fr/)). The harness ships as a Claude Code **plugin marketplace** (`harness-engineering`) — `/plugin marketplace add Camilool8/harness-engineering-templates`, then install a domain pack and run its `init` command. That is the primary path. The bash `assemble.sh` assembler is retained as an **eject path** for teams that want committed `.claude/` artifacts checked into their repo. Four quadrants, four jobs:
 
 | Quadrant | Purpose | Read when… |
 |---|---|---|
@@ -24,8 +24,8 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 | You are… | Read |
 |---|---|
 | New to this repo | [`tutorials/getting-started.md`](tutorials/getting-started.md) |
-| Picking a recipe for a real project | [`how-to/pick-a-recipe.md`](how-to/pick-a-recipe.md) |
-| Looking up what a config key does | [`reference/harness-config.md`](reference/harness-config.md) |
+| Browsing the plugin catalog | [`reference/plugins.md`](reference/plugins.md) |
+| Picking a pack and sub-domain for a real project | [`how-to/pick-a-recipe.md`](how-to/pick-a-recipe.md) |
 | Asking *why* it is shaped this way | [`explanation/why-harness.md`](explanation/why-harness.md) |
 | About to open your first PR | [`tutorials/your-first-contribution.md`](tutorials/your-first-contribution.md) |
 
@@ -35,18 +35,18 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 
 ### Tutorials
 
-- [`tutorials/getting-started.md`](tutorials/getting-started.md) — clone the repo, assemble the `web/frontend-app` recipe into a fresh project, run Claude Code, watch a hook fire.
-- [`tutorials/your-first-contribution.md`](tutorials/your-first-contribution.md) — fork → small fix → tests → PR → merge, end-to-end.
+- [`tutorials/getting-started.md`](tutorials/getting-started.md) — add the marketplace, install `harness-web`, run `/harness-web:init`, watch a safety hook fire, optionally arm an opt-in discipline.
+- [`tutorials/your-first-contribution.md`](tutorials/your-first-contribution.md) — fork → small fix → both test suites → PR → merge, end-to-end.
 
 ### How-to guides
 
-- [`how-to/pick-a-recipe.md`](how-to/pick-a-recipe.md) — choose the right domain, sub-domain, and addon set for your project.
-- [`how-to/customize-modules.md`](how-to/customize-modules.md) — swap memory backend, add a methodology, turn on a safety gate.
-- [`how-to/assemble-by-hand.md`](how-to/assemble-by-hand.md) — install the harness without running `assemble.sh`.
-- [`how-to/add-a-module.md`](how-to/add-a-module.md) — contribute a new module under `templates/_modules/`.
-- [`how-to/add-an-addon.md`](how-to/add-an-addon.md) — contribute a new addon under `templates/web/_addons/`.
-- [`how-to/add-a-subdomain.md`](how-to/add-a-subdomain.md) — contribute a new sub-domain under `templates/web/`.
-- [`how-to/run-tests-locally.md`](how-to/run-tests-locally.md) — run `./templates/tests/run.sh` and individual checks; install prerequisites.
+- [`how-to/pick-a-recipe.md`](how-to/pick-a-recipe.md) — choose the right plugin pack and sub-domain for your project (with the eject-path equivalent).
+- [`how-to/customize-modules.md`](how-to/customize-modules.md) — arm opt-in hooks via `HARNESS.toml`, let skills auto-load, wire MCP servers, set permissions.
+- [`how-to/run-tests-locally.md`](how-to/run-tests-locally.md) — run both `./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`; install prerequisites.
+- [`how-to/add-a-module.md`](how-to/add-a-module.md) — contribute a new module (mirrored across both trees).
+- [`how-to/add-an-addon.md`](how-to/add-an-addon.md) — contribute a new addon (mirrored across both trees).
+- [`how-to/add-a-subdomain.md`](how-to/add-a-subdomain.md) — contribute a new sub-domain (mirrored across both trees).
+- [`how-to/assemble-by-hand.md`](how-to/assemble-by-hand.md) — install the harness manually without running `assemble.sh` (eject path).
 
 ### Reference
 

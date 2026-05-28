@@ -4,6 +4,8 @@ Contributions of new modules, addons, sub-domains, and whole domains are welcome
 
 This file is the **policy and workflow overview**. The detailed how-to guides for each contribution type live under [`docs/how-to/`](docs/how-to/).
 
+> **Two mirrored trees.** The repo ships the harness in two forms that stay in sync: the `plugins/harness-*/` tree (the marketplace — the primary path most users install) and the `templates/` tree (the eject/assembler source, for teams that want committed `.claude/` artifacts). New domain content — a module, addon, sub-domain, or whole domain — must be added to **both** trees and validated by **both** test suites (`./templates/tests/run.sh` and `./plugins/tests/run-plugin-tests.sh`) before merge. The relevant how-to guide spells out the mirror for each contribution type.
+
 ---
 
 ## Before you start
@@ -30,14 +32,18 @@ The how-to for each contribution type covers directory shape, required files, co
 
 ---
 
-## How the templates fit together
+## How the harness fits together
 
-The template system has four layers:
+The harness ships as a **plugin marketplace** (`harness-engineering`): a shared `harness-base` plus four curated domain packs (`harness-web`, `harness-data`, `harness-devops`, `harness-mobile`). Installing any domain pack pulls in `harness-base` automatically. This is the primary path — see [`docs/reference/plugins.md`](docs/reference/plugins.md).
 
-1. **`_base/`** — the universal starter every assembled project copies. Sets up the foundational `.claude/` structure: `settings.json`, `CLAUDE.md`, and the four non-negotiable hooks (secret-scan, command-guard, audit-log, verify-gate).
+The same content is also assembled by the **eject path** — the `templates/` tree fed to `assemble.sh`. Its four layers mirror the plugins:
+
+1. **`_base/`** — the universal starter every assembled project copies. Sets up the foundational `.claude/` structure: `settings.json`, `CLAUDE.md`, and the four non-negotiable hooks (secret-scan, command-guard, audit-log, verify-gate). Mirrors `harness-base`.
 2. **`_modules/<category>/<option>/`** — cross-cutting opt-in modules. Each ships an adopt-if / skip-if / install / remove decision guide.
-3. **Domain packs** — four curated three-layer packs: `web/`, `data/`, `devops/`, `mobile/`. Each ships a `DOMAIN.md`, sub-domains, and addons.
-4. **`assemble.sh`** — the one-command assembler. Reads a `harness.config.yml`, merges `_base/` + selected modules + a domain layer + any addons, writes a ready-to-use project directory.
+3. **Domain packs** — four curated three-layer packs: `web/`, `data/`, `devops/`, `mobile/`. Each ships a `DOMAIN.md`, sub-domains, and addons. Mirror the four domain plugins.
+4. **`assemble.sh`** — the one-command assembler. Reads a `harness.config.yml`, merges `_base/` + selected modules + a domain layer + any addons, writes a ready-to-use project directory. See [`docs/reference/eject.md`](docs/reference/eject.md).
+
+When you add domain content, you add it to both trees so the marketplace and the eject path stay aligned.
 
 Deep reference: [`docs/HARNESS_ENGINEERING.md`](docs/HARNESS_ENGINEERING.md), [`docs/METHODOLOGIES.md`](docs/METHODOLOGIES.md), [`docs/AGENT_ROLES.md`](docs/AGENT_ROLES.md).
 
@@ -45,15 +51,16 @@ Deep reference: [`docs/HARNESS_ENGINEERING.md`](docs/HARNESS_ENGINEERING.md), [`
 
 ## Running the tests locally
 
-The repo ships a hermetic, offline test suite:
+The repo ships a hermetic, offline test suite per tree. Run both:
 
 ```bash
-./templates/tests/run.sh
+./templates/tests/run.sh              # eject/assembler tree
+./plugins/tests/run-plugin-tests.sh   # marketplace tree
 ```
 
-The final line is `ALL CHECKS PASSED` or `N CHECK(S) FAILED`. Exit code mirrors the failure count.
+The eject suite's final line is `ALL CHECKS PASSED` or `N CHECK(S) FAILED`; the plugin suite's is `ALL PLUGIN CHECKS PASSED` or `N PLUGIN CHECK(S) FAILED`. Each exit code mirrors its failure count.
 
-Three checks, each runnable standalone:
+The eject suite runs three checks, each runnable standalone:
 
 ```bash
 templates/tests/checks/structure-lint.sh       # MODULE.md sections, agents, skills, JSON
@@ -61,7 +68,9 @@ templates/tests/checks/hook-lint.sh            # bash -n + shellcheck on every *
 templates/tests/checks/assemble-coverage.sh    # assembles every unit discovered on disk
 ```
 
-Prerequisites: `jq` (`brew install jq` / `apt install jq`). `shellcheck` is recommended; CI installs it automatically.
+The plugin suite runs `claude plugin validate --strict` against each `plugins/harness-*/` plugin, then `plugins/tests/lint-conventions.sh`.
+
+Prerequisites: `jq` (`brew install jq` / `apt install jq`). `shellcheck` is recommended; CI installs it automatically. The plugin suite uses the `claude` CLI for `validate` — without it that step skips locally, and CI runs it.
 
 Full guide: [`docs/how-to/run-tests-locally.md`](docs/how-to/run-tests-locally.md). When a check fails: [`docs/reference/troubleshooting.md`](docs/reference/troubleshooting.md#tests).
 
@@ -79,17 +88,17 @@ Full guide: [`docs/how-to/run-tests-locally.md`](docs/how-to/run-tests-locally.m
 
 The CI `governance` job runs `scripts/check-deletions.sh` on every PR and fails if any deleted path is not mentioned in the PR description. A maintainer can apply the `override-deletion` label to waive the justification — for example, if a file is being removed as part of a well-understood cleanup.
 
-Regardless of the label, the `verify` job (which runs `./templates/tests/run.sh`) always has to pass. There is no override for test failures.
+Regardless of the label, the `verify` job (`./templates/tests/run.sh`) and the `plugins` job (`./plugins/tests/run-plugin-tests.sh`) always have to pass. There is no override for test failures.
 
 ---
 
 ## Core enhancements
 
-The core consists of `templates/_base/`, `templates/assemble.sh`, the `harness.config.yml` schema, and `templates/tests/`. These components affect every assembled project and every consumer of this library. Changes here receive extra review scrutiny.
+The core consists of `templates/_base/`, `templates/assemble.sh`, the `harness.config.yml` schema, the `harness-base` plugin, and both test engines (`templates/tests/` and `plugins/tests/`). These components affect every harness and every consumer of this library. Changes here receive extra review scrutiny.
 
-- **`_base/`** changes must remain backward-compatible with all four curated domain packs. If a change would require every recipe to update its config, that is a breaking change and requires discussion.
-- **`assemble.sh`** changes must keep the existing merge semantics for `settings.json`, `.mcp.json`, and `CLAUDE.md`. Run the full test suite before and after.
-- **Test engine changes** (under `templates/tests/`) must not reduce coverage. Adding a new check is welcome; tightening an existing check is welcome; silencing or removing a check requires a very clear justification in the PR.
+- **`_base/` and `harness-base`** changes must remain backward-compatible with all four curated domain packs, and must land in both trees so the eject path and the marketplace stay aligned. If a change would require every recipe to update its config, that is a breaking change and requires discussion.
+- **`assemble.sh`** changes must keep the existing merge semantics for `settings.json`, `.mcp.json`, and `CLAUDE.md`. Run both test suites before and after.
+- **Test engine changes** (under `templates/tests/` or `plugins/tests/`) must not reduce coverage. Adding a new check is welcome; tightening an existing check is welcome; silencing or removing a check requires a very clear justification in the PR.
 
 ---
 
@@ -105,11 +114,12 @@ The `structure-lint` check enforces this automatically. This is not stylistic �
 
 1. **Fork and branch.** Work on a branch named for the change (`add-module-methodology-ddd`, `fix-hook-lint-error`, etc.).
 2. **Fill the PR template.** It prompts for a summary, a type-of-change checkbox, the standard checklist, and the deletions section. Fill it out.
-3. **CI runs automatically.** Two jobs on every PR:
-   - **`verify`** — runs `./templates/tests/run.sh`; must be green.
+3. **CI runs automatically.** Three jobs on every PR:
+   - **`verify`** — runs `./templates/tests/run.sh` over the eject tree; must be green.
+   - **`plugins`** — lints `plugins/` shell scripts then runs `./plugins/tests/run-plugin-tests.sh` over the marketplace tree; must be green.
    - **`governance`** — runs the deletion-policy check; must be green or waived by the `override-deletion` label.
 4. **CODEOWNERS review.** `@Camilool8` is automatically requested as a reviewer. Branch protection requires at least one approving review from a code owner before merge.
-5. **Squash-merge.** The maintainer squash-merges the PR. Both `verify` and `governance` must be green (or `governance` waived) before merge is allowed.
+5. **Squash-merge.** The maintainer squash-merges the PR. `verify`, `plugins`, and `governance` must all be green (or `governance` waived) before merge is allowed.
 
 ---
 
