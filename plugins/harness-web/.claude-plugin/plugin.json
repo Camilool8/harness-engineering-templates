@@ -1,0 +1,22 @@
+{
+  "name": "harness-web",
+  "displayName": "Harness Web",
+  "version": "0.1.0",
+  "description": "Curated web engineering pack with five sub-domains — api-service, design-system, distributed-backend, frontend-app, and fullstack-app — wiring domain skills, read-only architect/auditor agents, accessibility-first verification, and Core Web Vitals gates.",
+  "author": { "name": "Camilo Joga", "url": "https://github.com/Camilool8" },
+  "homepage": "https://github.com/Camilool8/harness-engineering-templates",
+  "repository": "https://github.com/Camilool8/harness-engineering-templates",
+  "license": "MIT",
+  "keywords": ["web", "frontend", "api", "nextjs", "accessibility"],
+  "dependencies": ["harness-base"],
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "context7": { "command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"] },
+    "playwright": { "command": "npx", "args": ["-y", "@playwright/mcp@latest"] },
+    "chrome-devtools": { "command": "npx", "args": ["-y", "chrome-devtools-mcp@latest"] },
+    "sanity": { "type": "http", "url": "https://mcp.sanity.io/mcp" },
+    "sentry": { "command": "npx", "args": ["-y", "@sentry/mcp-server@latest"] },
+    "shadcn": { "command": "npx", "args": ["-y", "shadcn@latest", "mcp"] }
+  }
+}
