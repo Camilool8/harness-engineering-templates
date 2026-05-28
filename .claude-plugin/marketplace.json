@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "harness-engineering",
+  "owner": {
+    "name": "Camilo Joga",
+    "url": "https://github.com/Camilool8"
+  },
+  "metadata": {
+    "description": "Opinionated Claude Code harness packs across four curated software domains (web, data, devops, mobile), built on a shared non-negotiable safety base.",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "harness-base",
+      "source": "./harness-base",
+      "description": "Four non-negotiable safety hooks plus cross-cutting engineering modules as auto-loading skills. Every domain pack depends on this.",
+      "category": "foundation",
+      "tags": ["safety", "hooks", "tdd", "memory", "audit", "required"]
+    },
+    {
+      "name": "harness-web",
+      "source": "./harness-web",
+      "description": "Curated web pack: API service, design system, distributed backend, frontend app, fullstack app.",
+      "category": "domain",
+      "tags": ["web", "frontend", "api", "nextjs", "accessibility"]
+    },
+    {
+      "name": "harness-data",
+      "source": "./harness-data",
+      "description": "Curated data pack: analytics engineering, analyst notebook, LLM app, ML pipeline.",
+      "category": "domain",
+      "tags": ["data", "ml", "llm", "warehouse", "evals"]
+    },
+    {
+      "name": "harness-devops",
+      "source": "./harness-devops",
+      "description": "Curated devops pack: CI/CD platform, infrastructure, Kubernetes platform, observability/SRE.",
+      "category": "domain",
+      "tags": ["devops", "iac", "kubernetes", "ci-cd", "sre"]
+    },
+    {
+      "name": "harness-mobile",
+      "source": "./harness-mobile",
+      "description": "Curated mobile pack: native iOS, native Android, React Native + Expo, Flutter.",
+      "category": "domain",
+      "tags": ["mobile", "ios", "android", "react-native", "flutter"]
+    }
+  ]
+}
