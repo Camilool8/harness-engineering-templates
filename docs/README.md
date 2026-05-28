@@ -50,8 +50,9 @@ These are deep Explanation in the Diátaxis sense — read them when you are mak
 
 ### Reference
 
-- [`reference/harness-config.md`](reference/harness-config.md) — every key in `harness.config.yml` with type, default, valid values, behaviour.
-- [`reference/assemble-cli.md`](reference/assemble-cli.md) — `./templates/assemble.sh` invocation, inputs, outputs, exit codes, `HARNESS.lock`.
+- [`reference/plugins.md`](reference/plugins.md) — the plugin marketplace: the five plugins, install commands, `HARNESS.toml` flags, the MCP/secret model.
+- [`reference/harness-config.md`](reference/harness-config.md) — every key in `harness.config.yml` with type, default, valid values, behaviour (eject path).
+- [`reference/eject.md`](reference/eject.md) — `./templates/assemble.sh` invocation, inputs, outputs, exit codes, `HARNESS.lock` (eject path).
 - [`reference/assembled-output.md`](reference/assembled-output.md) — the file tree a fully-assembled project ends up with; what each file does.
 - [`reference/modules.md`](reference/modules.md) — catalog of every module under `templates/_modules/`.
 - [`reference/domains.md`](reference/domains.md) — catalog of the four curated domain packs.

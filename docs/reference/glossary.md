@@ -66,7 +66,7 @@ A pre-filled `harness.config.yml` plus the directory it sits in. Pass it to `ass
 
 ### Settings fragment
 
-A `.claude/settings.fragment.json` file shipped by some [modules](#module) and [domain packs](#domain-pack). After `assemble.sh` copies it into the target, the fragment is deep-merged into `.claude/settings.json` (objects recurse, arrays concatenate) so module hooks add to the base hooks without overwriting. See [`reference/assemble-cli.md`](assemble-cli.md#merge-semantics).
+A `.claude/settings.fragment.json` file shipped by some [modules](#module) and [domain packs](#domain-pack). After `assemble.sh` copies it into the target, the fragment is deep-merged into `.claude/settings.json` (objects recurse, arrays concatenate) so module hooks add to the base hooks without overwriting. See [`reference/eject.md`](eject.md#merge-semantics).
 
 ### Skill
 

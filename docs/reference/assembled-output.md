@@ -73,7 +73,7 @@ Hooks registry. The `_base` shape:
 }
 ```
 
-Modules add to `hooks` arrays via `settings.fragment.json` files that `assemble.sh` deep-merges (see [`reference/assemble-cli.md`](assemble-cli.md#merge-semantics)).
+Modules add to `hooks` arrays via `settings.fragment.json` files that `assemble.sh` deep-merges (see [`reference/eject.md`](eject.md#merge-semantics)).
 
 No `permissions` block ships by default — `_base` enforces via hooks, and the `permissions` allow/deny/ask layer is opinionated per project. See [`reference/recommended-permissions.md`](recommended-permissions.md) for a copy-paste starting point if you want one.
 
@@ -144,6 +144,6 @@ To *remove* a module after the fact, follow its `MODULE.md` → **Remove** secti
 ## See also
 
 - [`reference/harness-config.md`](harness-config.md) — what each config key adds to this tree.
-- [`reference/assemble-cli.md`](assemble-cli.md) — how the tree is produced.
+- [`reference/eject.md`](eject.md) — how the tree is produced.
 - [`reference/modules.md`](modules.md) — catalog of every module's contribution.
 - [`explanation/non-negotiables.md`](../explanation/non-negotiables.md) — why the four `_base` hooks always ship.

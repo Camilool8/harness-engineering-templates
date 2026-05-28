@@ -1,6 +1,14 @@
-# Reference: `assemble.sh`
+# Reference: the eject path (`assemble.sh`)
 
-The one-command assembler that turns a `harness.config.yml` into a ready-to-use `.claude/` tree. No dependencies beyond `bash`, `coreutils`, and (recommended) `jq`. macOS bash 3.2 compatible.
+> **Most users should install the plugins instead** — see
+> [`reference/plugins.md`](plugins.md) and
+> [`tutorials/getting-started.md`](../tutorials/getting-started.md). This page
+> documents the **eject path**: the bash assembler that writes a committed
+> `.claude/` tree into your repo. Choose it when you need the harness as
+> version-controlled artifacts in your project (audit-heavy or regulated teams)
+> rather than as installed plugins.
+
+The one-command assembler turns a `harness.config.yml` into a ready-to-use `.claude/` tree. No dependencies beyond `bash`, `coreutils`, and (recommended) `jq`. macOS bash 3.2 compatible. It assembles from the `templates/` tree, which mirrors the plugins' content.
 
 Source: [`templates/assemble.sh`](../../templates/assemble.sh).
 

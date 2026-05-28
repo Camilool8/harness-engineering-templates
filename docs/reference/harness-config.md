@@ -191,13 +191,13 @@ If the active domain pack does not ship a Context7 fragment, this key is a no-op
 Two consequences worth remembering:
 
 1. The parser does *not* validate the schema. Misspelt keys are silently ignored (the corresponding module is just not installed). Run `./templates/tests/run.sh` after editing a config to catch drift.
-2. Add new top-level keys cautiously — `assemble.sh` only handles the ones above. See [`reference/assemble-cli.md`](assemble-cli.md) for how to extend the parser.
+2. Add new top-level keys cautiously — `assemble.sh` only handles the ones above. See [`reference/eject.md`](eject.md) for how to extend the parser.
 
 ---
 
 ## See also
 
-- [`reference/assemble-cli.md`](assemble-cli.md) — what `assemble.sh` does with this config.
+- [`reference/eject.md`](eject.md) — what `assemble.sh` does with this config.
 - [`reference/assembled-output.md`](assembled-output.md) — what the resulting `.claude/` tree contains.
 - [`how-to/customize-modules.md`](../how-to/customize-modules.md) — recipes for changing the values above.
 - [`templates/harness.config.yml`](../../templates/harness.config.yml) — the canonical reference manifest, with inline commentary.

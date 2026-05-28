@@ -192,6 +192,6 @@ Because every module is an isolated directory plus an appended `CLAUDE.md` secti
 ## See also
 
 - [`tutorials/getting-started.md`](../tutorials/getting-started.md) — the assembler-based walk-through.
-- [`reference/assemble-cli.md`](../reference/assemble-cli.md) — what the assembler does, step by step.
+- [`reference/eject.md`](../reference/eject.md) — what the assembler does, step by step.
 - [`reference/assembled-output.md`](../reference/assembled-output.md) — what the final tree looks like.
 - [`reference/modules.md`](../reference/modules.md) — catalog of every module's contribution.

@@ -41,7 +41,7 @@ The harness's value compounds when modules layer cleanly:
 
 The implementation enforces this in two ways:
 
-1. **Isolation in the file tree.** Every module's files live under its own subtree in `.claude/`. There are no shared mutable files where one module steps on another. The merge semantics ([deep-merge for `settings.json` and `.mcp.json`](../reference/assemble-cli.md#merge-semantics), append for `CLAUDE.md`) guarantee additive composition.
+1. **Isolation in the file tree.** Every module's files live under its own subtree in `.claude/`. There are no shared mutable files where one module steps on another. The merge semantics ([deep-merge for `settings.json` and `.mcp.json`](../reference/eject.md#merge-semantics), append for `CLAUDE.md`) guarantee additive composition.
 
 2. **A `Remove` section in every `MODULE.md`.** It tells you exactly which files to delete and which `CLAUDE.md` section to drop. Removing a module is always: delete files + delete section. No tangle.
 

@@ -186,6 +186,6 @@ For a maintainer to waive the check, apply the `override-deletion` label. The `v
 ## See also
 
 - [`reference/tests.md`](tests.md) — the full test catalog.
-- [`reference/assemble-cli.md`](assemble-cli.md) — assembler behaviour and exit codes.
+- [`reference/eject.md`](eject.md) — assembler behaviour and exit codes.
 - [`reference/assembled-output.md`](assembled-output.md) — what the output tree should look like.
 - [`how-to/run-tests-locally.md`](../how-to/run-tests-locally.md) — running checks in isolation.
