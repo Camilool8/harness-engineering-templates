@@ -72,7 +72,11 @@ context="$context"$'\n'"# The following pack rules are pinned for this session. 
 
 if [ "${#emit_files[@]}" -gt 0 ]; then
   for f in "${emit_files[@]}"; do
-    context="$context"$'\n\n---\n\n'"$(cat "$f")"
+    # Strip the leading YAML frontmatter (name/description) — it is skill-
+    # discovery metadata, noise in pinned-rules context, and its own `---`
+    # fence would collide with the separator below. Inject the body only.
+    body="$(awk 'NR==1 && $0=="---" {infm=1; next} infm && $0=="---" {infm=0; next} !infm' "$f")"
+    context="$context"$'\n\n---\n\n'"$body"
   done
 fi
 

@@ -47,6 +47,8 @@ c="$(ctx "$out")"
 printf '%s' "$out" | jq -e . >/dev/null 2>&1 && ok "web: valid JSON" || bad "web: invalid JSON"
 case "$c" in *"web/fullstack-app"*) ok "web: header present";; *) bad "web: header missing";; esac
 [ -n "$c" ] && ok "web: non-empty context" || bad "web: empty context"
+# Frontmatter (e.g. `name: web-domain`) must be stripped from injected bodies.
+case "$c" in *"name: web-domain"*) bad "web: frontmatter leaked into context";; *) ok "web: frontmatter stripped";; esac
 
 # 4. data prefixed resolve.
 out="$(run data data '[data]
