@@ -25,6 +25,10 @@ echo "### lint-conventions.sh"
 bash "$HERE/lint-conventions.sh" || fails=$((fails + 1))
 
 echo ""
+echo "### test-load-harness.sh"
+bash "$HERE/test-load-harness.sh" || fails=$((fails + 1))
+
+echo ""
 echo "================================"
 if [ "$fails" -eq 0 ]; then
   echo "ALL PLUGIN CHECKS PASSED"
