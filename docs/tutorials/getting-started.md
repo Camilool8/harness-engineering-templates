@@ -85,37 +85,9 @@ subdomain = "frontend-app"
 
 This is the only file the plugins write into your repo. The matching skills and hooks read it to know which sub-domain conventions to apply. (Editing a YAML config to pick a sub-domain is the *eject* path — in the plugin flow, the `init` command owns this file.)
 
----
+From now on, a `SessionStart` hook reads this marker at the start of **every** session and automatically pins the pack's shared `*-domain` rules plus your selected sub-domain skill (here, `frontend-app`) into context — you do not invoke them by hand. The other pack skills (`using-*`, `addon-*`) stay available and load on demand when they are relevant.
 
-## How the harness activates in your repo
-
-Installing a domain pack from the marketplace does **not** copy files into your
-project's `.claude/`. Plugins load from the plugin cache — their skills, agents,
-and hooks are active session-wide without being vendored into the repo. An empty
-project `.claude/` is normal and expected.
-
-To switch the pack on for a project, run its init command **once** and commit the
-marker it writes:
-
-```bash
-/harness-web:init     # or harness-data:init, harness-devops:init, harness-mobile:init
-```
-
-This writes `.claude/HARNESS.toml`:
-
-```toml
-[web]
-subdomain = "fullstack-app"
-```
-
-From then on, a `SessionStart` hook reads that marker at the start of **every**
-session and pins the pack's shared `*-domain` rules plus your selected subdomain
-skill into context automatically — no need to invoke them by hand. Other pack
-skills (`using-*`, `addon-*`) remain available and load on demand when relevant.
-
-If you would rather vendor the harness physically into the repo (so it travels
-with the code and needs no plugin install), use the eject path instead:
-`./templates/assemble.sh web/fullstack-app/harness.config.yml ./my-app`.
+> Prefer to vendor the harness physically into the repo instead of the plugin flow? The eject path does that: `./templates/assemble.sh web/frontend-app/harness.config.yml ./my-app`.
 
 ---
 
