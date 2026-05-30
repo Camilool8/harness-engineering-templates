@@ -85,6 +85,10 @@ subdomain = "frontend-app"
 
 This is the only file the plugins write into your repo. The matching skills and hooks read it to know which sub-domain conventions to apply. (Editing a YAML config to pick a sub-domain is the *eject* path — in the plugin flow, the `init` command owns this file.)
 
+From now on, a `SessionStart` hook reads this marker at the start of **every** session and automatically pins the pack's shared `*-domain` rules plus your selected sub-domain skill (here, `frontend-app`) into context — you do not invoke them by hand. The other pack skills (`using-*`, `addon-*`) stay available and load on demand when they are relevant.
+
+> Prefer to vendor the harness physically into the repo instead of the plugin flow? The eject path does that: `./templates/assemble.sh web/frontend-app/harness.config.yml ./my-app`.
+
 ---
 
 ## Step 5 — Watch a non-negotiable hook fire
